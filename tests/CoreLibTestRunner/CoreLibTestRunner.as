@@ -44,6 +44,7 @@ import com.adobe.utils.tests.IntUtilTest;
 import com.adobe.utils.tests.NumberFormatterTest;
 import com.adobe.utils.tests.StringUtilTest;
 import com.adobe.utils.tests.XMLUtilTest;
+import com.adobe.utils.tests.DictionaryUtilTest;
 
 import flexunit.framework.TestSuite;
 			
@@ -68,6 +69,7 @@ private function createSuite():TestSuite
 		ts.addTestSuite(XMLUtilTest);
 		ts.addTestSuite(SHA1Test);
 		ts.addTestSuite(WSSEUsernameTokenTest);
+		ts.addTestSuite(DictionaryUtilTest);
 	
 	return ts;
 }

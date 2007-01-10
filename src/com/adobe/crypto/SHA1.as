@@ -33,33 +33,33 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.crypto {
-	
+package com.adobe.crypto
+{
 	import com.adobe.utils.IntUtil;
-	
 	import flash.utils.ByteArray;
-	
 	import mx.utils.Base64Encoder;
 	
 	/**
-	 * US Secure Hash Algorithm 1 (SHA1)
+	 *  US Secure Hash Algorithm 1 (SHA1)
 	 *
-	 * Implementation based on algorithm description at 
-	 * http://www.faqs.org/rfcs/rfc3174.html
+	 *  Implementation based on algorithm description at 
+	 *  http://www.faqs.org/rfcs/rfc3174.html
 	 */
-	public class SHA1 {
-		
+	public class SHA1
+	{
 		/**
-		 * Performs the SHA1 hash algorithm on a string.
+		 *  Performs the SHA1 hash algorithm on a string.
 		 *
-		 * @param s The string to hash
-		 * @return A string containing the hash value of s
-		 * @langversion ActionScript 3.0
-		 * @playerversion Flash 8.5
-		 * @tiptext
+		 *  @param s		The string to hash
+		 *  @return			A string containing the hash value of s
+		 *  @langversion	ActionScript 3.0
+		 *  @playerversion	9.0
+		 *  @tiptext
 		 */
-		public static function hash( s:String ):String {
-			var byteArray:ByteArray = hashToByteArray(s);
+		public static function hash( s:String ):String
+		{
+			var blocks:Array = createBlocksFromString( s );
+			var byteArray:ByteArray = hashBlocks( blocks );
 			
 			return IntUtil.toHex( byteArray.readInt(), true )
 					+ IntUtil.toHex( byteArray.readInt(), true )
@@ -69,17 +69,39 @@ package com.adobe.crypto {
 		}
 		
 		/**
-		 * Performs the SHA1 hash algorithm on a string, then does
-		 * Base64 encoding on the result.
+		 *  Performs the SHA1 hash algorithm on a ByteArray.
 		 *
-		 * @param s The string to hash
-		 * @return The base64 encoded hash value of s
-		 * @langversion ActionScript 3.0
-		 * @playerversion Flash 8.5
-		 * @tiptext
+		 *  @param data		The ByteArray data to hash
+		 *  @return			A string containing the hash value of data
+		 *  @langversion	ActionScript 3.0
+		 *  @playerversion	9.0
 		 */
-		public static function hashToBase64( s:String ):String {
-			var byteArray:ByteArray = hashToByteArray(s);
+		public static function hashBytes( data:ByteArray ):String
+		{
+			var blocks:Array = SHA1.createBlocksFromByteArray( data );
+			var byteArray:ByteArray = hashBlocks(blocks);
+			
+			return IntUtil.toHex( byteArray.readInt(), true )
+					+ IntUtil.toHex( byteArray.readInt(), true )
+					+ IntUtil.toHex( byteArray.readInt(), true )
+					+ IntUtil.toHex( byteArray.readInt(), true )
+					+ IntUtil.toHex( byteArray.readInt(), true );
+		}
+		
+		/**
+		 *  Performs the SHA1 hash algorithm on a string, then does
+		 *  Base64 encoding on the result.
+		 *
+		 *  @param s		The string to hash
+		 *  @return			The base64 encoded hash value of s
+		 *  @langversion	ActionScript 3.0
+		 *  @playerversion	9.0
+		 *  @tiptext
+		 */
+		public static function hashToBase64( s:String ):String
+		{
+			var blocks:Array = SHA1.createBlocksFromString( s );
+			var byteArray:ByteArray = hashBlocks(blocks);
 
 			// ByteArray.toString() returns the contents as a UTF-8 string,
 			// which we can't use because certain byte sequences might trigger
@@ -98,7 +120,8 @@ package com.adobe.crypto {
 			return encoder.flush();
 		}
 		
-		private static function hashToByteArray( s:String ):ByteArray {
+		private static function hashBlocks( blocks:Array ):ByteArray
+		{
 			// initialize the h's
 			var h0:int = 0x67452301;
 			var h1:int = 0xefcdab89;
@@ -106,12 +129,7 @@ package com.adobe.crypto {
 			var h3:int = 0x10325476;
 			var h4:int = 0xc3d2e1f0;
 			
-			// create the blocks from the string and
-			// save the length as a local var to reduce
-			// lookup in the loop below
-			var blocks:Array = createBlocks( s );
 			var len:int = blocks.length;
-			
 			var w:Array = new Array( 80 );
 			
 			// loop over all of the blocks
@@ -164,10 +182,9 @@ package com.adobe.crypto {
 			byteArray.position = 0;
 			return byteArray;
 		}
-		
 
 		/**
-		 * Performs the logical function based on t
+		 *  Performs the logical function based on t
 		 */
 		private static function f( t:int, b:int, c:int, d:int ):int {
 			if ( t < 20 ) {
@@ -181,7 +198,7 @@ package com.adobe.crypto {
 		}
 		
 		/**
-		 * Determines the constant value based on t
+		 *  Determines the constant value based on t
 		 */
 		private static function k( t:int ):int {
 			if ( t < 20 ) {
@@ -195,15 +212,45 @@ package com.adobe.crypto {
 		}
 					
 		/**
-		 * Converts a string to a sequence of 16-word blocks
-		 * that we'll do the processing on.  Appends padding
-		 * and length in the process.
+		 *  Converts a ByteArray to a sequence of 16-word blocks
+		 *  that we'll do the processing on.  Appends padding
+		 *  and length in the process.
 		 *
-		 * @param s The string to split into blocks
-		 * @return An array containing the blocks that s was
-		 *			split into.
+		 *  @param data		The data to split into blocks
+		 *  @return			An array containing the blocks into which data was split
 		 */
-		private static function createBlocks( s:String ):Array {
+		private static function createBlocksFromByteArray( data:ByteArray ):Array
+		{
+			var oldPosition:int = data.position;
+			data.position = 0;
+			
+			var blocks:Array = new Array();
+			var len:int = data.length * 8;
+			var mask:int = 0xFF; // ignore hi byte of characters > 0xFF
+			for( var i:int = 0; i < len; i += 8 )
+			{
+				blocks[ i >> 5 ] |= ( data.readByte() & mask ) << ( 24 - i % 32 );
+			}
+			
+			// append padding and length
+			blocks[ len >> 5 ] |= 0x80 << ( 24 - len % 32 );
+			blocks[ ( ( ( len + 64 ) >> 9 ) << 4 ) + 15 ] = len;
+			
+			data.position = oldPosition;
+			
+			return blocks;
+		}
+					
+		/**
+		 *  Converts a string to a sequence of 16-word blocks
+		 *  that we'll do the processing on.  Appends padding
+		 *  and length in the process.
+		 *
+		 *  @param s	The string to split into blocks
+		 *  @return		An array containing the blocks that s was split into.
+		 */
+		private static function createBlocksFromString( s:String ):Array
+		{
 			var blocks:Array = new Array();
 			var len:int = s.length * 8;
 			var mask:int = 0xFF; // ignore hi byte of characters > 0xFF

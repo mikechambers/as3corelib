@@ -75,6 +75,32 @@ package com.adobe.crypto
 			assertSHA1( millionAs, "34aa973cd4c4daa4f61eeb2bdbad27316534016f" );
 		}
 		
+		public function testSHA1Binary():void {
+		
+			assertSHA1Binary( "abc", "a9993e364706816aba3e25717850c26c9cd0d89d" );
+			
+			assertSHA1Binary( "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
+						"84983e441c3bd26ebaae4aa1f95129e5e54670f1" );
+			
+			assertSHA1Binary( "The quick brown fox jumps over the lazy dog", 
+						"2fd4e1c67a2d28fced849ee1bb76e7391b93eb12" );
+						
+			assertSHA1Binary( "The quick brown fox jumps over the lazy cog", 
+						"de9f2c7fd25e1b3afad3e85a0bd17d9b100db4b3" );
+						
+			assertSHA1Binary( "", 
+						"da39a3ee5e6b4b0d3255bfef95601890afd80709" );
+
+			assertSHA1Binary( "d36e316282959a9ed4c89851497a717f2003-12-15T14:43:07Ztaadtaadpstcsm",
+						"aae47f1162c0578c4b7fd66acb0e290e67d5f4e6" );				 
+						
+			var millionAs:String = new String("");
+			for ( var i:int = 0; i < 1000000; i++ ) {
+				millionAs += "a";
+			}
+			assertSHA1Binary( millionAs, "34aa973cd4c4daa4f61eeb2bdbad27316534016f" );
+		}
+		
 		public function testSHA1Base64():void {
 			assertSHA1Base64( "abc", "qZk+NkcGgWq6PiVxeFDCbJzQ2J0=" );
 		
@@ -103,6 +129,16 @@ package com.adobe.crypto
 		private function assertSHA1( value:String, expected:String ):void {
 			var result:String = SHA1.hash( value );
 			
+			assertTrue( "Hash of '" + value + "' returned wrong value ('" + result + "')",
+						result == expected );
+		}
+		
+		private function assertSHA1Binary(value:String, expected:String):void {
+			
+			var byteArray:ByteArray = new ByteArray();
+			byteArray.writeUTFBytes(value);
+			
+			var result:String = SHA1.hashBytes( byteArray );
 			assertTrue( "Hash of '" + value + "' returned wrong value ('" + result + "')",
 						result == expected );
 		}

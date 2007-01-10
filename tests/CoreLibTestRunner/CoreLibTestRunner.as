@@ -33,18 +33,18 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-import com.adobe.crypto.tests.MD5Test;
-import com.adobe.crypto.tests.SHA1Test;
-import com.adobe.crypto.tests.WSSEUsernameTokenTest;
-import com.adobe.net.tests.URITest;
-import com.adobe.serialization.json.tests.JSONTest;
-import com.adobe.utils.tests.ArrayUtilTest;
-import com.adobe.utils.tests.DateUtilTest;
-import com.adobe.utils.tests.IntUtilTest;
-import com.adobe.utils.tests.NumberFormatterTest;
-import com.adobe.utils.tests.StringUtilTest;
-import com.adobe.utils.tests.XMLUtilTest;
-import com.adobe.utils.tests.DictionaryUtilTest;
+import com.adobe.crypto.MD5Test;
+import com.adobe.crypto.SHA1Test;
+import com.adobe.crypto.WSSEUsernameTokenTest;
+import com.adobe.net.URITest;
+import com.adobe.serialization.json.JSONTest;
+import com.adobe.utils.ArrayUtilTest;
+import com.adobe.utils.DateUtilTest;
+import com.adobe.utils.IntUtilTest;
+import com.adobe.utils.NumberFormatterTest;
+import com.adobe.utils.StringUtilTest;
+import com.adobe.utils.XMLUtilTest;
+import com.adobe.utils.DictionaryUtilTest;
 
 import flexunit.framework.TestSuite;
 			
@@ -58,17 +58,17 @@ private function createSuite():TestSuite
 {
 	var ts:TestSuite = new TestSuite();
 
-		ts.addTestSuite(StringUtilTest);
-		ts.addTestSuite(NumberFormatterTest);
-		ts.addTestSuite(ArrayUtilTest);
-		ts.addTestSuite(DateUtilTest);
-		ts.addTestSuite(URITest);
-		ts.addTestSuite(MD5Test);
-		ts.addTestSuite(IntUtilTest);
-		ts.addTestSuite(JSONTest);		
-		ts.addTestSuite(XMLUtilTest);
-		ts.addTestSuite(SHA1Test);
-		ts.addTestSuite(WSSEUsernameTokenTest);
+		ts.addTestSuite( StringUtilTest );
+		ts.addTestSuite( NumberFormatterTest );
+		ts.addTestSuite( ArrayUtilTest );
+		ts.addTestSuite( DateUtilTest );
+		ts.addTestSuite( URITest );
+		ts.addTestSuite( MD5Test );
+		ts.addTestSuite( IntUtilTest );
+		ts.addTestSuite( JSONTest );		
+		ts.addTestSuite( XMLUtilTest );
+		ts.addTestSuite( SHA1Test );
+		ts.addTestSuite( WSSEUsernameTokenTest );
 		ts.addTestSuite(DictionaryUtilTest);
 	
 	return ts;

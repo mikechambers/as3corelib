@@ -33,72 +33,41 @@
 	ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.utils.tests
+package com.adobe.utils
 {
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;
 	
-	import com.adobe.utils.XMLUtil;
+	import com.adobe.utils.NumberFormatter;
 
-	public class XMLUtilTest extends TestCase
+	public class NumberFormatterTest extends TestCase
 	{	
-		
-		private var validXML:XML = 
-							<cross-domain-policy>
-					   			<allow-access-from domain="*" />
-							</cross-domain-policy>
-							
-		private var nonvalidXML:String = "<div /><div />";
-			
-		private var simpleString:String = "a";
-		
-		private var element:String = "<div />";
-		
-	    public function XMLUtilTest(methodName:String = null)
+	    public function NumberFormatterTest(methodName:String = null)
         {
             super(methodName);
         }
-        
 
+		public function testAddLeadingZero():void
+		{
+			assertTrue("NumberFormatter.addLeadingZero(7) == \"07\"",
+										NumberFormatter.addLeadingZero(7) == "07");
+										
+			assertTrue("NumberFormatter.addLeadingZero(9) == \"09\"",
+										NumberFormatter.addLeadingZero(9) == "09");										
+										
+			assertTrue("NumberFormatter.addLeadingZero(0) == \"00\"",
+										NumberFormatter.addLeadingZero(0) == "00");
+										
+			assertTrue("NumberFormatter.addLeadingZero(-1) == \"-1\"",
+										NumberFormatter.addLeadingZero(-1) == "-1");
+										
+			assertTrue("NumberFormatter.addLeadingZero(10) == \"10\"",
+										NumberFormatter.addLeadingZero(10) == "10");
+										
+			assertTrue("NumberFormatter.addLeadingZero(10000) == \"10000\"",
+										NumberFormatter.addLeadingZero(10000) == "10000");
 
-		public function testStringsAreEqual():void
-		{			
-			assertTrue("XMLUtil.isValidXML(String(validXML))",XMLUtil.isValidXML(String(validXML)));
-			assertTrue("!XMLUtil.isValidXML(simpleString)", !XMLUtil.isValidXML(simpleString));
-			assertTrue("XMLUtil.isValidXML(element)", XMLUtil.isValidXML(element));
-			assertTrue("!XMLUtil.isValidXML(element)", !XMLUtil.isValidXML(nonvalidXML));
-				
 		}
-		
-		private var xml:XML = 
-			<xml>
-				<top>
-					<a>foo</a>
-					<b>bar</b>
-					<c>bam</c>
-				</top>
-			</xml>
-		
-		public function testgetNextSibling():void
-		{
-			
-			var s:Number = (new Date()).getTime();
-			assertTrue("XMLUtil.getNextSibling(xml.top[0].b[0]) == xml.top[0].c[0]", 
-									XMLUtil.getNextSibling(xml.top[0].b[0]) == xml.top[0].c[0]);
-			assertTrue("XMLUtil.getNextSibling(xml.top[0].c[0]) == null", 
-									XMLUtil.getNextSibling(xml.top[0].c[0]) == null);		
-			assertTrue("XMLUtil.getNextSibling(xml.top[0]) == null", 
-									XMLUtil.getNextSibling(xml.top[0]) == null);																
-		}
-		
-		public function testgetPreviousSibling():void
-		{
-			assertTrue("XMLUtil.getPreviousSibling(xml.top[0].b[0]) == xml.top[0].a[0]", 
-									XMLUtil.getPreviousSibling(xml.top[0].b[0]) == xml.top[0].a[0]);
-			assertTrue("XMLUtil.getPreviousSibling(xml.top[0].a[0]) == null", 
-									XMLUtil.getPreviousSibling(xml.top[0].a[0]) == null);		
-			assertTrue("XMLUtil.getPreviousSibling(xml.top[0]) == null", 
-									XMLUtil.getPreviousSibling(xml.top[0]) == null);	
-		}		
+
 	}
 }

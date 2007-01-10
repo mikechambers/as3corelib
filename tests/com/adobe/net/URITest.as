@@ -33,7 +33,7 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.net.tests
+package com.adobe.net
 {
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;

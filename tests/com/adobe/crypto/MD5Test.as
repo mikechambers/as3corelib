@@ -33,43 +33,53 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.utils.tests {
+package com.adobe.crypto
+{
 
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;
 	
-	import com.adobe.utils.IntUtil;
+	import com.adobe.crypto.MD5;
 	
-	public class IntUtilTest extends TestCase {
+	public class MD5Test extends TestCase {
 		
-	    public function IntUtilTest( methodName:String = null) {
+	    public function MD5Test( methodName:String = null) {
 			super( methodName );
         }
-	
-
 		
-		public function testRol():void {
-			assertTrue( "IntUtil.rol( 0x00000001, 1 )", IntUtil.rol( 0x00000001, 1 ) == 0x00000002 );
-			assertTrue( "IntUtil.rol( 0x00000001, 2 )", IntUtil.rol( 0x00000001, 2 ) == 0x00000004 );
-			assertTrue( "IntUtil.rol( 0x00000001, 4 )", IntUtil.rol( 0x00000001, 4 ) == 0x00000010 );
-			assertTrue( "IntUtil.rol( 0x00000001, 8 )", IntUtil.rol( 0x00000001, 8 ) == 0x00000100 );
-			assertTrue( "IntUtil.rol( 0x00000001, 12 )", IntUtil.rol( 0x00000001, 12 ) == 0x00001000 );
-			assertTrue( "IntUtil.rol( 0x00000001, 16 )", IntUtil.rol( 0x00000001, 16 ) == 0x00010000 );
-			assertTrue( "IntUtil.rol( 0x00000001, 20 )", IntUtil.rol( 0x00000001, 20 ) == 0x00100000 );
-			assertTrue( "IntUtil.rol( 0x00000001, 24 )", IntUtil.rol( 0x00000001, 24 ) == 0x01000000 );
-			assertTrue( "IntUtil.rol( 0x00000001, 28 )", IntUtil.rol( 0x00000001, 28 ) == 0x10000000 );
-			assertTrue( "IntUtil.rol( 0x00000001, 31 )", uint( IntUtil.rol( 0x00000001, 31 ) ) == 0x80000000 );
-			assertTrue( "IntUtil.rol( 0x00000001, 32 )", IntUtil.rol( 0x00000001, 32 ) == 0x00000001 );
-			
-			assertTrue( "IntUtil.rol( 0x80000000, 1 )", IntUtil.rol( int( 0x80000000 ), 1 ) == 0x00000001 );
+		public function testEmpty():void {
+			assertMD5( "", "d41d8cd98f00b204e9800998ecf8427e" );
 		}
 		
-		public function testToHex():void {
-			assertTrue( "Little Endian", IntUtil.toHex( 0x12345678 ) == "78563412" );
-			assertTrue( "Big Endian", IntUtil.toHex( 0x12345678, true ) == "12345678" );
-			
-			assertTrue( "Little Endian Negative", IntUtil.toHex( int( 0x89ABCDEF ) ) == "efcdab89" );
-			assertTrue( "Big Endian Negative", IntUtil.toHex( int( 0x89ABCDEF ), true ) == "89abcdef" );
+		public function testA():void {
+			assertMD5( "a", "0cc175b9c0f1b6a831c399e269772661" );
 		}
+		
+		public function testABC():void {
+			assertMD5( "abc", "900150983cd24fb0d6963f7d28e17f72" );
+		}
+		
+		public function testMD():void {
+			assertMD5( "message digest", "f96b697d7cb7938d525a2f31aaf161d0" );
+		}
+		
+		public function testAlphabet():void {
+			assertMD5( "abcdefghijklmnopqrstuvwxyz", "c3fcd3d76192e4007dfb496cca67e13b" );
+		}
+		
+		public function testAlphaNumeric():void {
+			assertMD5( "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789", "d174ab98d277d9f5a5611c2c9f419d9f" );
+		}
+		
+		public function testRepeatingNumeric():void {
+			assertMD5( "12345678901234567890123456789012345678901234567890123456789012345678901234567890", "57edf4a22be3c955ac49da2e2107b67a" );
+		}
+			
+		private function assertMD5( value:String, expected:String ):void {
+			assertTrue( "Hash of '" + value + "' returned wrong value ('" + MD5.hash( value ) + " ')",
+						MD5.hash( value ) == expected );
+		};
+		
 	}
+		
 }

@@ -33,42 +33,44 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.crypto.tests {
+package com.adobe.utils
+{
 
-	import com.adobe.crypto.WSSEUsernameToken;
-	
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;
 	
-	public class WSSEUsernameTokenTest extends TestCase {
+	import com.adobe.utils.IntUtil;
+	
+	public class IntUtilTest extends TestCase {
 		
-	    public function WSSEUsernameTokenTest( methodName:String = null ) {
+	    public function IntUtilTest( methodName:String = null) {
 			super( methodName );
         }
-		
-		public function testWSSEUsernameToken():void {
-		
-			// Results generated from stripped-down version of Claude
-			// Montpetit's WSSE-enabled Atom API client (see
-			// http://www.montpetit.net/en/2004/06/06/11h32/index.html).
-			//
-			
-			assertWSSEUsernameToken( "abc", "abc", "0123456789", new Date(Date.parse("05/09/2006 13:43:21 GMT-0700")),
-				 "UsernameToken Username=\"abc\", PasswordDigest=\"3ywhFZ7z+hyAPXgBFXsN4F+443E=\", Nonce=\"MDEyMzQ1Njc4OQ==\", Created=\"2006-05-09T13:43:21Z\"" );
+	
 
-			assertWSSEUsernameToken( "fe31_449", "168fqo4659", "1147216300992", new Date(Date.parse("05/09/2006 16:11:46 GMT-0700")),
-				 "UsernameToken Username=\"fe31_449\", PasswordDigest=\"o95p2xXn26wPNqybTfKmYULWFOQ=\", Nonce=\"MTE0NzIxNjMwMDk5Mg==\", Created=\"2006-05-09T16:11:46Z\"" );
-				 
-			assertWSSEUsernameToken( "candy", "dandy", "2018558572", new Date(Date.parse("08/16/2006 01:48:28 GMT-0700")),
-				 "UsernameToken Username=\"candy\", PasswordDigest=\"9F/nvNF47WErFaElKOO0OGhFqPI=\", Nonce=\"MjAxODU1ODU3Mg==\", Created=\"2006-08-16T01:48:28Z\"" );
+		
+		public function testRol():void {
+			assertTrue( "IntUtil.rol( 0x00000001, 1 )", IntUtil.rol( 0x00000001, 1 ) == 0x00000002 );
+			assertTrue( "IntUtil.rol( 0x00000001, 2 )", IntUtil.rol( 0x00000001, 2 ) == 0x00000004 );
+			assertTrue( "IntUtil.rol( 0x00000001, 4 )", IntUtil.rol( 0x00000001, 4 ) == 0x00000010 );
+			assertTrue( "IntUtil.rol( 0x00000001, 8 )", IntUtil.rol( 0x00000001, 8 ) == 0x00000100 );
+			assertTrue( "IntUtil.rol( 0x00000001, 12 )", IntUtil.rol( 0x00000001, 12 ) == 0x00001000 );
+			assertTrue( "IntUtil.rol( 0x00000001, 16 )", IntUtil.rol( 0x00000001, 16 ) == 0x00010000 );
+			assertTrue( "IntUtil.rol( 0x00000001, 20 )", IntUtil.rol( 0x00000001, 20 ) == 0x00100000 );
+			assertTrue( "IntUtil.rol( 0x00000001, 24 )", IntUtil.rol( 0x00000001, 24 ) == 0x01000000 );
+			assertTrue( "IntUtil.rol( 0x00000001, 28 )", IntUtil.rol( 0x00000001, 28 ) == 0x10000000 );
+			assertTrue( "IntUtil.rol( 0x00000001, 31 )", uint( IntUtil.rol( 0x00000001, 31 ) ) == 0x80000000 );
+			assertTrue( "IntUtil.rol( 0x00000001, 32 )", IntUtil.rol( 0x00000001, 32 ) == 0x00000001 );
+			
+			assertTrue( "IntUtil.rol( 0x80000000, 1 )", IntUtil.rol( int( 0x80000000 ), 1 ) == 0x00000001 );
 		}
 		
-		private function assertWSSEUsernameToken( username:String, password:String, nonce:String,
-				timestamp:Date, expected:String ):void {
-			var result:String = WSSEUsernameToken.getUsernameToken( username, password, nonce, timestamp );
+		public function testToHex():void {
+			assertTrue( "Little Endian", IntUtil.toHex( 0x12345678 ) == "78563412" );
+			assertTrue( "Big Endian", IntUtil.toHex( 0x12345678, true ) == "12345678" );
 			
-			assertTrue( "WSSEUsernameToken returned wrong value ('" + result + "')",
-						result == expected );
-		}		
+			assertTrue( "Little Endian Negative", IntUtil.toHex( int( 0x89ABCDEF ) ) == "efcdab89" );
+			assertTrue( "Big Endian Negative", IntUtil.toHex( int( 0x89ABCDEF ), true ) == "89abcdef" );
+		}
 	}
 }

@@ -33,7 +33,8 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.serialization.json.tests {
+package com.adobe.serialization.json
+{
 
 	import flexunit.framework.TestCase;
 	import flexunit.framework.TestSuite;

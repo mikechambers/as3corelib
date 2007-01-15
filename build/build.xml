@@ -1,0 +1,101 @@
+<?xml version="1.0"?>
+<project name="as3corelib" basedir="../" default="lib">
+
+	<!-- Define variables/paths used in this build script -->
+	<property file="./build/build.properties" />
+
+	<!--
+		Have you edit the properties file to make sure the paths are right oo your system?
+	-->
+	<target name="properties">
+		<fail unless="asdoc.exe">The "asdoc.exe" property must be set in ${build.dir}/build.properties.</fail>
+		<fail unless="compc.exe">The "compc.exe" property must be set in ${build.dir}/build.properties.</fail>
+		<fail unless="mxmlc.exe">The "mxmlc.exe" property must be set in ${build.dir}/build.properties.</fail>
+	</target>
+	
+	<!--
+		Compile the unit tests for the library, placing the test runner .swf file
+		in the bin directory.
+	-->
+	<target name="compileTests" depends="properties">
+		<exec executable="${mxmlc.exe}" dir="${basedir}">
+			<!-- Point to the main test runner's application mxml file -->
+			<arg line="'${tests.dir}/${testRunner.dir}/${testRunner.name}.mxml'" />
+			
+			<!-- Place the built .swf file in the "bin" directory -->
+			<arg line="-o '${bin.dir}/${testRunner.name}.swf'" />
+			
+			<!-- Define source directories for "src" and "tests" -->
+			<arg line="-sp ${src.dir}" />
+			<arg line="-sp ${tests.dir}" />
+			
+			<!-- Include the necessary framework libraries in the class path -->
+			<arg line="-l '${flex2sdk.lib.dir}'" />
+			
+			<!-- Include in the flexunit.swc in the class path -->
+			<arg line="-l ${flexunit.swc}" />
+			
+			<!-- Include locale-specific items in the path -->
+			<arg line="-locale ${flex2sdk.locale}" />
+			<arg line="-l '${flex2sdk.locale.dir}'" />
+		</exec>
+	</target>
+	
+	<!--
+		Runs the unit tests for the library in the stand-alone Flash Player
+	-->
+	<target name="test" depends="compileTests">
+		<!--
+			If/When we add support for determinig the status of unit tests
+			as part of the ANT build process, we need to change the spawn to
+			"no" so that ANT waits until the test runner closes before
+			proceeding.
+		-->
+		<exec executable="${flashDebugPlayer.exe}" spawn="yes">
+			<arg line="${bin.dir}/${testRunner.name}.swf" />
+		</exec>
+	</target>
+	
+	<!--
+		Compile all of the classes under the "src" tree into a .swc file
+	-->
+	<target name="lib" depends="properties">
+		<exec executable="${compc.exe}" dir="${basedir}">
+			<!-- Specify the name of the output file -->
+			<arg line="-o '${bin.dir}/${library.name}.swc'" />
+			
+			<!-- Specify the main source path as "src" -->
+			<arg line="-sp ${src.dir}" />
+			
+			<!-- Include all of the classes in the "src" tree -->
+			<arg line="-is ${src.dir}" />
+		</exec>
+	</target>
+	
+	<!--
+		Generate ASDoc output for the library
+	-->
+	<target name="docs" depends="properties">
+		<!-- Clean out the contents of the doc directory, without delete "docs" -->
+		<!--
+		<delete includeemptydirs="true">
+			<fileset dir="${docs.dir}" includes="**/*" />
+		</delete>
+		-->
+		
+		<exec executable="${asdoc.exe}" spawn="no">
+			<!-- Place the documentation in the "docs" directory -->
+			<arg line="-o ${docs.dir}" />
+			
+			<!-- Specify the main source path as "src" -->
+			<arg line="-sp ${src.dir}" />
+			
+			<!-- Document all of the classes in the "src" tree -->
+			<arg line="-ds ${src.dir} " />
+			
+			<!-- Include the library name in the window title -->
+			<arg line="-window-title 'Adobe ActionScript 3.0 Library - ${library.name}' "/>
+		</exec>
+	</target>
+
+</project>

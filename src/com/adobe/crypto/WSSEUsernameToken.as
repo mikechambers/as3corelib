@@ -91,14 +91,14 @@ package com.adobe.crypto
 			return s.replace(".", "");
 		}
 		
-		private static function base64Encode(s:String):String
+		internal static function base64Encode(s:String):String
 		{
 			var encoder:Base64Encoder = new Base64Encoder();
 			encoder.encode(s);
 			return encoder.flush();
 		}
 		
-		private static function generateTimestamp(timestamp:Date):String
+		internal static function generateTimestamp(timestamp:Date):String
 		{
 			if (timestamp == null)
 			{
@@ -109,7 +109,7 @@ package com.adobe.crypto
 			return dateFormatter.format(timestamp) + "Z";
 		}
 		
-		private static function getBase64Digest(nonce:String, created:String, password:String):String
+		internal static function getBase64Digest(nonce:String, created:String, password:String):String
 		{
 			return SHA1.hashToBase64(nonce + created + password);
 		}

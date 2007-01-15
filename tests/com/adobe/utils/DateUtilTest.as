@@ -84,10 +84,14 @@ package com.adobe.utils
 			assertTrue("d.date == 5",d.date == 5);
 			assertTrue("d.month == 10", d.month == 10);  // 10 is November
 			assertTrue("d.fullYear == 1994", d.fullYear == 1994);
-			assertTrue("d.hours == 8", d.hours == 8);
+			// Fixes issue #12 - use UTC so time zone doesn't throw off hours
+			assertTrue("d.hoursUTC == 16", d.hoursUTC == 16 );
 			assertTrue("d.minutes == 15", d.minutes == 15);
 			assertTrue("d.seconds == 30", d.seconds == 30);
-			assertTrue("d.timezoneOffset/60 == 8", d.timezoneOffset/60 == 8);
+			// Can't reliably test time zone offset since the date string's original
+			// time zone is converted to the local time zone of the computer running
+			// the unit tests.
+			//assertTrue("d.timezoneOffset/60 == 8", d.timezoneOffset/60 == 8);
 		}
 		
 		public function testParseW3CDTFWithMilliseconds():void
@@ -103,11 +107,15 @@ package com.adobe.utils
 			assertTrue("d.date == 5",d.date == 5);
 			assertTrue("d.month == 10", d.month == 10);  // 10 is November
 			assertTrue("d.fullYear == 1994", d.fullYear == 1994);
-			assertTrue("d.hours == 8", d.hours == 8);
+			// Fixes issue #12 - use UTC so time zone doesn't throw off hours
+			assertTrue("d.hoursUTC == 16", d.hoursUTC == 16 );
 			assertTrue("d.minutes == 15", d.minutes == 15);
 			assertTrue("d.seconds == 30", d.seconds == 30);
 			assertTrue("d.milliseconds == 345", d.milliseconds == 345);
-			assertTrue("d.timezoneOffset/60 == 8", d.timezoneOffset/60 == 8);
+			// Can't reliably test time zone offset since the date string's original
+			// time zone is converted to the local time zone of the computer running
+			// the unit tests.
+			//assertTrue("d.timezoneOffset/60 == 8", d.timezoneOffset/60 == 8);
 		}
 		
 		public function testW3CDTF():void
@@ -212,7 +220,8 @@ package com.adobe.utils
 			assertTrue("d.date == 5",d.date == 5);
 			assertTrue("d.month == 11", d.month == 11);
 			assertTrue("d.fullYear == 2005", d.fullYear == 2005);
-			assertTrue("d.hours == 14", d.hours == 14);
+			// Fixes issue #12 - use UTC so time zone doesn't throw off hours
+			assertTrue("d.hoursUTC == 22", d.hoursUTC == 22 );
 			assertTrue("d.minutes == 55", d.minutes == 55);
 			assertTrue("d.seconds == 43", d.seconds == 43);
 			

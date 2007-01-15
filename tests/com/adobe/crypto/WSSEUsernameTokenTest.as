@@ -54,21 +54,36 @@ package com.adobe.crypto
 			// http://www.montpetit.net/en/2004/06/06/11h32/index.html).
 			//
 			
-			assertWSSEUsernameToken( "abc", "abc", "0123456789", new Date(Date.parse("05/09/2006 13:43:21 GMT-0700")),
-				 "UsernameToken Username=\"abc\", PasswordDigest=\"3ywhFZ7z+hyAPXgBFXsN4F+443E=\", Nonce=\"MDEyMzQ1Njc4OQ==\", Created=\"2006-05-09T13:43:21Z\"" );
-
-			assertWSSEUsernameToken( "fe31_449", "168fqo4659", "1147216300992", new Date(Date.parse("05/09/2006 16:11:46 GMT-0700")),
-				 "UsernameToken Username=\"fe31_449\", PasswordDigest=\"o95p2xXn26wPNqybTfKmYULWFOQ=\", Nonce=\"MTE0NzIxNjMwMDk5Mg==\", Created=\"2006-05-09T16:11:46Z\"" );
+			var date:Date = new Date(Date.parse("05/09/2006 13:43:21 GMT-0700"));
+			assertWSSEUsernameToken( "abc", "abc", "0123456789", date,
+				 "UsernameToken Username=\"abc\", PasswordDigest=\"" 
+				 + WSSEUsernameToken.getBase64Digest( WSSEUsernameToken.base64Encode( "0123456789" ),
+				 									WSSEUsernameToken.generateTimestamp( date ),
+				 									"abc" ) 
+				 + "\", Nonce=\"MDEyMzQ1Njc4OQ==\", Created=\"2006-05-09T" + ( date.hours < 10 ? "0" + date.hours : date.hours ) + ":43:21Z\"" );
+			
+			date = new Date(Date.parse("05/09/2006 16:11:46 GMT-0700"));
+			assertWSSEUsernameToken( "fe31_449", "168fqo4659", "1147216300992", date,
+				 "UsernameToken Username=\"fe31_449\", PasswordDigest=\"" 
+				 + WSSEUsernameToken.getBase64Digest( WSSEUsernameToken.base64Encode( "1147216300992" ), 
+				 									WSSEUsernameToken.generateTimestamp( date ), 
+				 									"168fqo4659" ) 
+				 + "\", Nonce=\"MTE0NzIxNjMwMDk5Mg==\", Created=\"2006-05-09T" + ( date.hours < 10 ? "0" + date.hours : date.hours ) + ":11:46Z\"" );
 				 
-			assertWSSEUsernameToken( "candy", "dandy", "2018558572", new Date(Date.parse("08/16/2006 01:48:28 GMT-0700")),
-				 "UsernameToken Username=\"candy\", PasswordDigest=\"9F/nvNF47WErFaElKOO0OGhFqPI=\", Nonce=\"MjAxODU1ODU3Mg==\", Created=\"2006-08-16T01:48:28Z\"" );
+			date = new Date(Date.parse("08/16/2006 01:48:28 GMT-0700"));
+			assertWSSEUsernameToken( "candy", "dandy", "2018558572", date,
+				 "UsernameToken Username=\"candy\", PasswordDigest=\"" 
+				 + WSSEUsernameToken.getBase64Digest( WSSEUsernameToken.base64Encode( "2018558572" ), 
+				 									WSSEUsernameToken.generateTimestamp( date ), 
+				 									"dandy" )
+				 + "\", Nonce=\"MjAxODU1ODU3Mg==\", Created=\"2006-08-16T" + ( date.hours < 10 ? "0" + date.hours : date.hours ) + ":48:28Z\"" );
 		}
 		
 		private function assertWSSEUsernameToken( username:String, password:String, nonce:String,
 				timestamp:Date, expected:String ):void {
 			var result:String = WSSEUsernameToken.getUsernameToken( username, password, nonce, timestamp );
 			
-			assertTrue( "WSSEUsernameToken returned wrong value ('" + result + "')",
+			assertTrue( "WSSEUsernameToken returned wrong value ('" + result + "')" + expected,
 						result == expected );
 		}		
 	}

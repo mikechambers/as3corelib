@@ -98,7 +98,7 @@ package com.adobe.utils
 		{
 			//1994-11-05T08:15:30-05:00 corresponds to November 5, 1994, 8:15:30
 			// am, US Eastern Standard Time.
-			
+
 			var s:String = "1994-11-05T08:15:30.345-08:00";
 			
 			var d:Date = DateUtil.parseW3CDTF(s);
@@ -116,6 +116,22 @@ package com.adobe.utils
 			// time zone is converted to the local time zone of the computer running
 			// the unit tests.
 			//assertTrue("d.timezoneOffset/60 == 8", d.timezoneOffset/60 == 8);
+
+			// Now test without padding (date, month, offset)
+			var s2:String = "1994-9-5T8:15:30.345-8:00";
+			
+			var d2:Date = DateUtil.parseW3CDTF(s2);
+			
+			assertNotNull("d2 is null", d2);
+			assertTrue("d2.date == 5",d2.date == 5);
+			assertTrue("d2.month == 10", d2.month == 8);  // 8 is september
+			assertTrue("d2.fullYear == 1994", d2.fullYear == 1994);
+			// Fixes issue #12 - use UTC so time zone doesn't throw off hours
+			assertTrue("d2.hoursUTC == 16", d2.hoursUTC == 16 );
+			assertTrue("d2.minutes == 15", d2.minutes == 15);
+			assertTrue("d2.seconds == 30", d2.seconds == 30);
+			assertTrue("d2.milliseconds == 345", d2.milliseconds == 345);
+
 		}
 		
 		public function testW3CDTF():void
@@ -239,6 +255,22 @@ package com.adobe.utils
 			{
 				assertTrue("DateUtil.parseRFC822(\"foo\") did not throw an exception.", false);
 			}
+
+			// Now try a string without padding (date and hour)
+			var s2:String = "Mon, 5 Dec 2005 9:55:43 -0800";
+			
+			var d2:Date = DateUtil.parseRFC822(s2);
+			
+			assertNotNull("d is null", d2);
+			assertTrue("d2.date == 5",d2.date == 5);
+			assertTrue("d2.month == 11", d2.month == 11);
+			assertTrue("d2.fullYear == 2005", d2.fullYear == 2005);
+			// Fixes issue #12 - use UTC so time zone doesn't throw off hours
+			assertTrue("d2.hoursUTC == 22", d2.hoursUTC == 17);
+			assertTrue("d2.minutes == 55", d2.minutes == 55);
+			assertTrue("d2.seconds == 43", d2.seconds == 43);
+
+
 		}
 		
 		

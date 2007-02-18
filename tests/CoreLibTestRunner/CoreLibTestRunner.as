@@ -35,6 +35,8 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 import com.adobe.crypto.MD5Test;
 import com.adobe.crypto.SHA1Test;
+import com.adobe.crypto.SHA224Test;
+import com.adobe.crypto.SHA256Test;
 import com.adobe.crypto.WSSEUsernameTokenTest;
 import com.adobe.net.URITest;
 import com.adobe.serialization.json.JSONTest;
@@ -58,18 +60,27 @@ private function createSuite():TestSuite
 {
 	var ts:TestSuite = new TestSuite();
 
-		ts.addTestSuite( StringUtilTest );
-		ts.addTestSuite( NumberFormatterTest );
-		ts.addTestSuite( ArrayUtilTest );
-		ts.addTestSuite( DateUtilTest );
-		ts.addTestSuite( URITest );
-		ts.addTestSuite( MD5Test );
-		ts.addTestSuite( IntUtilTest );
-		ts.addTestSuite( JSONTest );		
-		ts.addTestSuite( XMLUtilTest );
-		ts.addTestSuite( SHA1Test );
-		ts.addTestSuite( WSSEUsernameTokenTest );
-		ts.addTestSuite(DictionaryUtilTest);
+	// utils
+	ts.addTestSuite( StringUtilTest );
+	ts.addTestSuite( NumberFormatterTest );
+	ts.addTestSuite( ArrayUtilTest );
+	ts.addTestSuite( DateUtilTest );
+	ts.addTestSuite( IntUtilTest );
+	ts.addTestSuite( XMLUtilTest );
+	ts.addTestSuite( DictionaryUtilTest );
+	
+	// crypto
+	ts.addTestSuite( MD5Test );
+	ts.addTestSuite( SHA1Test );
+	ts.addTestSuite( SHA224Test );
+	ts.addTestSuite( SHA256Test );
+	ts.addTestSuite( WSSEUsernameTokenTest );
+	
+	// net
+	ts.addTestSuite( URITest );
+	
+	// serialization
+	ts.addTestSuite( JSONTest );		
 	
 	return ts;
 }

@@ -13,11 +13,23 @@ package com.adobe.utils {
 		 * Rotates x left n bits
 		 *
 		 * @langversion ActionScript 3.0
-		 * @playerversion Flash 8.5
+		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
 		public static function rol ( x:int, n:int ):int {
 			return ( x << n ) | ( x >>> ( 32 - n ) );
+		}
+		
+		/**
+		 * Rotates x right n bits
+		 *
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
+		 * @tiptext
+		 */
+		public static function ror ( x:int, n:int ):uint {
+			var nn:int = 32 - n;
+			return ( x << nn ) | ( x >>> ( 32 - nn ) );
 		}
 		
 		/** String for quick lookup of a hex character based on index */

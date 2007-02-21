@@ -39,8 +39,20 @@ package com.adobe.images
 	import flash.display.BitmapData;
 	import flash.utils.ByteArray;
 
+	/**
+	 * Class that converts BitmapData into a valid PNG
+	 */	
 	public class PNGEncoder
 	{
+		/**
+		 * Created a PNG image from the specified BitmapData
+		 *
+		 * @param image The BitmapData that will be converted into the PNG format.
+		 * @return a ByteArray representing the PNG encoded image data.
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
+		 * @tiptext
+		 */			
 	    public static function encode(img:BitmapData):ByteArray {
 	        // Create output byte array
 	        var png:ByteArray = new ByteArray();

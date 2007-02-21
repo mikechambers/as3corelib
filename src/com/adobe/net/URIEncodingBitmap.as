@@ -42,6 +42,9 @@ package com.adobe.net
 	 * character escaping.  This class is only needed if you
 	 * create a derived class of URI to handle custom URI
 	 * syntax.  This class is used internally by URI.
+	 * 
+	 * @langversion ActionScript 3.0
+	 * @playerversion Flash 9.0* 
 	 */
 	public class URIEncodingBitmap extends ByteArray
 	{
@@ -49,6 +52,9 @@ package com.adobe.net
 		 * Constructor.  Creates an encoding bitmap using the given
 		 * string of characters as the set of characters that need
 		 * to be URI escaped.
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */
 		public function URIEncodingBitmap(charsToEscape:String) : void
 		{
@@ -90,6 +96,9 @@ package com.adobe.net
 		 * example, if '%' is given, the return value is 37 (0x25).
 		 * If the character given does not need to be escaped, the
 		 * return value is zero.
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0 
 		 */
 		public function ShouldEscape(char:String) : int
 		{

@@ -68,6 +68,9 @@ package com.adobe.net
 	 * non-hierarchical URI's), this class can be fully subclassed.  If you
 	 * intended to subclass URI, please see the source code for complete
 	 * documation on protected members and protected fuctions.</p>
+	 * 
+	 * @langversion ActionScript 3.0
+	 * @playerversion Flash 9.0 
 	 */
 	public class URI
 	{	

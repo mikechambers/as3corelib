@@ -46,6 +46,9 @@ package com.adobe.webapis
 		*  	received as the download operation progresses.
 		*	 
 		* 	@eventType flash.events.ProgressEvent.PROGRESS
+		* 
+		* @langversion ActionScript 3.0
+		* @playerversion Flash 9.0
 		*/
 		[Event(name="progress", type="flash.events.ProgressEvent")]		
 	
@@ -54,6 +57,9 @@ package com.adobe.webapis
 		*	error that terminates the download.
 		* 
 		* 	@eventType flash.events.IOErrorEvent.IO_ERROR
+		* 
+		* @langversion ActionScript 3.0
+		* @playerversion Flash 9.0
 		*/
 		[Event(name="ioError", type="flash.events.IOErrorEvent")]		
 		
@@ -62,12 +68,18 @@ package com.adobe.webapis
 		*	load data from a server outside the security sandbox.
 		* 
 		* 	@eventType flash.events.SecurityErrorEvent.SECURITY_ERROR
+		* 
+		* @langversion ActionScript 3.0
+		* @playerversion Flash 9.0
 		*/
 		[Event(name="securityError", type="flash.events.SecurityErrorEvent")]	
 	
 	/**
 	*	Base class for services that utilize URLLoader
 	*	to communicate with remote APIs / Services.
+	* 
+	* @langversion ActionScript 3.0
+	* @playerversion Flash 9.0
 	*/
 	public class URLLoaderBase extends ServiceBase
 	{	

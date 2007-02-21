@@ -42,6 +42,9 @@ package com.adobe.utils
 		 * Constant representing a text node type returned from XML.nodeKind.
 		 * 
 		 * @see XML.nodeKind()
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */
 		public static const TEXT:String = "text";
 		
@@ -49,6 +52,9 @@ package com.adobe.utils
 		 * Constant representing a comment node type returned from XML.nodeKind.
 		 * 
 		 * @see XML.nodeKind()
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */		
 		public static const COMMENT:String = "comment";
 		
@@ -56,6 +62,9 @@ package com.adobe.utils
 		 * Constant representing a processing instruction type returned from XML.nodeKind.
 		 * 
 		 * @see XML.nodeKind()
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */		
 		public static const PROCESSING_INSTRUCTION:String = "processing-instruction";
 		
@@ -63,6 +72,9 @@ package com.adobe.utils
 		 * Constant representing an attribute type returned from XML.nodeKind.
 		 * 
 		 * @see XML.nodeKind()
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */		
 		public static const ATTRIBUTE:String = "attribute";
 		
@@ -70,6 +82,9 @@ package com.adobe.utils
 		 * Constant representing a element type returned from XML.nodeKind.
 		 * 
 		 * @see XML.nodeKind()
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */		
 		public static const ELEMENT:String = "element";
 		
@@ -80,6 +95,9 @@ package com.adobe.utils
 		 * 
 		 * @return A Boolean value indicating whether the specified string is
 		 * valid XML.
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */
 		public static function isValidXML(data:String):Boolean
 		{
@@ -109,6 +127,9 @@ package com.adobe.utils
 		 * 
 		 * @return The next sibling of the node. null if the node does not have 
 		 * a sibling after it, or if the node has no parent.
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */		
 		public static function getNextSibling(x:XML):XML
 		{	
@@ -122,6 +143,9 @@ package com.adobe.utils
 		 * 
 		 * @return The sibling before the node. null if the node does not have 
 		 * a sibling before it, or if the node has no parent.
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */			
 		public static function getPreviousSibling(x:XML):XML
 		{	

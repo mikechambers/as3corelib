@@ -61,12 +61,18 @@ package com.adobe.net
 	 * 
 	 * @see URI.getRelation
 	 * @see URI.getCommonParent
+	 * 
+	 * @langversion ActionScript 3.0
+	 * @playerversion Flash 9.0
 	 */
 	public interface IURIResolver
 	{
 		/**
 		 * Implement this method to provide custom URI resolution for
 		 * your application.
+		 * 
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 9.0
 		 */
 		function resolve(uri:URI) : URI;
 	}

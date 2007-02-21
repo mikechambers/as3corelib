@@ -40,7 +40,7 @@ package com.adobe.utils
 	* 	Class that contains static utility methods for manipulating Strings.
 	* 
 	* 	@langversion ActionScript 3.0
-	*	@playerversion Flash 8.5
+	*	@playerversion Flash 9.0
 	*	@tiptext
 	*/		
 	public class StringUtil
@@ -59,7 +59,7 @@ package com.adobe.utils
 		*	equal in a case sensitive compare.	
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/			
 		public static function stringsAreEqual(s1:String, s2:String, 
@@ -85,7 +85,7 @@ package com.adobe.utils
 		*	@returns A String with whitespace removed from the begining and end	
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/			
 		public static function trim(input:String):String
@@ -101,7 +101,7 @@ package com.adobe.utils
 		*	@returns A String with whitespace removed from the begining	
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function ltrim(input:String):String
@@ -125,7 +125,7 @@ package com.adobe.utils
 		*	@returns A String with whitespace removed from the end	
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function rtrim(input:String):String
@@ -152,7 +152,7 @@ package com.adobe.utils
 		*	@returns True if the string starts with the prefix, false if it does not.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function beginsWith(input:String, prefix:String):Boolean
@@ -170,7 +170,7 @@ package com.adobe.utils
 		*	@returns True if the string ends with the suffix, false if it does not.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function endsWith(input:String, suffix:String):Boolean
@@ -189,7 +189,7 @@ package com.adobe.utils
 		*	@returns A String with the remove string removed.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function remove(input:String, remove:String):String
@@ -214,7 +214,7 @@ package com.adobe.utils
 		*	replaceWith string.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/
 		public static function replace(input:String, replace:String, replaceWith:String):String

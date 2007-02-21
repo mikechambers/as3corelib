@@ -44,7 +44,7 @@ package com.adobe.utils {
 		 * @return A string of length 8 corresponding to the 
 		 *		hex representation of n ( minus the leading "0x" )
 		 * @langversion ActionScript 3.0
-		 * @playerversion Flash 8.5
+		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
 		public static function toHex( n:int, bigEndian:Boolean = false ):String {

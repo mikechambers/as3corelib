@@ -43,7 +43,7 @@ package com.adobe.errors
 	* in the instance have not been initialized properly.
 	*
 	* @langversion ActionScript 3.0
-	* @playerversion Flash 8.5
+	* @playerversion Flash 9.0
 	* @tiptext
 	*
 	*/
@@ -55,7 +55,7 @@ package com.adobe.errors
 		*	@param message A message describing the error in detail.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/
 		public function IllegalStateError(message:String)

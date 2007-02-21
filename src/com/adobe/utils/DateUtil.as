@@ -43,7 +43,7 @@ package com.adobe.utils
 	*	with Dates.
 	* 
 	* 	@langversion ActionScript 3.0
-	*	@playerversion Flash 8.5
+	*	@playerversion Flash 9.0
 	*	@tiptext
 	*/	
 	public class DateUtil
@@ -59,7 +59,7 @@ package com.adobe.utils
 		* 	@return An English 3 Letter Month abbreviation.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see SHORT_MONTH
@@ -82,7 +82,7 @@ package com.adobe.utils
 		*	short name.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see SHORT_MONTH
@@ -102,7 +102,7 @@ package com.adobe.utils
 		* 	@return An English full month name.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see FULL_MONTH
@@ -122,7 +122,7 @@ package com.adobe.utils
 		*	full month name.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see FULL_MONTH
@@ -142,7 +142,7 @@ package com.adobe.utils
 		* 	@return An English 3 Letter day abbreviation.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see SHORT_DAY
@@ -162,7 +162,7 @@ package com.adobe.utils
 		*	full month name.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see SHORT_DAY
@@ -182,7 +182,7 @@ package com.adobe.utils
 		* 	@return An English full day name.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see FULL_DAY
@@ -202,7 +202,7 @@ package com.adobe.utils
 		*	full month name.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*
 		*	@see FULL_DAY
@@ -223,7 +223,7 @@ package com.adobe.utils
 		*	Single digits will be padded with 0.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function getShortYear(d:Date):String
@@ -251,7 +251,7 @@ package com.adobe.utils
 		* 	@return An int indicating how the two dates compare.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function compareDates(d1:Date, d2:Date):int
@@ -286,7 +286,7 @@ package com.adobe.utils
 		* 	@return An int between 0 and 13 ( 1 - 12 ) representing the short hour.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function getShortHour(d:Date):int
@@ -321,7 +321,7 @@ package com.adobe.utils
 		*	hour represents.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function getAMPM(d:Date):String
@@ -341,7 +341,7 @@ package com.adobe.utils
 		* @returns
 		*
 		* @langversion ActionScript 3.0
-		* @playerversion Flash 8.5
+		* @playerversion Flash 9.0
 		* @tiptext
 		*
 		* @see http://asg.web.cmu.edu/rfc/rfc822.html
@@ -470,7 +470,7 @@ package com.adobe.utils
 		* @returns
 		*
 		* @langversion ActionScript 3.0
-		* @playerversion Flash 8.5
+		* @playerversion Flash 9.0
 		* @tiptext
 		*
 		* @see http://asg.web.cmu.edu/rfc/rfc822.html
@@ -527,7 +527,7 @@ package com.adobe.utils
 		* @returns
 		*
 		* @langversion ActionScript 3.0
-		* @playerversion Flash 8.5
+		* @playerversion Flash 9.0
 		* @tiptext
 		*
 		* @see http://www.w3.org/TR/NOTE-datetime
@@ -606,7 +606,7 @@ package com.adobe.utils
 		* @returns
 		*
 		* @langversion ActionScript 3.0
-		* @playerversion Flash 8.5
+		* @playerversion Flash 9.0
 		* @tiptext
 		*
 		* @see http://www.w3.org/TR/NOTE-datetime

@@ -45,7 +45,7 @@ package com.adobe.net
 	* 	you to dynamically attach properties to it (which URLLoader does not allow).
 	* 
 	* 	@langversion ActionScript 3.0
-	*	@playerversion Flash 8.5
+	*	@playerversion Flash 9.0
 	*	@tiptext
 	*/	
 	public dynamic class DynamicURLLoader extends URLLoader 

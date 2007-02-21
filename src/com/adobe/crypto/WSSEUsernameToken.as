@@ -57,7 +57,7 @@ package com.adobe.crypto
 		 * the time will be set to the moment of execution)
 		 * @return The generated token
 		 * @langversion ActionScript 3.0
-		 * @playerversion Flash 8.5
+		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
 		public static function getUsernameToken(username:String, password:String, nonce:String=null, timestamp:Date=null):String

@@ -40,7 +40,7 @@ package com.adobe.utils
 	* 	Class that contains static utility methods for formatting Numbers
 	* 
 	* 	@langversion ActionScript 3.0
-	*	@playerversion Flash 8.5
+	*	@playerversion Flash 9.0
 	*	@tiptext
 	*
 	*	@see #mx.formatters.NumberFormatter
@@ -58,7 +58,7 @@ package com.adobe.utils
 		*	leading zero.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/		
 		public static function addLeadingZero(n:Number):String

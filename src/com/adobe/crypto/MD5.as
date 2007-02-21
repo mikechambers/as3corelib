@@ -51,7 +51,7 @@ package com.adobe.crypto {
 		 * @param s The string to hash
 		 * @return A string containing the hash value of s
 		 * @langversion ActionScript 3.0
-		 * @playerversion Flash 8.5
+		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
 		public static function hash( s:String ):String {

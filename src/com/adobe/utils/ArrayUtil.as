@@ -44,7 +44,7 @@ package com.adobe.utils
 	*	i.e. they will only manipulate indexed values.  
 	* 
 	* 	@langversion ActionScript 3.0
-	*	@playerversion Flash 8.5
+	*	@playerversion Flash 9.0
 	*	@tiptext
 	*/		
 	public class ArrayUtil
@@ -60,7 +60,7 @@ package com.adobe.utils
 		* 	@return True if the array contains the value, False if it does not.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/			
 		public static function arrayContainsValue(arr:Array, value:Object):Boolean
@@ -76,7 +76,7 @@ package com.adobe.utils
 		*	@param value The object that will be removed from the array.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/		
 		public static function removeValueFromArray(arr:Array, value:Object):void
@@ -106,7 +106,7 @@ package com.adobe.utils
 		*	array.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/	
 		public static function createUniqueCopy(a:Array):Array
@@ -144,7 +144,7 @@ package com.adobe.utils
 		*	in.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/			
 		public static function copyArray(arr:Array):Array
@@ -164,7 +164,7 @@ package com.adobe.utils
 			False if they do not.
 		*
 		* 	@langversion ActionScript 3.0
-		*	@playerversion Flash 8.5
+		*	@playerversion Flash 9.0
 		*	@tiptext
 		*/		
 		public static function arraysAreEqual(arr1:Array, arr2:Array):Boolean

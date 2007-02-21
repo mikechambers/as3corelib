@@ -293,6 +293,34 @@ package com.adobe.serialization.json
 			obj[" prop with spaces "] = true;
 			assertTrue( "Prop with spaces", "{\" prop with spaces \":true}" );
 		}
+		
+		public function testEncodeClassInstance():void
+		{
+			var s:String = JSON.encode( new SimpleClass() );
+			
+			assertTrue( "Has length", s.length > 0 );
+
+			// Decode the string so we can verify that it has the properties
+			var o:Object = JSON.decode( s );
+
+			assertNotNull( o );
+			assertNotNull( o.publicVar1 );
+			assertNotNull( o.publicVar2 );
+			assertNotNull( o.accessor1 );
+			assertNotNull( o.accessor2 );
+			assertEquals( 17, o.publicVar1 );
+			assertEquals( 20, o.publicVar2 );
+			assertEquals( 25, o.accessor1 );
+			assertEquals( 30, o.accessor2 );
+			
+			// Make sure o only has 4 properties
+			var count:int = 0;
+			for ( var key:String in o )
+			{
+				count++;	
+			}
+			assertEquals( 4, count );
+		}
 	}
 		
 }

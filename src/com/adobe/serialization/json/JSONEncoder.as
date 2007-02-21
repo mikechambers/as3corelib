@@ -33,7 +33,10 @@ OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOURCE CODE, EVEN IF
 ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.serialization.json {
+package com.adobe.serialization.json 
+{
+
+	import flash.utils.describeType;
 
 	public class JSONEncoder {
 	
@@ -233,40 +236,66 @@ package com.adobe.serialization.json {
 		 * @param o The object to convert
 		 * @return The JSON string representation of <code>o</code>
 		 */
-		private function objectToString( o:Object ):String {
-			
+		private function objectToString( o:Object ):String
+		{
 			// create a string to store the object's jsonstring value
 			var s:String = "";
 			
-			// the value of o[key] in the loop below - store this 
-			// as a variable so we don't have to keep looking up o[key]
-			// when testing for valid values to convert
-			var value:Object;
-			
-			// loop over the keys in the object and add their converted
-			// values to the string
-			for ( var key:String in o ) {
-				// assign value to a variable for quick lookup
-				value = o[key];
+			// determine if o is a class instance or a plain object
+			var classInfo:XML = describeType( o );
+			if ( classInfo.@name.toString() == "Object" )
+			{
+				// the value of o[key] in the loop below - store this 
+				// as a variable so we don't have to keep looking up o[key]
+				// when testing for valid values to convert
+				var value:Object;
 				
-				// don't add function's to the JSON string
-				if ( value is Function ) {
-					// skip this key and try another
-					continue;
+				// loop over the keys in the object and add their converted
+				// values to the string
+				for ( var key:String in o )
+				{
+					// assign value to a variable for quick lookup
+					value = o[key];
+					
+					// don't add function's to the JSON string
+					if ( value is Function )
+					{
+						// skip this key and try another
+						continue;
+					}
+					
+					// when the length is 0 we're adding the first item so
+					// no comma is necessary
+					if ( s.length > 0 ) {
+						// we've already added an item, so add the comma separator
+						s += ","
+					}
+					
+					s += escapeString( key ) + ":" + convertToString( value );
+				}
+			}
+			else // o is a class instance
+			{
+				// Loop over all of the variables and accessors in the class and 
+				// serialize them along with their values.
+				for each ( var v:XML in classInfo..*.( name() == "variable" || name() == "accessor" ) )
+				{
+					// When the length is 0 we're adding the first item so
+					// no comma is necessary
+					if ( s.length > 0 ) {
+						// We've already added an item, so add the comma separator
+						s += ","
+					}
+					
+					s += escapeString( v.@name.toString() ) + ":" 
+							+ convertToString( o[ v.@name ] );
 				}
 				
-				// when the length is 0 we're adding the first item so
-				// no comma is necessary
-				if ( s.length > 0 ) {
-					// we've already added an item, so add the comma separator
-					s += ","
-				}
-				
-				s += escapeString( key ) + ":" + convertToString( value );
 			}
 			
 			return "{" + s + "}";
 		}
+
 		
 	}
 	

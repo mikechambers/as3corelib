@@ -49,6 +49,9 @@ import com.adobe.utils.XMLUtilTest;
 import com.adobe.utils.DictionaryUtilTest;
 
 import flexunit.framework.TestSuite;
+import com.adobe.images.JPGEncoderTest;
+import com.adobe.images.PNGEncoderTest;
+
 			
 private function onCreationComplete():void
 {
@@ -81,6 +84,10 @@ private function createSuite():TestSuite
 	
 	// serialization
 	ts.addTestSuite( JSONTest );		
+	
+	//images
+	ts.addTestSuite( JPGEncoderTest );
+	ts.addTestSuite( PNGEncoderTest );
 	
 	return ts;
 }

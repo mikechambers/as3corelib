@@ -4,7 +4,7 @@
 <META http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <link rel="stylesheet" href="../../../style.css" type="text/css" media="screen">
 <link rel="stylesheet" href="../../../print.css" type="text/css" media="print">
-<meta content="IntUtil,com.adobe.utils.IntUtil,rol,toHex" name="keywords">
+<meta content="IntUtil,com.adobe.utils.IntUtil,rol,ror,toHex" name="keywords">
 <title>com.adobe.utils.IntUtil</title>
 </head>
 <body>
@@ -64,6 +64,15 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
+<a class="signatureLink" href="#ror()">ror</a>(x:int, n:int):uint</div>
+<div class="summaryTableDescription">[static]
+   Rotates x right n bits
+      </div>
+</td><td class="summaryTableOwnerCol">IntUtil</td>
+</tr>
+<tr class="">
+<td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
+<div class="summarySignature">
 <a class="signatureLink" href="#toHex()">toHex</a>(n:int, bigEndian:Boolean = false):String</div>
 <div class="summaryTableDescription">[static]
    Outputs the hex value of a int, allowing the developer to specify
@@ -105,6 +114,35 @@ showHideInherited();
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
 <td width="20"></td><td><code>int</code></td>
+</tr>
+</table>
+</div>
+<a name="ror()"></a>
+<table cellspacing="0" cellpadding="0" class="detailHeader">
+<tr>
+<td class="detailHeaderName">ror</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td>
+</tr>
+</table>
+<div class="detailBody">
+<code>public static function ror(x:int, n:int):uint</code><p>
+   Rotates x right n bits
+      </p><span class="label">Parameters</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20px"></td><td><code><span class="label">x</span>:int</code></td>
+</tr>
+<tr>
+<td class="paramSpacer">&nbsp;</td>
+</tr>
+<tr>
+<td width="20px"></td><td><code><span class="label">n</span>:int</code></td>
+</tr>
+</table>
+<p></p>
+<span class="label">Returns</span>
+<table border="0" cellspacing="0" cellpadding="0">
+<tr>
+<td width="20"></td><td><code>uint</code></td>
 </tr>
 </table>
 </div>

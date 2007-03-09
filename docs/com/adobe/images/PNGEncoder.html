@@ -39,7 +39,8 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 </table>
 <p></p>
-<p></p>
+  Class that converts BitmapData into a valid PNG
+  <p></p>
 <br>
 <hr>
 </div>
@@ -54,7 +55,9 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
 <a class="signatureLink" href="#encode()">encode</a>(img:BitmapData):ByteArray</div>
-<div class="summaryTableDescription">[static]</div>
+<div class="summaryTableDescription">[static]
+   Created a PNG image from the specified BitmapData
+      </div>
 </td><td class="summaryTableOwnerCol">PNGEncoder</td>
 </tr>
 </table>
@@ -73,17 +76,21 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public static function encode(img:BitmapData):ByteArray</code><span class="label">Parameters</span>
+<code>public static function encode(img:BitmapData):ByteArray</code><p>
+   Created a PNG image from the specified BitmapData
+      </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td width="20px"></td><td><code><span class="label">img</span>:BitmapData</code></td>
+<td width="20px"></td><td><code><span class="label">img</span>:BitmapData</code> &mdash; The BitmapData that will be converted into the PNG format.
+   </td>
 </tr>
 </table>
 <p></p>
 <span class="label">Returns</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td width="20"></td><td><code>ByteArray</code></td>
+<td width="20"></td><td><code>ByteArray</code> &mdash; a ByteArray representing the PNG encoded image data.
+   </td>
 </tr>
 </table>
 </div>

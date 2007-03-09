@@ -39,7 +39,8 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 </tr>
 </table>
 <p></p>
-<p></p>
+  Class that converts BitmapData into a valid JPEG
+  <p></p>
 <br>
 <hr>
 </div>
@@ -54,14 +55,18 @@ if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("Cl
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
 <a class="signatureLink" href="#JPGEncoder()">JPGEncoder</a>(quality:Number = 50)</div>
-<div class="summaryTableDescription"></div>
+<div class="summaryTableDescription">
+   Constructor for JPEGEncoder class
+      </div>
 </td><td class="summaryTableOwnerCol">JPGEncoder</td>
 </tr>
 <tr class="">
 <td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol">
 <div class="summarySignature">
 <a class="signatureLink" href="#encode()">encode</a>(image:BitmapData):ByteArray</div>
-<div class="summaryTableDescription"></div>
+<div class="summaryTableDescription">
+   Created a JPEG image from the specified BitmapData
+      </div>
 </td><td class="summaryTableOwnerCol">JPGEncoder</td>
 </tr>
 </table>
@@ -80,10 +85,14 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function JPGEncoder(quality:Number = 50)</code><span class="label">Parameters</span>
+<code>public function JPGEncoder(quality:Number = 50)</code><p>
+   Constructor for JPEGEncoder class
+      </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td width="20px"></td><td><code><span class="label">quality</span>:Number</code> (default = <code>50</code>)<code></code></td>
+<td width="20px"></td><td><code><span class="label">quality</span>:Number</code> (default = <code>50</code>)<code></code> &mdash; The quality level between 1 and 100 that detrmines the
+   level of compression used in the generated JPEG
+   </td>
 </tr>
 </table>
 </div>
@@ -96,17 +105,21 @@ showHideInherited();
 </tr>
 </table>
 <div class="detailBody">
-<code>public function encode(image:BitmapData):ByteArray</code><span class="label">Parameters</span>
+<code>public function encode(image:BitmapData):ByteArray</code><p>
+   Created a JPEG image from the specified BitmapData
+      </p><span class="label">Parameters</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td width="20px"></td><td><code><span class="label">image</span>:BitmapData</code></td>
+<td width="20px"></td><td><code><span class="label">image</span>:BitmapData</code> &mdash; The BitmapData that will be converted into the JPEG format.
+   </td>
 </tr>
 </table>
 <p></p>
 <span class="label">Returns</span>
 <table border="0" cellspacing="0" cellpadding="0">
 <tr>
-<td width="20"></td><td><code>ByteArray</code></td>
+<td width="20"></td><td><code>ByteArray</code> &mdash; a ByteArray representing the JPEG encoded image data.
+   </td>
 </tr>
 </table>
 </div>

@@ -41,5 +41,10 @@ package com.adobe.fileformats.vcard
 		public var city:String;
 		public var state:String;
 		public var postalCode:String;
+		
+		public function toString():String
+		{
+			return (street + " " + city + ", " + state + " " + postalCode);
+		}
 	}
 }

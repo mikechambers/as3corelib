@@ -215,7 +215,7 @@ package com.adobe.fileformats.vcard
 						}
 						else if (addressToken.search(/^\d/) != -1 && address.street == null)
 						{
-							address.street = addressToken.replace(/\\n/, " ");
+							address.street = addressToken.replace(/\\n/, "");
 							address.city = addressTokens[j+1];
 							address.state = addressTokens[j+2];
 							address.postalCode = addressTokens[j+3];

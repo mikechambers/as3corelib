@@ -34,7 +34,6 @@
 */
 package com.adobe.fileformats.vcard
 {
-	import flash.filesystem.*;
 	import mx.utils.Base64Decoder;
 	import mx.utils.StringUtil;
 	

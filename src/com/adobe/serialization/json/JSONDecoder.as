@@ -192,7 +192,13 @@ package com.adobe.serialization.json {
 		/**
 		 * Attempt to parse a value
 		 */
-		private function parseValue():Object {
+		private function parseValue():Object
+		{
+			// Catch errors when the input stream ends abruptly
+			if ( token == null )
+			{
+				tokenizer.parseError( "Unexpected end of input" );
+			}
 					
 			switch ( token.type ) {
 				case JSONTokenType.LEFT_BRACE:

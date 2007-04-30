@@ -321,6 +321,23 @@ package com.adobe.serialization.json
 			}
 			assertEquals( 4, count );
 		}
+		
+		public function testDecodeEmptyStringError():void
+		{
+			var e:Error = null;
+			
+			try
+			{
+				JSON.decode( "" );
+			}
+			catch ( pe:JSONParseError )
+			{
+				e = pe;
+			}
+			
+			assertNotNull( e );
+			assertTrue( "Caught parse error", e is JSONParseError );
+		}
 	}
 		
 }

@@ -231,7 +231,7 @@ package com.adobe.serialization.json
 		}
 		
 		public function testDecodeArrayWithNewlines():void {
-			var o:Array = JSON.decode( "\n [ \nnull, \n true \n ] \n" ) as Array;
+			var o:Array = JSON.decode( "\n [ \nnull, \n \r \t \r true \n ] \r \t \r \n" ) as Array;
 			
 			assertTrue( "Expected decoded with newlines array[0] == null", o[0] == null );
 			assertTrue( "Expected decoded with newlines array[1] == true", o[1] == true );

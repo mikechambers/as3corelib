@@ -509,7 +509,7 @@ package com.adobe.serialization.json {
 		 *	character
 		 */
 		private function isWhiteSpace( ch:String ):Boolean {
-			return ( ch == ' ' || ch == '\t' || ch == '\n' );
+			return ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' );
 		}
 		
 		/**

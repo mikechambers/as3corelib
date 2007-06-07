@@ -147,6 +147,7 @@ package com.adobe.net
 		 */
 		public function getMimeType(extension:String):String
 		{
+			extension = extension.toLocaleLowerCase();
 			for each (var a:Array in types)
 			{
 				for each (var b:String in a)
@@ -165,6 +166,7 @@ package com.adobe.net
 		 */
 		public function getExtension(mimetype:String):String
 		{
+			mimetype = mimetype.toLocaleLowerCase();
 			for each (var a:Array in types)
 			{
 				if (a[0] == mimetype)

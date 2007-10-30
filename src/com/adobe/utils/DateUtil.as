@@ -35,7 +35,6 @@
 
 package com.adobe.utils
 {
-	import com.adobe.utils.ArrayUtil;
 	import mx.formatters.DateBase;
 
 	/**
@@ -661,6 +660,43 @@ package com.adobe.utils
 			}
 			sb += "-00:00";
 			return sb;
+		}
+		
+		/**
+		 * Converts a date into just after midnight.
+		 */
+		public static function makeMorning(d:Date):Date
+		{
+			var d:Date = new Date(d.time);
+			d.hours = 0;
+            d.minutes = 0;
+            d.seconds = 0;
+            d.milliseconds = 0;
+            return d;
+		}
+		
+		/**
+		 * Converts a date into just befor midnight.
+		 */
+		public static function makeNight(d:Date):Date
+		{
+			var d:Date = new Date(d.time);
+			d.hours = 23;
+            d.minutes = 59;
+            d.seconds = 59;
+            d.milliseconds = 999;				
+            return d;
+		}
+
+		/**
+		 * Sort of converts a date into UTC.
+		 */
+		public static function getUTCDate(d:Date):Date
+		{
+			var nd:Date = new Date();
+			var offset:Number = d.getTimezoneOffset() * 60 * 1000; 
+			nd.setTime(d.getTime() + offset);
+			return nd;
 		}
 	}
 }

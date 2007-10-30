@@ -270,6 +270,9 @@ package com.adobe.utils
 			assertTrue("d2.minutes == 55", d2.minutes == 55);
 			assertTrue("d2.seconds == 43", d2.seconds == 43);
 
+			var s3:String = "Wed, 2 Jan 2007 04:00:00 PST";
+			var d3:Date = DateUtil.parseRFC822(s3);
+			trace(d3);
 
 		}
 		

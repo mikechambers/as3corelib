@@ -57,7 +57,7 @@ package com.adobe.serialization.json {
 		 */
 		public function JSONParseError( message:String = "", location:int = 0, text:String = "") {
 			super( message );
-			//name = "JSONParseError";
+			name = "JSONParseError";
 			_location = location;
 			_text = text;
 		}

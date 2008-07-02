@@ -37,12 +37,6 @@ package com.adobe.serialization.json
 {
 
 	import flexunit.framework.TestCase;
-	import flexunit.framework.TestSuite;
-	
-	import com.adobe.serialization.json.JSONDecoder;
-	import com.adobe.serialization.json.JSONEncoder;
-	import com.adobe.serialization.json.JSON;
-	import com.adobe.serialization.json.JSONParseError;
 	
 	public class JSONTest extends TestCase {
 		
@@ -338,6 +332,56 @@ package com.adobe.serialization.json
 			assertNotNull( e );
 			assertTrue( "Caught parse error", e is JSONParseError );
 		}
+		
+		public function testWhiteSpace():void
+		{
+			/*
+			      ws = *(
+                %x20 /              ; Space
+                %x09 /              ; Horizontal tab
+                %x0A /              ; Line feed or New line
+                %x0D                ; Carriage return
+            )
+			*/
+			
+			//tabs
+			var a_tab:String = "[\t1\t]";
+			
+			var a_tab_result:Array = JSON.decode(a_tab) as Array;
+			
+			assertEquals(a_tab_result[0], 1);
+			
+			
+			//space
+			var a_space:String = "[ 1 ]";
+			
+			var a_space_result:Array = JSON.decode(a_space) as Array;
+			
+			assertEquals(a_space_result[0], 1);
+			
+			//line return
+			var a_lr:String = "[\n1\n]";
+
+			var a_lr_result:Array = JSON.decode(a_lr) as Array;
+			
+			assertEquals(a_lr_result[0], 1);
+			
+			//carriage return
+			var a_cr:String = "[\r1\r]";
+			
+			var a_cr_result:Array = JSON.decode(a_cr) as Array;
+			
+			assertEquals(a_cr_result[0], 1);
+			
+			//combined return
+			var a_clr:String = "[\n\r1\n\r]";
+			
+			var a_clr_result:Array = JSON.decode(a_clr) as Array;
+			
+			assertEquals(a_clr_result[0], 1);
+		}
+		
+		
 	}
 		
 }

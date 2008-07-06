@@ -36,7 +36,7 @@ ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 package com.adobe.crypto {
 	
 	import com.adobe.utils.IntUtil;
-	
+	import flash.utils.ByteArray;	
 	/**
 	 * The MD5 Message-Digest Algorithm
 	 *
@@ -51,10 +51,27 @@ package com.adobe.crypto {
 		 * @param s The string to hash
 		 * @return A string containing the hash value of s
 		 * @langversion ActionScript 3.0
-		 * @playerversion Flash 9.0
+		 * @playerversion Flash 8.5
 		 * @tiptext
 		 */
-		public static function hash( s:String ):String {
+		 
+		public static function hash(s:String) :String{
+			//Convert to byteArray and send through hashBinary function
+			// so as to only have complex code in one location
+			var ba:ByteArray = new ByteArray();
+			ba.writeUTFBytes(s);	
+			return hashBinary(ba);
+		}
+		/**
+		 * Performs the MD5 hash algorithm on a ByteArray.
+		 *
+		 * @param s The string to hash
+		 * @return A string containing the hash value of s
+		 * @langversion ActionScript 3.0
+		 * @playerversion Flash 8.5
+		 * @tiptext
+		 */	 
+		public static function hashBinary( s:ByteArray ):String {
 			// initialize the md buffers
 			var a:int = 1732584193;
 			var b:int = -271733879;
@@ -238,12 +255,12 @@ package com.adobe.crypto {
 		 * @return An array containing the blocks that s was
 		 *			split into.
 		 */
-		private static function createBlocks( s:String ):Array {
+		private static function createBlocks( s:ByteArray ):Array {
 			var blocks:Array = new Array();
 			var len:int = s.length * 8;
 			var mask:int = 0xFF; // ignore hi byte of characters > 0xFF
 			for( var i:int = 0; i < len; i += 8 ) {
-				blocks[ i >> 5 ] |= ( s.charCodeAt( i / 8 ) & mask ) << ( i % 32 );
+				blocks[ i >> 5 ] |= ( s[ i / 8 ] & mask ) << ( i % 32 );
 			}
 			
 			// append padding and length

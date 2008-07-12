@@ -64,28 +64,28 @@ private function createSuite():TestSuite
 	var ts:TestSuite = new TestSuite();
 
 	// utils
-	ts.addTestSuite( StringUtilTest );
+ts.addTestSuite( StringUtilTest );
 	ts.addTestSuite( NumberFormatterTest );
 	ts.addTestSuite( ArrayUtilTest );
 	ts.addTestSuite( DateUtilTest );
 	ts.addTestSuite( IntUtilTest );
 	ts.addTestSuite( XMLUtilTest );
 	ts.addTestSuite( DictionaryUtilTest );
-	
-	// crypto
+//	
+//	// crypto
 	ts.addTestSuite( MD5Test );
 	ts.addTestSuite( SHA1Test );
 	ts.addTestSuite( SHA224Test );
 	ts.addTestSuite( SHA256Test );
 	ts.addTestSuite( WSSEUsernameTokenTest );
-	
-	// net
-	ts.addTestSuite( URITest );
-	
-	// serialization
+//	
+//	// net
+ts.addTestSuite( URITest );
+//	
+//	// serialization
 	ts.addTestSuite( JSONTest );		
-	
-	//images
+//	
+//	//images
 	ts.addTestSuite( JPGEncoderTest );
 	ts.addTestSuite( PNGEncoderTest );
 	

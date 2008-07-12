@@ -78,7 +78,7 @@ private function createSuite():TestSuite
 	ts.addTestSuite( SHA224Test );
 	ts.addTestSuite( SHA256Test );
 	ts.addTestSuite( WSSEUsernameTokenTest );
-
+	
 	// net
 	ts.addTestSuite( URITest );
 	

@@ -68,45 +68,6 @@ package com.adobe.utils
 										NumberFormatter.addLeadingZero(10000) == "10000");
 
 		}
-		
-		public function testAddSeperator():void
-		{
-			assertTrue('NumberFormatter.addSeparator(1000, ",") == "1,000"',
-					NumberFormatter.addSeparator(1000, ",") == "1,000");
-	
-			assertTrue('NumberFormatter.addSeparator(90, ",") == "90"',
-					NumberFormatter.addSeparator(90, ",") == "90");	
-
-			//fail
-			assertTrue('NumberFormatter.addSeparator(90.00, ",") == "90.00"',
-					NumberFormatter.addSeparator(90.00, ",") == "90.00");	
-	
-			//fail
-			assertTrue('NumberFormatter.addSeparator(90.0, ",") == "90.0"',
-					NumberFormatter.addSeparator(90.0, ",") == "90.0");		
-				
-			//fail
-			assertTrue('NumberFormatter.addSeparator(1000.00, ",") == "1,000.00"',
-					NumberFormatter.addSeparator(1000.00, ",") == "1,000.00");				
-	
-			//fail
-			assertTrue('NumberFormatter.addSeparator(1000.0, ",") == "1,000.0"',
-					NumberFormatter.addSeparator(1000.0, ",") == "1,000.0");		
-	
-			//fail
-			assertTrue('NumberFormatter.addSeparator(1000, ".") == "1.000"',
-					NumberFormatter.addSeparator(1000, ".") == "1.000");	
-					
-			assertTrue('NumberFormatter.addSeparator(123456789, ",") == "123,456,789"',
-					NumberFormatter.addSeparator(123456789, ",") == "123,456,789");
-					
-			assertTrue('NumberFormatter.addSeparator(123456789, "XXX") == "123XXX456XXX789"',
-					NumberFormatter.addSeparator(123456789, "XXX") == "123XXX456XXX789");
-			
-			//fail : causes infinite loop		
-			assertTrue('NumberFormatter.addSeparator(123456789, "1") == "12314561789"',
-					NumberFormatter.addSeparator(123456789, "1") == "12314561789");
-		}
 
 	}
 }

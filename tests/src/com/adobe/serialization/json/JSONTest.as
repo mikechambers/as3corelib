@@ -88,7 +88,7 @@ package com.adobe.serialization.json
 			}
 			finally
 			{
-				trace( parseError.message );
+				//trace( parseError.message );
 				assertNotNull( parseError );
 			}
 		}

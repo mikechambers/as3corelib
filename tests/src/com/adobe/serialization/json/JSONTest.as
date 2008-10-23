@@ -246,6 +246,9 @@ package com.adobe.serialization.json
 		public function testEncodeString():void {
 			var o:String = JSON.encode( "this is a \n \"string\"" );
 			assertTrue( "Expected encoded string", o == "\"this is a \\n \\\"string\\\"\"" );
+			
+			o = JSON.encode( "myString" );
+			assertEquals( o, "\"myString\"" );
 		}
 		
 		public function testEncodeArrayEmpty():void {

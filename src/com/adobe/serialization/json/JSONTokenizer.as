@@ -334,6 +334,33 @@ package com.adobe.serialization.json {
 				{
 					parseError( "A digit cannot immediately follow 0" );
 				}
+// Commented out - this should only be available when "strict" is false
+//				// unless we have 0x which starts a hex number\
+//				else if ( ch == 'x' )
+//				{
+//					// include the x in the input
+//					input += ch;
+//					nextChar();
+//					
+//					// need at least one hex digit after 0x to
+//					// be valid
+//					if ( isHexDigit( ch ) )
+//					{
+//						input += ch;
+//						nextChar();
+//					}
+//					else
+//					{
+//						parseError( "Number in hex format require at least one hex digit after \"0x\"" );	
+//					}
+//					
+//					// consume all of the hex values
+//					while ( isHexDigit( ch ) )
+//					{
+//						input += ch;
+//						nextChar();
+//					}
+//				}
 			}
 			else
 			{

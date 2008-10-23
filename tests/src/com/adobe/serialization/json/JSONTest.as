@@ -203,6 +203,29 @@ package com.adobe.serialization.json
 				assertNotNull( parseError );
 			}
 		}
+
+// Commented out - this is something that should only be available when "strict" is
+// false.		
+//		public function testDecodeHexNumber():void
+//		{
+//			var n:Number = JSON.decode( "0xFF0033" );
+//			assertEquals( 0xFF0033, n );
+//			
+//			var parseError:JSONParseError = null;
+//			try
+//			{
+//				n = JSON.decode( "0xZ" );
+//			}
+//			catch ( e:JSONParseError )
+//			{
+//				parseError = e;
+//			}
+//			finally
+//			{
+//				// Make sure we catch a parse error since 0xZ is an invalid number
+//				assertNotNull( parseError );
+//			}
+//		}
 		
 		public function testDecodeObject():void {
 			var o:* = JSON.decode( " { \"test\": true, \"test2\": -12356732.12 } " ) as Object;

@@ -443,10 +443,19 @@ package com.adobe.serialization.json {
 		 * Advances the character location past any
 		 * sort of white space and comments
 		 */
-		private function skipIgnored():void {
-			skipWhite();
-			skipComments();
-			skipWhite();
+		private function skipIgnored():void
+		{
+			var originalLoc:int;
+			
+			// keep trying to skip whitespace and comments as long
+			// as we keep advancing past the original location 
+			do
+			{
+				originalLoc = loc;
+				skipWhite();
+				skipComments();
+			}
+			while ( originalLoc != loc );
 		}
 		
 		/**

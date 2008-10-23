@@ -251,6 +251,15 @@ package com.adobe.serialization.json
 			assertTrue( "Expected decoded with newlines array[1] == true", o[1] == true );
 		}
 		
+		public function testDecodeSuccessiveComments():void
+		{
+			var jsonString:String = "   // test comment"
+							+ "\n   // test comment line 2"
+							+ "\nfalse";
+			var o:* = JSON.decode( jsonString );
+			assertEquals( false, o );
+		}
+		
 		public function testEncodeTrue():void {
 			var o:String = JSON.encode( true );
 			assertTrue( "Expected encoded true", o == "true" );

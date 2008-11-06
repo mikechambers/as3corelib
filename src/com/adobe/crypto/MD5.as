@@ -42,6 +42,7 @@ package com.adobe.crypto {
 	 */
 	public class MD5 {
 		
+		public static var digest:ByteArray;
 		/**
 		 * Performs the MD5 hash algorithm on a string.
 		 *
@@ -59,6 +60,11 @@ package com.adobe.crypto {
 			ba.writeUTFBytes(s);	
 			return hashBinary(ba);
 		}
+		
+		public static function hashBytes(s:ByteArray) :String{	
+			return hashBinary(s);
+		}
+		
 		/**
 		 * Performs the MD5 hash algorithm on a ByteArray.
 		 *
@@ -172,7 +178,12 @@ package com.adobe.crypto {
 				c += cc;
 				d += dd;
 			}
-
+			digest = new ByteArray()
+			digest.writeInt(a);
+			digest.writeInt(b);
+			digest.writeInt(c);
+			digest.writeInt(d);
+			digest.position = 0;
 			// Finish up by concatening the buffers with their hex output
 			return IntUtil.toHex( a ) + IntUtil.toHex( b ) + IntUtil.toHex( c ) + IntUtil.toHex( d );
 		}

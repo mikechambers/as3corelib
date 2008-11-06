@@ -43,6 +43,7 @@ package com.adobe.crypto
 	 */
 	public class SHA224
 	{
+		public static var digest:ByteArray;
 		
 		/**
 		 *  Performs the SHA224 hash algorithm on a string.
@@ -193,6 +194,10 @@ package com.adobe.crypto
 			byteArray.writeInt(h5);
 			byteArray.writeInt(h6);
 			byteArray.position = 0;
+			
+			digest = new ByteArray();
+			digest.writeBytes(byteArray);
+			digest.position = 0;
 			return byteArray;
 		}
 		

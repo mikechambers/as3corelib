@@ -45,6 +45,9 @@ import com.adobe.utils.StringUtilTest;
 import com.adobe.utils.XMLUtilTest;
 import com.adobe.utils.DictionaryUtilTest;
 
+import com.adobe.crypto.HMACMD5Test;
+import com.adobe.crypto.HMACSHA1Test;
+
 import flexunit.framework.TestSuite;
 import com.adobe.images.JPGEncoderTest;
 import com.adobe.images.PNGEncoderTest;
@@ -75,6 +78,8 @@ private function createSuite():TestSuite
 	ts.addTestSuite( SHA224Test );
 	ts.addTestSuite( SHA256Test );
 	ts.addTestSuite( WSSEUsernameTokenTest );
+	ts.addTestSuite( HMACSHA1Test );
+	ts.addTestSuite( HMACMD5Test );	
 	
 	// net
 	ts.addTestSuite( URITest );

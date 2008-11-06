@@ -43,7 +43,7 @@ package com.adobe.crypto
 	 */
 	public class SHA256
 	{
-		
+		public static var digest:ByteArray;
 		/**
 		 *  Performs the SHA256 hash algorithm on a string.
 		 *
@@ -198,6 +198,10 @@ package com.adobe.crypto
 			byteArray.writeInt(h6);
 			byteArray.writeInt(h7);
 			byteArray.position = 0;
+			
+			digest = new ByteArray();
+			digest.writeBytes(byteArray);
+			digest.position = 0;
 			return byteArray;
 		}
 		

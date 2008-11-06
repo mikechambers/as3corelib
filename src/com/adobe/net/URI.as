@@ -696,7 +696,7 @@ package com.adobe.net
 		 * <p>The URI specification allows for authentication
 		 * credentials to be embedded in the URI as such:</p>
 		 * 
-		 * <p>http://user:passwd@host/path/to/file.htm</p>
+		 * <p>http://user:passwd&#64;host/path/to/file.htm</p>
 		 * 
 		 * <p>When setting this value, the string
 		 * given is assumed to be unescaped.  When retrieving this

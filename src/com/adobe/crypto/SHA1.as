@@ -44,6 +44,8 @@ package com.adobe.crypto
 	 */
 	public class SHA1
 	{
+		public static var digest:ByteArray;
+		
 		/**
 		 *  Performs the SHA1 hash algorithm on a string.
 		 *
@@ -177,6 +179,10 @@ package com.adobe.crypto
 			byteArray.writeInt(h3);
 			byteArray.writeInt(h4);
 			byteArray.position = 0;
+			
+			digest = new ByteArray();
+			digest.writeBytes(byteArray);
+			digest.position = 0;
 			return byteArray;
 		}
 

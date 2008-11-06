@@ -30,6 +30,8 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+import com.adobe.crypto.HMACMD5Test;
+import com.adobe.crypto.HMACSHA1Test;
 import com.adobe.crypto.MD5Test;
 import com.adobe.crypto.SHA1Test;
 import com.adobe.crypto.SHA224Test;
@@ -70,6 +72,8 @@ private function createSuite():TestSuite
 	ts.addTestSuite( DictionaryUtilTest );
 	
 	// crypto
+	ts.addTestSuite( HMACSHA1Test );
+	ts.addTestSuite( HMACMD5Test );
 	ts.addTestSuite( MD5Test );
 	ts.addTestSuite( SHA1Test );
 	ts.addTestSuite( SHA224Test );

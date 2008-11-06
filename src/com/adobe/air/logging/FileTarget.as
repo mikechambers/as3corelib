@@ -44,6 +44,12 @@ package com.adobe.air.logging
 	
 	use namespace mx_internal;
 
+	/**
+	 * An Adobe AIR only class that provides a log target for the Flex logging
+	 * framework, that logs files to a file on the user's system.
+	 * 
+	 * This class will only work when running within Adobe AIR>
+	 */
 	public class FileTarget extends LineFormattedTarget
 	{
 		private const DEFAULT_LOG_PATH:String = "app-storage:/application.log";

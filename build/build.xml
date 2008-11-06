@@ -94,7 +94,7 @@
 			<arg line="-ds ${src.dir} " />
 			
 			<!-- Include the library name in the window title -->
-			<arg line="-window-title 'Adobe ActionScript 3.0 Library - ${library.name}' "/>
+			<arg line="-window-title 'Adobe ActionScript 3.0 Core Library - ${library.name}' "/>
 		</exec>
 	</target>
 

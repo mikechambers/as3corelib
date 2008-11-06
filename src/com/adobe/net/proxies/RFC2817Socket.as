@@ -73,10 +73,7 @@ package com.adobe.net.proxies
 		 **/
 		public function RFC2817Socket(host:String = null, port:int = 0)
 		{
-			if (host != null && port != 0)
-			{
-				super(host, port);
-			}
+			super(host, port);
 		}
 		
 		/**

@@ -30,6 +30,7 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
+import com.adobe.air.crypto.EncryptionKeyGeneratorTest;
 import com.adobe.crypto.HMACMD5Test;
 import com.adobe.crypto.HMACSHA1Test;
 import com.adobe.crypto.MD5Test;
@@ -37,19 +38,19 @@ import com.adobe.crypto.SHA1Test;
 import com.adobe.crypto.SHA224Test;
 import com.adobe.crypto.SHA256Test;
 import com.adobe.crypto.WSSEUsernameTokenTest;
+import com.adobe.images.JPGEncoderTest;
+import com.adobe.images.PNGEncoderTest;
 import com.adobe.net.URITest;
 import com.adobe.serialization.json.JSONTest;
 import com.adobe.utils.ArrayUtilTest;
 import com.adobe.utils.DateUtilTest;
+import com.adobe.utils.DictionaryUtilTest;
 import com.adobe.utils.IntUtilTest;
 import com.adobe.utils.NumberFormatterTest;
 import com.adobe.utils.StringUtilTest;
 import com.adobe.utils.XMLUtilTest;
-import com.adobe.utils.DictionaryUtilTest;
 
 import flexunit.framework.TestSuite;
-import com.adobe.images.JPGEncoderTest;
-import com.adobe.images.PNGEncoderTest;
 
 			
 private function onCreationComplete():void
@@ -89,6 +90,9 @@ private function createSuite():TestSuite
 	//images
 	ts.addTestSuite( JPGEncoderTest );
 	ts.addTestSuite( PNGEncoderTest );
+	
+	// air.crypto
+	ts.addTestSuite( EncryptionKeyGeneratorTest );
 	
 	return ts;
 }

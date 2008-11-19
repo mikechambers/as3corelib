@@ -313,11 +313,12 @@ package com.adobe.serialization.json
 			
 			var obj:Object = { foo: { foo2: { foo3: { foo4: "bar" } } } };
 			var s:String = JSON.encode( obj );
-			assertTrue( "Deeply nested", "{\"foo\":{\"foo2\":{\"foo3\":{\"foo4\":\"bar\"}}}}" );
+			assertEquals( "Deeply nested", "{\"foo\":{\"foo2\":{\"foo3\":{\"foo4\":\"bar\"}}}}", s );
 			
 			obj = new Object();
 			obj[" prop with spaces "] = true;
-			assertTrue( "Prop with spaces", "{\" prop with spaces \":true}" );
+			s = JSON.encode( obj );
+			assertEquals( "Prop with spaces", "{\" prop with spaces \":true}", s );
 		}
 		
 		public function testEncodeClassInstance():void

@@ -22,12 +22,15 @@
 			<!-- Point to the main test runner's application mxml file -->
 			<arg line="'${tests.dir}/${testRunner.dir}/${testRunner.name}.mxml'" />
 			
+			<!-- Use AIR configuration file -->
+			<arg line="-load-config '${flex2sdk.lib.dir}/../air-config.xml'" />
+			
 			<!-- Place the built .swf file in the "bin" directory -->
 			<arg line="-o '${bin.dir}/${testRunner.name}.swf'" />
 			
 			<!-- Define source directories for "src" and "tests" -->
 			<arg line="-sp ${src.dir}" />
-			<arg line="-sp ${tests.dir}" />
+			<arg line="-sp ${tests.dir}/src" />
 			
 			<!-- Include the necessary framework libraries in the class path -->
 			<arg line="-l '${flex2sdk.lib.dir}'" />

@@ -92,7 +92,7 @@ private function createSuite():TestSuite
 	ts.addTestSuite( PNGEncoderTest );
 	
 	// air.crypto
-	ts.addTestSuite( EncryptionKeyGeneratorTest );
+//	ts.addTestSuite( EncryptionKeyGeneratorTest );
 	
 	return ts;
 }

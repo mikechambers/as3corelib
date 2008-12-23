@@ -30,7 +30,8 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.serialization.json {
+package com.adobe.serialization.json
+{
 
 	/**
 	 * This class provides encoding and decoding of the JSON format.
@@ -44,9 +45,8 @@ package com.adobe.serialization.json {
 	 *		var myObject:Object = JSON.decode( jsonString );
 	 *	</code>
 	 */
-	public class JSON {
-	
-	
+	public class JSON
+	{
 		/**
 		 * Encodes a object into a JSON string.
 		 *
@@ -56,28 +56,29 @@ package com.adobe.serialization.json {
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public static function encode( o:Object ):String {
-			
-			var encoder:JSONEncoder = new JSONEncoder( o );
-			return encoder.getString();
-		
+		public static function encode( o:Object ):String
+		{	
+			return new JSONEncoder( o ).getString();
 		}
 		
 		/**
 		 * Decodes a JSON string into a native object.
 		 * 
 		 * @param s The JSON string representing the object
+		 * @param strict Flag indicating if the decoder should strictly adhere
+		 * 		to the JSON standard or not.  The default of <code>true</code>
+		 * 		throws errors if the format does not match the JSON syntax exactly.
+		 * 		Pass <code>false</code> to allow for non-properly-formatted JSON
+		 * 		strings to be decoded with more leniancy.
 		 * @return A native object as specified by s
 		 * @throw JSONParseError
 		 * @langversion ActionScript 3.0
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public static function decode( s:String ):* {
-			
-			var decoder:JSONDecoder = new JSONDecoder( s )
-			return decoder.getValue();
-			
+		public static function decode( s:String, strict:Boolean = true ):*
+		{	
+			return new JSONDecoder( s, strict ).getValue();	
 		}
 	
 	}

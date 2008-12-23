@@ -32,41 +32,72 @@
 
 package com.adobe.serialization.json
 {
-
 	import flexunit.framework.TestCase;
 	
-	public class JSONTest extends TestCase {
+	public class JSONTest extends TestCase
+	{
 		
-	    public function JSONTest( methodName:String = null) {
+	    public function JSONTest( methodName:String = null )
+	    {
 			super( methodName );
         }
+        
+        /**
+		 * Helper method to verify whether or not a given input correctly
+		 * throws a JSONParseError
+		 */
+		protected function expectParseError( jsonString:String, strict:Boolean = true ):void
+		{
+			var parseError:JSONParseError = null;
+			
+			try
+			{
+				var o:* = JSON.decode( jsonString, strict );
+				fail( "Expecting parse error but one was not thrown" );
+			}
+			catch ( e:JSONParseError )
+			{
+				parseError = e;
+			}
+			catch ( e:Error )
+			{
+				throw e;
+			}
+			
+			// Make sure we catch a parse error since 0xZ is an invalid number
+			assertNotNull( parseError );
+		}
 		
 		/**
 		 * Test for the JSON string true decoded to boolean true.
 		 */
-		public function testDecodeTrue():void {
-			var o:* = JSON.decode( "  \n	 true  \n  " ) as Boolean;
-			assertTrue( "Expected decoded true", o == true );
+		public function testDecodeTrue():void
+		{
+			var o:* = JSON.decode( "true" ) as Boolean;
+			assertTrue( "Expected decoded true", o );
 		}
 		
-		public function testDecodeFalse():void {
-			var o:* = JSON.decode( "  	 false " ) as Boolean;
-			assertTrue( "Expected decoded false", o == false );
+		public function testDecodeFalse():void
+		{
+			var o:* = JSON.decode( "false" ) as Boolean;
+			assertFalse( "Expected decoded false", o );
 		}
 		
 		public function testDecodeNull():void
 		{
 			var o:* = JSON.decode( "null " );
-			assertTrue( "Expected decoded null", o == null );
+			assertNull( "Expected decoded null", o );
 		}
 		
 		public function testDecodeString():void
 		{
-			var o:* = JSON.decode( ' "this is \t a string \n with \' escapes" ' ) as String;
-			assertTrue( "String not decoded successfully", o == "this is \t a string \n with \' escapes" );
+			var o:* = JSON.decode( "\"this is \t a string \n with \' escapes\"" ) as String;
+			assertEquals( "String not decoded successfully", "this is \t a string \n with \' escapes", o );
 			
-			o = JSON.decode( ' "http:\/\/digg.com\/security\/Simple_Digg_Hack" ' );
-			assertTrue( "String not decoded correctly", o == "http://digg.com/security/Simple_Digg_Hack" );
+			o = JSON.decode( "\"http:\/\/digg.com\/security\/Simple_Digg_Hack\"" );
+			assertEquals( "String not decoded correctly", "http://digg.com/security/Simple_Digg_Hack", o );
+			
+			expectParseError( "\"unterminal string" );
 		}
 		
 		public function testDecodeZero():void
@@ -77,20 +108,7 @@ package com.adobe.serialization.json
 		
 		public function testDecodeZeroWithDigitsAfterIt():void
 		{
-			var parseError:JSONParseError = null;
-			try
-			{
-				var n:Number = JSON.decode( "02" ) as Number;
-			}
-			catch ( e:JSONParseError )
-			{
-				parseError = e;
-			}
-			finally
-			{
-				//trace( parseError.message );
-				assertNotNull( parseError );
-			}
+			expectParseError( "02" );
 		}
 		
 		public function testDecodePositiveInt():void
@@ -119,39 +137,12 @@ package com.adobe.serialization.json
 		
 		public function testDecodeFloatLeadingZeroError():void
 		{
-			var parseError:JSONParseError = null;
-			try
-			{
-				var n:Number = JSON.decode( "-.2" ) as Number;
-			}
-			catch ( e:JSONParseError )
-			{
-				parseError = e;
-			}
-			finally
-			{
-				trace( parseError.message );
-				assertNotNull( parseError );
-			}
+			expectParseError( "-.2" );
 		}
 		
 		public function testDecodeFloatDecimalMissingError():void
 		{
-			var parseError:JSONParseError = null;
-			try
-			{
-				var n:Number = JSON.decode( "1." );
-			}
-			catch ( e:JSONParseError )
-			{
-				parseError = e;
-			}
-			finally
-			{
-				// Make sure we caught a parse error since
-				// there has to be numbers after the decimal
-				assertNotNull( parseError );
-			}
+			expectParseError( "1." );
 		}
 		
 		public function testDecodeScientificRegularExponent():void
@@ -185,70 +176,140 @@ package com.adobe.serialization.json
 			assertEquals( n, 0 );
 		}
 		
-		public function testDecodeScientificExonentError():void
+		public function testDecodeScientificExponentError():void
 		{
-			var parseError:JSONParseError = null;
-			try
-			{
-				var n:Number = JSON.decode( "1e" );
-			}
-			catch ( e:JSONParseError )
-			{
-				parseError = e;
-			}
-			finally
-			{
-				// Make sure we caught a parse error since
-				// there has to be numbers after the e
-				assertNotNull( parseError );
-			}
+			expectParseError( "1e" );
 		}
 
-// Commented out - this is something that should only be available when "strict" is
-// false.		
-//		public function testDecodeHexNumber():void
-//		{
-//			var n:Number = JSON.decode( "0xFF0033" );
-//			assertEquals( 0xFF0033, n );
-//			
-//			var parseError:JSONParseError = null;
-//			try
-//			{
-//				n = JSON.decode( "0xZ" );
-//			}
-//			catch ( e:JSONParseError )
-//			{
-//				parseError = e;
-//			}
-//			finally
-//			{
-//				// Make sure we catch a parse error since 0xZ is an invalid number
-//				assertNotNull( parseError );
-//			}
-//		}
+		/**
+		 * In non-strict mode, we can interpret hex values as numbers
+		 */
+		public function testDecodeHex():void
+		{
+			var n:Number = JSON.decode( "0xFF0033", false );
+			assertEquals( 0xFF0033, n );
+			
+			// Verify invalid hex format throws error
+			expectParseError( "0x", false );
+			
+			// Verify invalid hex format throws error
+			expectParseError( "0xZ", false );
+			
+			// Verify that strict mode errors
+			expectParseError( "0xFF0033" );
+		}
 		
-		public function testDecodeObject():void {
+		/**
+		 * Non-strict mode allows for NaN as a valid token
+		 */
+		public function testDecodeNaN():void
+		{
+			var n:Number = JSON.decode( "NaN", false ) as Number;
+			assertTrue( isNaN( n ) );
+			
+			var o:Object = JSON.decode( "{ \"num\": NaN }", false );
+			assertNotNull( o );
+			assertTrue( isNaN( o.num ) );
+			
+			// Verify that strict mode throws an error
+			expectParseError( "NaN" );
+			expectParseError( "{ \"num\": NaN }" );
+		}
+		
+		public function testDecodeObject():void
+		{
 			var o:* = JSON.decode( " { \"test\": true, \"test2\": -12356732.12 } " ) as Object;
-			assertTrue( "Expected decoded object.test = true", o.test == true );
-			assertTrue( "Expected decoded object.test2 = -12356732.12", o.test2 == -12356732.12 );
+			assertNotNull( o );
+			
+			assertEquals( "Expected decoded object.test = true", true, o.test );
+			assertEquals( "Expected decoded object.test2 = -12356732.12", -12356732.12, o.test2 );
 		}
 		
-		public function testDecodeArray():void {
+		/**
+		 * In non-strict mode, the object can have a trailing comma after
+		 * the last member and not throw an error.
+		 */
+		public function testDecodeObjectWithTrailingComma():void
+		{
+			var o:Object = JSON.decode( "{\"p1\":true,\"p2\":false,}", false );
+			assertNotNull( o );
+			assertTrue( o.p1 );
+			assertFalse( o.p2 );
+			
+			o = JSON.decode( "{,}", false );
+			assertNotNull( o );
+			
+			// Verify strict mode throws error with trailing comma
+			expectParseError( "{\"p1\":true,\"p2\":false,}" );
+			expectParseError( "{,}" );
+		}
+		
+		/**
+		 * Leading comma is not supported (yet?  should they be?)
+		 */
+		public function testDecodeObjectWithLeadingCommaFails():void
+		{
+			expectParseError( "[,\"p1\":true}", false );
+		}
+		
+		public function testDecodeArray():void
+		{
 			var o:* = JSON.decode( " [ null, true, false, 100, -100, \"test\", { \"foo\": \"bar\" } ] "  ) as Array;
-			assertTrue( "Expected decoded array[0] == null", o[0] == null );
-			assertTrue( "Expected decoded array[1] == true", o[1] == true );
-			assertTrue( "Expected decoded array[2] == false", o[2] == false );
-			assertTrue( "Expected decoded array[3] == 100", o[3] == 100 );
-			assertTrue( "Expected decoded array[4] == -100", o[4] == -100 );
-			assertTrue( "Expected decoded array[5] == \"test\"", o[5] == "test" );
-			assertTrue( "Expected decoded array[6].foo == \"bar\"", o[6].foo == "bar" );
+			assertNull( "Expected decoded array[0] == null", o[0] );
+			assertTrue( "Expected decoded array[1] == true", o[1] );
+			assertFalse( "Expected decoded array[2] == false", o[2] );
+			assertEquals( "Expected decoded array[3] == 100", 100, o[3] );
+			assertEquals( "Expected decoded array[4] == -100", -100, o[4] );
+			assertEquals( "Expected decoded array[5] == \"test\"", "test", o[5] );
+			assertEquals( "Expected decoded array[6].foo == \"bar\"", "bar", o[6].foo );
 		}
 		
-		public function testDecodeArrayWithNewlines():void {
+		public function testDecodeArrayWithNewlines():void
+		{
 			var o:Array = JSON.decode( "\n [ \nnull, \n \r \t \r true \n ] \r \t \r \n" ) as Array;
 			
-			assertTrue( "Expected decoded with newlines array[0] == null", o[0] == null );
-			assertTrue( "Expected decoded with newlines array[1] == true", o[1] == true );
+			assertNull( "Expected decoded with newlines array[0] == null", o[0] );
+			assertTrue( "Expected decoded with newlines array[1] == true", o[1] );
+		}
+		
+		/**
+		 * In non-strict mode, the array can have a trailing comma after
+		 * the last element and not throw an error.
+		 */
+		public function testDecodeArrayWithTrailingComma():void
+		{
+			var o:Array = JSON.decode( "[0,1,]", false ) as Array;
+			assertEquals( 0, o[0] );
+			assertEquals( 1, o[1] );
+			
+			o = JSON.decode( "[,]", false ) as Array;
+			assertNotNull( o );
+			assertEquals( 0, o.length );
+			
+			// Verify strict mode throws error with trailing comma
+			expectParseError( "[0,1,]" );
+			expectParseError( "[,]" );
+		}
+		
+		/**
+		 * Leading comma is not supported (yet?  should they be?)
+		 */
+		public function testDecodeArrayWithLeadingCommaFails():void
+		{
+			expectParseError( "[,10]", false );
+		}
+		
+		public function testDecodeComments():void
+		{
+			expectParseError( "/*" );
+			expectParseError( "/*/" );
+			expectParseError( "//" );
+			
+			var n:Number = JSON.decode( "// this is a number\n12" );
+			assertEquals( 12, n );
+			
+			n = JSON.decode( "/* \n\n multiine com//ment *///\n14" );
+			assertEquals( 14, n )	
 		}
 		
 		public function testDecodeSuccessiveComments():void
@@ -260,45 +321,97 @@ package com.adobe.serialization.json
 			assertEquals( false, o );
 		}
 		
-		public function testEncodeTrue():void {
+		public function testDecodeEmptyStringError():void
+		{
+			expectParseError( "" );
+		}
+		
+		public function testDecodeWhiteSpace():void
+		{
+			var n:Number;
+			
+			n = JSON.decode( " 1 " );
+			assertEquals( 1, n );
+			
+			n = JSON.decode( "\t2\t" );
+			assertEquals( 2, n );
+			
+			n = JSON.decode( "\r3\r" );
+			assertEquals( 3, n );
+			
+			n = JSON.decode( "\n4\n" );
+			assertEquals( 4, n );
+			
+			// Verify combined before/after spacing
+			n = JSON.decode( "\t \n\n\r \r\n\t 100 \r\n\t\r\r\r\n  \n" ) as Number
+			assertEquals( 100, n );
+		}
+		
+		public function testDecodeWithCharactersLeftInInputString():void
+		{
+			// strict mode throws errors
+			expectParseError( "[ 1 ] true" );
+			expectParseError( "0xZ" );
+			expectParseError( "true Z" );
+			
+			// non-strict mode will not throw errors
+			var a:Array = JSON.decode( "[ 1 ] true", false ) as Array;
+			assertEquals( 1, a[0] );
+			
+			var n:Number = JSON.decode( "1Z", false ) as Number;
+			assertEquals( 1, n );
+			
+			var b:Boolean = JSON.decode( "true Z", false ) as Boolean;
+			assertTrue( b );
+		}
+		
+		public function testEncodeTrue():void
+		{
 			var o:String = JSON.encode( true );
-			assertTrue( "Expected encoded true", o == "true" );
+			assertEquals( "Expected encoded true", "true", o );
 		}
 		
-		public function testEncodeFalse():void {
+		public function testEncodeFalse():void
+		{
 			var o:String = JSON.encode( false );
-			assertTrue( "Expected encoded false", o == "false" );
+			assertEquals( "Expected encoded false", "false", o );
 		}
 		
-		public function testEncodeNull():void {
+		public function testEncodeNull():void
+		{
 			var o:String = JSON.encode( null );
-			assertTrue( "Expected encoded null", o == "null" );
+			assertEquals( "Expected encoded null", "null", o );
 		}
 		
-		public function testEncodeString():void {
+		public function testEncodeString():void
+		{
 			var o:String = JSON.encode( "this is a \n \"string\"" );
-			assertTrue( "Expected encoded string", o == "\"this is a \\n \\\"string\\\"\"" );
+			assertEquals( "Expected encoded string", "\"this is a \\n \\\"string\\\"\"", o );
 			
 			o = JSON.encode( "myString" );
-			assertEquals( o, "\"myString\"" );
+			assertEquals( "\"myString\"", o );
 		}
 		
-		public function testEncodeArrayEmpty():void {
+		public function testEncodeArrayEmpty():void
+		{
 			var o:String = JSON.encode( [] );
-			assertTrue( "Expected encoded []", o == "[]" );
+			assertEquals( "Expected encoded []", "[]", o );
 		}
 		
-		public function testEncodeArray():void {
+		public function testEncodeArray():void
+		{
 			var o:String = JSON.encode( [ true, false, -10, null, Number.NEGATIVE_INFINITY ] );
-			assertTrue( "Expected encoded array", o == "[true,false,-10,null,null]" );
+			assertTrue( "Expected encoded array", "[true,false,-10,null,null]", o );
 		}
 		
-		public function testEncodeObjectEmpty():void {
+		public function testEncodeObjectEmpty():void
+		{
 			var o:String = JSON.encode( {} );
-			assertTrue( "Expected encoded {}", o == "{}" );
+			assertTrue( "Expected encoded {}", "{}", o );
 		}
 		
-		public function testEncodeObject():void {
+		public function testEncodeObject():void
+		{
 			// Note: because order cannot be guaranteed when decoding
 			// into a string, we can't reliably test an object with
 			// multiple properties, so instead we test multiple
@@ -348,72 +461,6 @@ package com.adobe.serialization.json
 			}
 			assertEquals( 4, count );
 		}
-		
-		public function testDecodeEmptyStringError():void
-		{
-			var e:Error = null;
-			
-			try
-			{
-				JSON.decode( "" );
-			}
-			catch ( pe:JSONParseError )
-			{
-				e = pe;
-			}
-			
-			assertNotNull( e );
-			assertTrue( "Caught parse error", e is JSONParseError );
-		}
-		
-		public function testWhiteSpace():void
-		{
-			/*
-			      ws = *(
-                %x20 /              ; Space
-                %x09 /              ; Horizontal tab
-                %x0A /              ; Line feed or New line
-                %x0D                ; Carriage return
-            )
-			*/
-			
-			//tabs
-			var a_tab:String = "[\t1\t]";
-			
-			var a_tab_result:Array = JSON.decode(a_tab) as Array;
-			
-			assertEquals(a_tab_result[0], 1);
-			
-			
-			//space
-			var a_space:String = "[ 1 ]";
-			
-			var a_space_result:Array = JSON.decode(a_space) as Array;
-			
-			assertEquals(a_space_result[0], 1);
-			
-			//line return
-			var a_lr:String = "[\n1\n]";
-
-			var a_lr_result:Array = JSON.decode(a_lr) as Array;
-			
-			assertEquals(a_lr_result[0], 1);
-			
-			//carriage return
-			var a_cr:String = "[\r1\r]";
-			
-			var a_cr_result:Array = JSON.decode(a_cr) as Array;
-			
-			assertEquals(a_cr_result[0], 1);
-			
-			//combined return
-			var a_clr:String = "[\n\r1\n\r]";
-			
-			var a_clr_result:Array = JSON.decode(a_clr) as Array;
-			
-			assertEquals(a_clr_result[0], 1);
-		}
-		
 		
 	}
 		

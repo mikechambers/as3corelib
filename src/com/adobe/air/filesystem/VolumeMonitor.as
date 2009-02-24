@@ -63,12 +63,38 @@ package com.adobe.air.filesystem
 	public class VolumeMonitor extends EventDispatcher
 	{
 		private var timer:Timer;
-		private static const MONITOR_INTERVAL:Number = 1000;
+		private var _interval:Number;
+		private static const DEFAULT_MONITOR_INTERVAL:Number = 2000;
 		
 		private var volumes:Dictionary;
 		
-		public function VolumeMonitor()
+		/**
+		 * 	Constructor.
+		 * 
+		 * 	@param interval How often in milliseconds the system is polled for
+		 * 	volume change events. Default value is 2000, minimum value is 1000
+		 */
+		public function VolumeMonitor(interval:Number = -1)
 		{
+			if(interval != -1)
+			{
+				if(interval < 1000)
+				{
+					_interval = 1000;
+				}
+			}
+			else
+			{
+				_interval = DEFAULT_MONITOR_INTERVAL;
+			}
+		}
+		
+		/**
+		 * 	How often the system is polled for Volume change events.
+		 */
+		public function get interval():Number
+		{
+			return _interval;
 		}
 		
 		/**
@@ -78,7 +104,7 @@ package com.adobe.air.filesystem
 		{
 			if(!timer)
 			{
-				timer = new Timer(MONITOR_INTERVAL);
+				timer = new Timer(_interval);
 				timer.addEventListener(TimerEvent.TIMER, onTimerEvent);
 			}
 			

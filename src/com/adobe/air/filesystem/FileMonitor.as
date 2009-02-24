@@ -126,7 +126,7 @@ package com.adobe.air.filesystem
 		 */
 		public function watch():void
 		{
-			if(timer.running)
+			if(timer && timer.running)
 			{
 				return;
 			}

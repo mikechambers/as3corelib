@@ -57,8 +57,6 @@ package com.adobe.air.filesystem
 	/**
 	 * Class that monitors changes to the File volumes attached to the operating
 	 * system.
-	 * 
-	 * 
 	 */ 
 	public class VolumeMonitor extends EventDispatcher
 	{
@@ -81,6 +79,10 @@ package com.adobe.air.filesystem
 				if(interval < 1000)
 				{
 					_interval = 1000;
+				}
+				else
+				{
+					_interval = interval;
 				}
 			}
 			else
@@ -105,7 +107,7 @@ package com.adobe.air.filesystem
 			if(!timer)
 			{
 				timer = new Timer(_interval);
-				timer.addEventListener(TimerEvent.TIMER, onTimerEvent);
+				timer.addEventListener(TimerEvent.TIMER, onTimerEvent,false,0, true);
 			}
 			
 			//we reinitialize the hash everytime we start watching

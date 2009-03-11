@@ -18,5 +18,12 @@ package com.adobe.air.filesystem.events
 			super(type, bubbles, cancelable);
 		}
 		
+		public override function clone():Event
+		{
+			var out:FileMonitorEvent = new FileMonitorEvent(type, bubbles, cancelable);
+			out.file = file;
+			
+			return out;
+		}
 	}
 }

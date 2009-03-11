@@ -75,7 +75,8 @@ package com.adobe.air.filesystem
 	{
 		private var _file:File;
 		private var timer:Timer;
-		private static const MONITOR_INTERVAL:Number = 1000;
+		public static const DEFAULT_MONITOR_INTERVAL:Number = 1000;
+		private var _interval:Number;
 		private var fileExists:Boolean = false;
 		
 		private var lastModifiedTime:Number;
@@ -84,14 +85,35 @@ package com.adobe.air.filesystem
 		 *  Constructor
 		 * 
 		 * 	@parameter file The File that will be monitored for changes.
+		 * 
+		 * 	@param interval How often in milliseconds the file is polled for
+		 * 	change events. Default value is 1000, minimum value is 1000
 		 */ 
-		public function FileMonitor(file:File = null)
+		public function FileMonitor(file:File = null, interval:Number = -1)
 		{
 			this.file = file;
+			
+			if(interval != -1)
+			{
+				if(interval < 1000)
+				{
+					_interval = 1000;
+				}
+				else
+				{
+					_interval = interval;
+				}
+			}
+			else
+			{
+				_interval = DEFAULT_MONITOR_INTERVAL;
+			}
 		}
 	
 		/**
-		 * File being monitored for changes. 
+		 * File being monitored for changes.
+		 * 
+		 * Setting the property will result in unwatch() being called.
 		 */
 		public function get file():File
 		{
@@ -99,12 +121,7 @@ package com.adobe.air.filesystem
 		}
 		
 		public function set file(file:File):void
-		{
-			if(file == null)
-			{
-				return;
-			}
-			
+		{			
 			if(timer && timer.running)
 			{
 				unwatch();
@@ -112,12 +129,28 @@ package com.adobe.air.filesystem
 			
 			_file = file;
 			
+			if(!_file)
+			{
+				fileExists = false;
+				return;
+			}
+
+			//note : this will throw an error if new File() is passed in.
 			fileExists = _file.exists;
 			if(fileExists)
 			{
 				lastModifiedTime = _file.modificationDate.getTime();
-			}
+			}	
+
 		}
+		
+		/**
+		 * 	How often the system is polled for Volume change events.
+		 */
+		public function get interval():Number
+		{
+			return _interval;
+		}		
 		
 		/**
 		 * Begins monitoring the specified file for changes.
@@ -126,6 +159,12 @@ package com.adobe.air.filesystem
 		 */
 		public function watch():void
 		{
+			if(!file)
+			{
+				//should we throw an error?
+				return;
+			}
+			
 			if(timer && timer.running)
 			{
 				return;
@@ -134,8 +173,8 @@ package com.adobe.air.filesystem
 			//check and see if timer is active. if it is, return
 			if(!timer)
 			{
-				timer = new Timer(MONITOR_INTERVAL);
-				timer.addEventListener(TimerEvent.TIMER, onTimerEvent);
+				timer = new Timer(_interval);
+				timer.addEventListener(TimerEvent.TIMER, onTimerEvent, false, 0, true);
 			}
 			
 			timer.start();
@@ -153,7 +192,6 @@ package com.adobe.air.filesystem
 			
 			timer.stop();
 			timer.removeEventListener(TimerEvent.TIMER, onTimerEvent);
-			timer = null;
 		}
 		
 		private function onTimerEvent(e:TimerEvent):void

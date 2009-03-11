@@ -51,6 +51,22 @@ import com.adobe.utils.StringUtilTest;
 import com.adobe.utils.XMLUtilTest;
 
 import flexunit.framework.TestSuite;
+import com.adobe.air.filesystem.VolumeMonitorTest;
+import com.adobe.air.filesystem.events.FileMonitorEventTest;
+import com.adobe.air.net.events.ResourceCacheEventTest;
+import com.adobe.protocols.events.ConnectedEventTest;
+import com.adobe.protocols.events.DatabaseEventTest;
+import com.adobe.protocols.events.DefinitionEventTest;
+import com.adobe.protocols.events.DefinitionHeaderEventTest;
+import com.adobe.protocols.events.DictionaryServerEventTest;
+import com.adobe.protocols.events.DisconnectedEventTest;
+import com.adobe.protocols.events.ErrorEventTest;
+import com.adobe.protocols.events.MatchEventTest;
+import com.adobe.protocols.events.MatchStrategiesEventTest;
+import com.adobe.protocols.events.NoMatchEventTest;
+import com.adobe.protocols.util.CompletedResponseEventTest;
+import com.adobe.webapis.events.ServiceEventTest;
+import com.adobe.air.filesystem.FileMonitorTest;
 
 			
 private function onCreationComplete():void
@@ -91,8 +107,32 @@ private function createSuite():TestSuite
 	ts.addTestSuite( JPGEncoderTest );
 	ts.addTestSuite( PNGEncoderTest );
 	
+	//protocols.dict
+	ts.addTestSuite(ConnectedEventTest);
+	ts.addTestSuite(DatabaseEventTest);
+	ts.addTestSuite(DefinitionEventTest);
+	ts.addTestSuite(DefinitionHeaderEventTest);
+	ts.addTestSuite(DictionaryServerEventTest);
+	ts.addTestSuite(DisconnectedEventTest);
+	ts.addTestSuite(ErrorEventTest);
+	ts.addTestSuite(MatchEventTest);
+	ts.addTestSuite(MatchStrategiesEventTest);
+	ts.addTestSuite(NoMatchEventTest);
+	ts.addTestSuite(CompletedResponseEventTest);
+	
+	//webapis
+	ts.addTestSuite(ServiceEventTest);
+	
 	// air.crypto
-//	ts.addTestSuite( EncryptionKeyGeneratorTest );
+	ts.addTestSuite( EncryptionKeyGeneratorTest );
+	
+	//air.filesystem
+	ts.addTestSuite(VolumeMonitorTest);
+	ts.addTestSuite(FileMonitorTest);
+	ts.addTestSuite(FileMonitorEventTest);
+	
+	//air.net
+	ts.addTestSuite(ResourceCacheEventTest);
 	
 	return ts;
 }

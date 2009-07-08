@@ -230,6 +230,16 @@ package com.adobe.serialization.json {
 			
 			while ( ch != '"' && ch != '' )
 			{					
+				// Issue #104 - If the string contains any unescaped control characters, this
+				// is an error in strict mode
+				if ( strict )
+				{
+					if ( ch.charCodeAt() <= 0x1F )
+					{
+						parseError( "String contains unescaped control character 0x" + ch.charCodeAt().toString( 16 ) );
+					}
+				}
+				
 				// unescape the escape sequences in the string
 				if ( ch == '\\' )
 				{	

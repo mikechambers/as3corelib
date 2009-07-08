@@ -91,13 +91,34 @@ package com.adobe.serialization.json
 		
 		public function testDecodeString():void
 		{
-			var o:* = JSON.decode( "\"this is \t a string \n with \' escapes\"" ) as String;
-			assertEquals( "String not decoded successfully", "this is \t a string \n with \' escapes", o );
+			var string:String = "this \"is\" \t a string \\ \n with \' chars that should be http://escaped.com/";
+			assertEquals( string, JSON.decode( JSON.encode( string ) ) );
 			
-			o = JSON.decode( "\"http:\/\/digg.com\/security\/Simple_Digg_Hack\"" );
+			var o:* = JSON.decode( "\"http:\/\/digg.com\/security\/Simple_Digg_Hack\"" );
 			assertEquals( "String not decoded correctly", "http://digg.com/security/Simple_Digg_Hack", o );
 			
-			expectParseError( "\"unterminal string" );
+			expectParseError( "\"unterminated string" );
+		}
+		
+		// Issue #104 - http://code.google.com/p/as3corelib/issues/detail?id=104
+		public function testDecodeStringWithControlCharacters():void
+		{
+			var i:int;
+			
+			// In strict mode, we expect an error when we try to decode a string that
+			// contains unescaped control characters.
+			for ( i = 0x00; i <= 0x1F; i++ )
+			{
+				expectParseError( "\"string with control char " + i + ": " + String.fromCharCode( i ) + "\"", true );	
+			}
+			
+			// In non-strict mode, we don't expect any errors
+			for ( i = 0x00; i <= 0x1F; i++ )
+			{
+				var string:String = "control char " + i + ": " + String.fromCharCode( i ) + ""
+				assertEquals( string,
+							JSON.decode( "\"" + string + "\"", false ) );
+			}
 		}
 		
 		public function testDecodeZero():void

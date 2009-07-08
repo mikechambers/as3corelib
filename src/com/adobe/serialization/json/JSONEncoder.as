@@ -277,6 +277,12 @@ package com.adobe.serialization.json
 				// serialize them along with their values.
 				for each ( var v:XML in classInfo..*.( name() == "variable" || name() == "accessor" ) )
 				{
+					// Issue #110 - If [Transient] metadata exists, then we should skip the var
+					if ( v.metadata && v.metadata.( @name == "Transient" ).length() > 0 )
+					{
+						continue;
+					}
+					
 					// When the length is 0 we're adding the first item so
 					// no comma is necessary
 					if ( s.length > 0 ) {

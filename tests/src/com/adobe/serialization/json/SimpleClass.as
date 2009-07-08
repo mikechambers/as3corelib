@@ -70,6 +70,9 @@ package com.adobe.serialization.json
 		{
 			return false;
 		}
+		
+		[Transient]
+		public var transientVar:String;
 
 	
 	}

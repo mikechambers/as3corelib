@@ -457,9 +457,14 @@ package com.adobe.serialization.json
 		
 		public function testEncodeClassInstance():void
 		{
-			var s:String = JSON.encode( new SimpleClass() );
+			var customObject:SimpleClass = new SimpleClass();
+			customObject.transientVar = "Should not be encoded";
+			
+			var s:String = JSON.encode( customObject );
 			
 			assertTrue( "Has length", s.length > 0 );
+			// Make sure the transient variable was not encoded
+			assertEquals( "Should not find transient var in string", -1,  s.indexOf( "\"transientVar\":\"Should not be encoded\"" ) );
 
 			// Decode the string so we can verify that it has the properties
 			var o:Object = JSON.decode( s );
@@ -469,6 +474,7 @@ package com.adobe.serialization.json
 			assertNotNull( o.publicVar2 );
 			assertNotNull( o.accessor1 );
 			assertNotNull( o.accessor2 );
+			assertNull( o.transientVar );
 			assertEquals( 17, o.publicVar1 );
 			assertEquals( 20, o.publicVar2 );
 			assertEquals( 25, o.accessor1 );

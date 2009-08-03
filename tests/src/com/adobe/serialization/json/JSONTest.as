@@ -350,6 +350,7 @@ package com.adobe.serialization.json
 		public function testDecodeWhiteSpace():void
 		{
 			var n:Number;
+			var nbsp:String = String.fromCharCode( 160 ); // non-breaking space
 			
 			n = JSON.decode( " 1 " );
 			assertEquals( 1, n );
@@ -366,6 +367,17 @@ package com.adobe.serialization.json
 			// Verify combined before/after spacing
 			n = JSON.decode( "\t \n\n\r \r\n\t 100 \r\n\t\r\r\r\n  \n" ) as Number
 			assertEquals( 100, n );
+			
+			// In non-strict mode, we should also accept non breaking space
+			n = JSON.decode( "\t \n" 
+							+ nbsp 
+							+ "\n\r \r\n\t 100 \r\n\t\r\r\r\n" 
+							+ nbsp 
+							+ "  \n", false ) as Number
+			assertEquals( 100, n );
+			
+			// In strict mode, we do NOT accept non breaking space, so expect a parse error
+			expectParseError( "\t \n" + nbsp + "\n\r \r\n\t 100 \r\n\t\r\r\r\n" + nbsp + "  \n" );
 		}
 		
 		public function testDecodeWithCharactersLeftInInputString():void

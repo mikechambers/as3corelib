@@ -618,7 +618,18 @@ package com.adobe.serialization.json {
 		 */
 		private function isWhiteSpace( ch:String ):Boolean
 		{
-			return ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' );
+			// Check for the whitespace defined in the spec
+			if ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' )
+			{
+				return true;
+			}
+			// If we're not in strict mode, we also accept non-breaking space
+			else if ( !strict && ch.charCodeAt( 0 ) == 160 )
+			{
+				return true;
+			}
+			
+			return false;
 		}
 		
 		/**

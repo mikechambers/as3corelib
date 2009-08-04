@@ -91,13 +91,28 @@ package com.adobe.serialization.json
 		
 		public function testDecodeString():void
 		{
-			var string:String = "this \"is\" \t a string \\ \n with \' chars that should be http://escaped.com/";
+			var string:String = "this \"is\" \t a \/ string \b \f \r \h \\ \n with \' ch\\u0061rs that should be { } http://escaped.com/";
 			assertEquals( string, JSON.decode( JSON.encode( string ) ) );
 			
-			var o:* = JSON.decode( "\"http:\/\/digg.com\/security\/Simple_Digg_Hack\"" );
+			var o:String = JSON.decode( "\"http:\/\/digg.com\/security\/Simple_Digg_Hack\"" ) as String;
 			assertEquals( "String not decoded correctly", "http://digg.com/security/Simple_Digg_Hack", o );
 			
 			expectParseError( "\"unterminated string" );
+		}
+		
+		public function testDecodeStringWithInvalidUnicodeEscape():void
+		{
+			// No characters after the u
+			expectParseError( "\"\\u\"" );
+			
+			// Not a hex character after the u
+			expectParseError( "\"\\ut\"" );
+			
+			// Not enough characters after the u
+			expectParseError( "\"\\u123\"" );
+			
+			// Unicode decodes correctly
+			assertEquals( "a", JSON.decode( "\"\u0061\"" ) );
 		}
 		
 		// Issue #104 - http://code.google.com/p/as3corelib/issues/detail?id=104

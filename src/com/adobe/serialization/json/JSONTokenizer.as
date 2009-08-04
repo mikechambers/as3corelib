@@ -54,6 +54,12 @@ package com.adobe.serialization.json {
 		/** The current character in the JSON string during parsing */
 		private var ch:String;
 		
+		/** 
+		 * The regular expression used to make sure the string does not
+		 * contain invalid control characters.
+		 */
+		private var controlCharsRegExp:RegExp = /[\x00-\x1F]/;
+		
 		/**
 		 * Constructs a new JSONDecoder to parse a JSON string 
 		 * into a native object.
@@ -222,129 +228,159 @@ package com.adobe.serialization.json {
 		 */
 		private function readString():JSONToken
 		{
-			// the string to store the string we'll try to read
-			var string:String = "";
+			// Rather than examine the string character-by-character, it's
+			// faster to use indexOf to try to and find the closing quote character
+			// and then replace escape sequences after the fact.
 			
-			// advance past the first "
+			// Start at the current input stream position
+			var quoteIndex:int = loc;
+			do
+			{
+				// Find the next quote in the input stream
+				quoteIndex = jsonString.indexOf( "\"", quoteIndex );
+				
+				if ( quoteIndex >= 0 )
+				{
+					// We found the next double quote character in the string, but we need
+					// to make sure it is not part of an escape sequence.
+					
+					// Keep looping backwards while the previous character is a backslash
+					var backspaceCount:int = 0;
+					var backspaceIndex:int = quoteIndex - 1;
+					while ( jsonString.charAt( backspaceIndex ) == "\\" )
+					{
+						backspaceCount++;
+						backspaceIndex--;
+					}
+					
+					// If we have an even number of backslashes, that means this is the ending quote 
+					if ( backspaceCount % 2 == 0 )
+					{
+						break;
+					}
+					
+					// At this point, the quote was determined to be part of an escape sequence
+					// so we need to move past the quote index to look for the next one
+					quoteIndex++;
+				}
+				else // There are no more quotes in the string and we haven't found the end yet
+				{
+					parseError( "Unterminated string literal" );
+				}
+			} while ( true );
+			
+			// Unescape the string
+			// the token for the string we'll try to read
+			var token:JSONToken = new JSONToken();
+			token.type = JSONTokenType.STRING;
+			// Attach resulting string to the token to return it
+			token.value = unescapeString( jsonString.substr( loc, quoteIndex - loc ) );
+			
+			// Move past the closing quote in the input string.  This updates the next
+			// character in the input stream to be the character one after the closing quote
+			loc = quoteIndex + 1;
 			nextChar();
 			
-			while ( ch != '"' && ch != '' )
-			{					
-				// Issue #104 - If the string contains any unescaped control characters, this
-				// is an error in strict mode
-				if ( strict )
-				{
-					if ( ch.charCodeAt() <= 0x1F )
-					{
-						parseError( "String contains unescaped control character 0x" + ch.charCodeAt().toString( 16 ) );
-					}
-				}
+			return token;
+		}
+		
+		/**
+		 * Convert all JavaScript escape characters into normal characters
+		 *
+		 * @param source A source string to convert
+		 *
+		 * @return Original string with escape characters replaced by real characters
+		 */
+		public function unescapeString( input:String ):String
+		{
+			// Issue #104 - If the string contains any unescaped control characters, this
+			// is an error in strict mode
+			if ( strict && controlCharsRegExp.test( input ) )
+			{
+				parseError( "String contains unescaped control character (0x00-0x1F)" );
+			}
+			
+			var result:String = "";
+			var backslashIndex:int = 0;
+			var nextSubstringStartPosition:int = 0;
+			var len:int = input.length;
+			do
+			{
+				// Find the next backslask in the input
+				backslashIndex = input.indexOf( '\\', nextSubstringStartPosition );
 				
-				// unescape the escape sequences in the string
-				if ( ch == '\\' )
-				{	
-					// get the next character so we know what
-					// to unescape
-					nextChar();
+				if ( backslashIndex >= 0 )
+				{
+					result += input.substr( nextSubstringStartPosition, backslashIndex - nextSubstringStartPosition );
 					
-					switch ( ch )
+					// Move past the backslash and next character (all escape sequences are
+					// two characters, except for \u, which will advance this further)
+					nextSubstringStartPosition = backslashIndex + 2;
+					
+					// Check the next character so we know what to escape
+					var afterBackslashIndex:int = backslashIndex + 1;
+					var escapedChar:String = input.charAt( afterBackslashIndex );
+					switch ( escapedChar )
 					{	
-						case '"': // quotation mark
-							string += '"';
-							break;
+						// Try to list the most common expected cases first to improve performance
 						
-						case '/':	// solidus
-							string += "/";
-							break;
-							
-						case '\\':	// reverse solidus
-							string += '\\';
-							break;
-							
-						case 'b':	// bell
-							string += '\b';
-							break;
-							
-						case 'f':	// form feed
-							string += '\f';
-							break;
-							
-						case 'n':	// newline
-							string += '\n';
-							break;
-							
-						case 'r':	// carriage return
-							string += '\r';
-							break;
-							
-						case 't':	// horizontal tab
-							string += '\t'
-							break;
+						case '"': result += '"'; break; // quotation mark
+						case '\\': result += '\\'; break; // reverse solidus	
+						case 'n': result += '\n'; break; // newline
+						case 'r': result += '\r'; break; // carriage return
+						case 't': result += '\t'; break; // horizontal tab	
 						
+						// Convert a unicode escape sequence to it's character value
 						case 'u':
-							// convert a unicode escape sequence
-							// to it's character value - expecting
-							// 4 hex digits
 							
-							// save the characters as a string we'll convert to an int
+							// Save the characters as a string we'll convert to an int
 							var hexValue:String = "";
 							
-							// try to find 4 hex characters
-							for ( var i:int = 0; i < 4; i++ )
+							// Make sure there are enough characters in the string leftover
+							if ( nextSubstringStartPosition + 4 >= len )
+							{
+								parseError( "Unexpected end of input.  Expecting 4 hex digits after \\u." );
+							}
+							
+							// Try to find 4 hex characters
+							for ( var i:int = nextSubstringStartPosition; i < nextSubstringStartPosition + 4; i++ )
 							{
 								// get the next character and determine
 								// if it's a valid hex digit or not
-								if ( !isHexDigit( nextChar() ) )
+								var possibleHexChar:String = input.charAt( i );
+								if ( !isHexDigit( possibleHexChar ) )
 								{
-									parseError( " Excepted a hex digit, but found: " + ch );
+									parseError( "Excepted a hex digit, but found: " + possibleHexChar );
 								}
-								// valid, add it to the value
-								hexValue += ch;
+								
+								// Valid hex digit, add it to the value
+								hexValue += possibleHexChar;
 							}
 							
-							// convert hexValue to an integer, and use that
-							// integrer value to create a character to add
+							// Convert hexValue to an integer, and use that
+							// integer value to create a character to add
 							// to our string.
-							string += String.fromCharCode( parseInt( hexValue, 16 ) );
-							
+							result += String.fromCharCode( parseInt( hexValue, 16 ) );
+							// Move past the 4 hex digits that we just read
+							nextSubstringStartPosition += 4;
 							break;
-					
-						default:
-							// couldn't unescape the sequence, so just
-							// pass it through
-							string += '\\' + ch;
 						
+						case 'f': result += '\f'; break; // form feed
+						case '/': result += '/'; break; // solidus
+						case 'b': result += '\b'; break; // bell
+						default: result += '\\' + escapedChar; // Couldn't unescape the sequence, so just pass it through
 					}
-					
 				}
 				else
 				{
-					// didn't have to unescape, so add the character to the string
-					string += ch;
-					
+					// No more backslashes to replace, append the rest of the string
+					result += input.substr( nextSubstringStartPosition );
+					break;
 				}
 				
-				// move to the next character
-				nextChar();
-			}
+			} while ( nextSubstringStartPosition < len );
 			
-			// we read past the end of the string without closing it, which
-			// is a parse error
-			if ( ch == '' )
-			{
-				parseError( "Unterminated string literal" );
-			}
-			
-			// move past the closing " in the input string
-			nextChar();
-			
-			// the token for the string we've just read
-			var token:JSONToken = new JSONToken();
-			token.type = JSONTokenType.STRING;
-			// attach to the string to the token so we can return it
-			token.value = string;
-			
-			return token;
+			return result;
 		}
 		
 		/**

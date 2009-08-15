@@ -73,6 +73,12 @@ package com.adobe.serialization.json
 		
 		[Transient]
 		public var transientVar:String;
+		
+		/** Write-only property */
+		public function set writeOnlyProp( value:Number ):void
+		{
+			
+		}
 
 	
 	}

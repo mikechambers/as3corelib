@@ -684,7 +684,7 @@ package com.adobe.serialization.json {
 		 */
 		private function isHexDigit( ch:String ):Boolean
 		{
-			return ( isDigit( ch ) || ( ch >= 'A' && ch <= 'F' ) || ( ch >= 'a' && ch <= 'z' ) );
+			return ( isDigit( ch ) || ( ch >= 'A' && ch <= 'F' ) || ( ch >= 'a' && ch <= 'f' ) );
 		}
 	
 		/**

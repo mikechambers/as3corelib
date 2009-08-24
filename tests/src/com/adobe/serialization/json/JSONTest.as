@@ -112,7 +112,7 @@ package com.adobe.serialization.json
 			expectParseError( "\"\\u123\"" );
 			
 			// Unicode decodes correctly
-			assertEquals( "a", JSON.decode( "\"\u0061\"" ) );
+			assertEquals( "a", JSON.decode( "\"\\u0061\"" ) );
 		}
 		
 		// Issue #104 - http://code.google.com/p/as3corelib/issues/detail?id=104
@@ -230,6 +230,7 @@ package com.adobe.serialization.json
 			
 			// Verify invalid hex format throws error
 			expectParseError( "0xZ", false );
+			expectParseError( "0xz", false );
 			
 			// Verify that strict mode errors
 			expectParseError( "0xFF0033" );

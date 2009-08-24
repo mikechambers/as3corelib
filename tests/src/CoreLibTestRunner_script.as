@@ -80,33 +80,33 @@ private function createSuite():TestSuite
 	var ts:TestSuite = new TestSuite();
 
 	// utils
-//	ts.addTestSuite( StringUtilTest );
-//	ts.addTestSuite( NumberFormatterTest );
-//	ts.addTestSuite( ArrayUtilTest );
-//	ts.addTestSuite( DateUtilTest );
-//	ts.addTestSuite( IntUtilTest );
-//	ts.addTestSuite( XMLUtilTest );
-//	ts.addTestSuite( DictionaryUtilTest );
-//	
-//	// crypto
-//	ts.addTestSuite( HMACSHA1Test );
-//	ts.addTestSuite( HMACMD5Test );
-//	ts.addTestSuite( MD5Test );
-//	ts.addTestSuite( SHA1Test );
-//	ts.addTestSuite( SHA224Test );
-//	ts.addTestSuite( SHA256Test );
-//	ts.addTestSuite( WSSEUsernameTokenTest );
-//	
-//	// net
-//	ts.addTestSuite( URITest );
-//	
+	ts.addTestSuite( StringUtilTest );
+	ts.addTestSuite( NumberFormatterTest );
+	ts.addTestSuite( ArrayUtilTest );
+	ts.addTestSuite( DateUtilTest );
+	ts.addTestSuite( IntUtilTest );
+	ts.addTestSuite( XMLUtilTest );
+	ts.addTestSuite( DictionaryUtilTest );
+	
+	// crypto
+	ts.addTestSuite( HMACSHA1Test );
+	ts.addTestSuite( HMACMD5Test );
+	ts.addTestSuite( MD5Test );
+	ts.addTestSuite( SHA1Test );
+	ts.addTestSuite( SHA224Test );
+	ts.addTestSuite( SHA256Test );
+	ts.addTestSuite( WSSEUsernameTokenTest );
+	
+	// net
+	ts.addTestSuite( URITest );
+	
 	// serialization
 	ts.addTestSuite( JSONTest );		
 	
-//	//images
-//	ts.addTestSuite( JPGEncoderTest );
-//	ts.addTestSuite( PNGEncoderTest );
-//	
+	//images
+	ts.addTestSuite( JPGEncoderTest );
+	ts.addTestSuite( PNGEncoderTest );
+	
 	//protocols.dict
 	ts.addTestSuite(ConnectedEventTest);
 	ts.addTestSuite(DatabaseEventTest);

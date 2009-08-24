@@ -287,8 +287,7 @@ package com.adobe.serialization.json {
 		/**
 		 * Convert all JavaScript escape characters into normal characters
 		 *
-		 * @param source A source string to convert
-		 *
+		 * @param input The input string to convert
 		 * @return Original string with escape characters replaced by real characters
 		 */
 		public function unescapeString( input:String ):String
@@ -306,7 +305,7 @@ package com.adobe.serialization.json {
 			var len:int = input.length;
 			do
 			{
-				// Find the next backslask in the input
+				// Find the next backslash in the input
 				backslashIndex = input.indexOf( '\\', nextSubstringStartPosition );
 				
 				if ( backslashIndex >= 0 )
@@ -337,7 +336,7 @@ package com.adobe.serialization.json {
 							var hexValue:String = "";
 							
 							// Make sure there are enough characters in the string leftover
-							if ( nextSubstringStartPosition + 4 >= len )
+							if ( nextSubstringStartPosition + 4 > len )
 							{
 								parseError( "Unexpected end of input.  Expecting 4 hex digits after \\u." );
 							}
@@ -679,19 +678,13 @@ package com.adobe.serialization.json {
 		}
 		
 		/**
-		 * Determines if a character is a digit [0-9].
+		 * Determines if a character is a hex digit [0-9A-Fa-f].
 		 *
-		 * @return True if the character passed in is a digit
+		 * @return True if the character passed in is a hex digit
 		 */
 		private function isHexDigit( ch:String ):Boolean
 		{
-			// get the uppercase value of ch so we only have
-			// to compare the value between 'A' and 'F'
-			var uc:String = ch.toUpperCase();
-			
-			// a hex digit is a digit of A-F, inclusive ( using
-			// our uppercase constraint )
-			return ( isDigit( ch ) || ( uc >= 'A' && uc <= 'F' ) );
+			return ( isDigit( ch ) || ( ch >= 'A' && ch <= 'F' ) || ( ch >= 'a' && ch <= 'z' ) );
 		}
 	
 		/**

@@ -49,6 +49,7 @@ package com.adobe.air.filesystem.events
 			
 			var e2:FileMonitorEvent = FileMonitorEvent(e1.clone());
 			
+			assertTrue("e1 != e2", e1 != e2);
 			assertTrue("e1.cancelable == e2.cancelable", e1.cancelable == e2.cancelable);
 			assertTrue("e1.bubbles == e2.bubbles", e1.bubbles == e2.bubbles);
 			assertTrue("e1.type == e2.type", e1.type == e2.type);

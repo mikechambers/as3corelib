@@ -43,7 +43,16 @@ package com.adobe.webapis.events
 	
 		public function test_clone():void
 		{
-			assertTrue(false);
+			var type:String = "foo";
+			var o:Object = {foo:"bar"};
+			
+			var original:ServiceEvent = new ServiceEvent(type);
+			
+			var clone:ServiceEvent = ServiceEvent(original.clone());
+			
+			assertTrue("original != clone", original != clone);
+			assertTrue("clone.type == original.type", clone.type == original.type);
+			assertTrue("clone.type == original.type", clone.data == original.data);
 		}		
 		
 	}

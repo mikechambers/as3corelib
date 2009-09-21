@@ -51,8 +51,16 @@ package com.adobe.webapis.events
 			var clone:ServiceEvent = ServiceEvent(original.clone());
 			
 			assertTrue("original != clone", original != clone);
-			assertTrue("clone.type == original.type", clone.type == original.type);
-			assertTrue("clone.type == original.type", clone.data == original.data);
+			
+			trace(clone.bubbles, original.bubbles);
+			assertTrue("clone.bubbles == original.bubbles",
+										clone.bubbles == original.bubbles);
+			assertTrue("clone.cancelable == original.cancelable",
+								clone.cancelable == original.cancelable);
+			assertTrue("clone.type == original.type", 
+											clone.type == original.type);
+			assertTrue("clone.data == original.data", 
+											clone.data == original.data);
 		}		
 		
 	}

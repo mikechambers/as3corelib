@@ -57,7 +57,6 @@ package com.adobe.air.net.events
 			
 			assertTrue("original != clone", original != clone);
 			
-			trace(clone.bubbles, original.bubbles);
 			assertTrue("clone.bubbles == original.bubbles",
 										clone.bubbles == original.bubbles);
 			assertTrue("clone.cancelable == original.cancelable",

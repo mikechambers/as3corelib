@@ -32,6 +32,8 @@
 
 package com.adobe.air.net.events
 {
+	import flash.filesystem.File;
+	
 	import flexunit.framework.TestCase;
 
 	public class ResourceCacheEventTest extends TestCase
@@ -43,7 +45,29 @@ package com.adobe.air.net.events
 		
 		public function test_clone():void
 		{
-			assertTrue(false);
+			var type:String = ResourceCacheEvent.ITEM_CACHED;
+			var key:String = "foo";
+			var file:File = new File();
+			
+			var original:ResourceCacheEvent = new ResourceCacheEvent(type);
+			original.key = key;
+			original.file = file;
+			
+			var clone:ResourceCacheEvent = ResourceCacheEvent(original.clone());
+			
+			assertTrue("original != clone", original != clone);
+			
+			trace(clone.bubbles, original.bubbles);
+			assertTrue("clone.bubbles == original.bubbles",
+										clone.bubbles == original.bubbles);
+			assertTrue("clone.cancelable == original.cancelable",
+								clone.cancelable == original.cancelable);
+			assertTrue("clone.type == original.type", 
+											clone.type == original.type);
+			assertTrue("clone.key == original.key", 
+											clone.key == original.key);
+			assertTrue("clone.file == original.file", 
+											clone.file == original.file);
 		}
 	}
 }

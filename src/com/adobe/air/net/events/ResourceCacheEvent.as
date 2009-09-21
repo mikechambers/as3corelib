@@ -41,16 +41,30 @@ package com.adobe.air.net.events
 		public static const ITEM_READY:String = "onPathReady";
 		public static const ITEM_CACHED:String = "onItemCached";
 		
-		public function ResourceCacheEvent(type:String, bubbles:Boolean=false, cancelable:Boolean=false)
-		{
-			super(type, bubbles, cancelable);
-		}
-		
 		[Bindable]
 		public var key:String;
 		
 		[Bindable]
-		public var file:File;
+		public var file:File;		
+		
+		public function ResourceCacheEvent(type:String, 
+												bubbles:Boolean=false, 
+												cancelable:Boolean=false)
+		{
+			super(type, bubbles, cancelable);
+		}
+		
+		public override function clone():Event
+		{
+			var out:ResourceCacheEvent = new ResourceCacheEvent(type,
+																bubbles,
+																cancelable);
+																
+			out.key = key;
+			out.file = file;
+			
+			return out;
+		}
 		
 	}
 }

@@ -33,10 +33,7 @@
 package com.adobe.utils
 {
 	import flexunit.framework.TestCase;
-	import flexunit.framework.TestSuite;
 	
-	import com.adobe.utils.DateUtil;
-	import com.adobe.utils.ArrayUtil;
 	import mx.formatters.DateBase;
 
 	public class DateUtilTest extends TestCase
@@ -73,7 +70,7 @@ package com.adobe.utils
 			//1994-11-05T08:15:30-05:00 corresponds to November 5, 1994, 8:15:30
 			// am, US Eastern Standard Time.
 			
-			var s:String = "1994-11-05T08:15:30-08:00";
+			var s:String = "1994-11-05T08:15:30.123456-08:00";
 			
 			var d:Date = DateUtil.parseW3CDTF(s);
 			

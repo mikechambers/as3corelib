@@ -51,17 +51,17 @@ package com.adobe.protocols.dict
 		extends EventDispatcher
 	{
 		// Event type names.
-		public static var CONNECTED:String = "connected";
-		public static var DISCONNECTED:String = "disconnected";
+		//public static var CONNECTED:String = "connected";
+		//public static var DISCONNECTED:String = "disconnected";
 		public static var IO_ERROR:String = IOErrorEvent.IO_ERROR;
-		public static var ERROR:String = "error";
-		public static var SERVERS:String = "servers";
-		public static var DATABASES:String = "databases";
-		public static var MATCH_STRATEGIES:String = "matchStrategies";
-		public static var DEFINITION:String = "definition";
-		public static var DEFINITION_HEADER:String = "definitionHeader";
-		public static var MATCH:String = "match";
-		public static var NO_MATCH:String = "noMatch";
+		//public static var ERROR:String = "error";
+		//public static var SERVERS:String = "servers";
+		//public static var DATABASES:String = "databases";
+		//public static var MATCH_STRATEGIES:String = "matchStrategies";
+		//public static var DEFINITION:String = "definition";
+		//public static var DEFINITION_HEADER:String = "definitionHeader";
+		//public static var MATCH:String = "match";
+		//public static var NO_MATCH:String = "noMatch";
 
 		public static var FIRST_MATCH:uint = 0;
 		public static var ALL_DATABASES:uint = 1;
@@ -167,7 +167,7 @@ package com.adobe.protocols.dict
 
 		private function disconnected(event:Event):void
 		{
-        	dispatchEvent(new DisconnectedEvent());
+        	dispatchEvent(new DisconnectedEvent(DisconnectedEvent.DISCONNECTED));
     	}
 
 		private function incomingServerXML(event:ResultEvent):void
@@ -189,7 +189,7 @@ package com.adobe.protocols.dict
 					servers.push(dServer);
 				}
 			}
-			var dEvent:DictionaryServerEvent = new DictionaryServerEvent();
+			var dEvent:DictionaryServerEvent = new DictionaryServerEvent(DictionaryServerEvent.SERVERS);
 			dEvent.servers = servers;
 			dispatchEvent(dEvent);
 		}
@@ -209,7 +209,7 @@ package com.adobe.protocols.dict
 			}
 			else if (responseCode == 220) // successful connection
 			{
-				dispatchEvent(new ConnectedEvent());
+				dispatchEvent(new ConnectedEvent(ConnectedEvent.CONNECTED));
 			}
 			else if (responseCode == 110) // databases are being returned
 			{
@@ -269,7 +269,7 @@ package com.adobe.protocols.dict
     			var description:String = line.substring(line.indexOf(" ")+1, line.length).replace(/\"/g,"");
     			databases.push(new Database(name, description));
     		}
-    		var event:DatabaseEvent = new DatabaseEvent();
+    		var event:DatabaseEvent = new DatabaseEvent(DatabaseEvent.DATABASES);
     		event.databases = databases;
     		dispatchEvent(event);
     	}
@@ -284,7 +284,7 @@ package com.adobe.protocols.dict
     			var description:String = line.substring(line.indexOf(" ")+1, line.length).replace(/\"/g,"");
     			strategies.push(new MatchStrategy(name, description));
     		}
-    		var event:MatchStrategiesEvent = new MatchStrategiesEvent();
+    		var event:MatchStrategiesEvent = new MatchStrategiesEvent(MatchStrategiesEvent.MATCH_STRATEGIES);
     		event.strategies = strategies;
     		dispatchEvent(event);
     	}
@@ -298,14 +298,14 @@ package com.adobe.protocols.dict
     			var match:String = line.substring(line.indexOf(" ")+1, line.length).replace(/\"/g,"");
     			matches.push(match);
     		}
-    		var event:MatchEvent = new MatchEvent();
+    		var event:MatchEvent = new MatchEvent(MatchEvent.MATCH);
     		event.matches = matches;
     		dispatchEvent(event);
     	}
 
     	private function throwErrorEvent(response:Response):void
     	{
-    		var event:ErrorEvent = new ErrorEvent();
+    		var event:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
     		event.code = response.code;
     		event.message = response.headerText;
 			dispatchEvent(event);
@@ -313,19 +313,19 @@ package com.adobe.protocols.dict
 
     	private function throwNoMatchEvent(response:Response):void
     	{
-			dispatchEvent(new NoMatchEvent());
+			dispatchEvent(new NoMatchEvent(NoMatchEvent.NO_MATCH));
     	}
 
     	private function throwDefinitionHeaderEvent(response:Response):void
     	{
-			var event:DefinitionHeaderEvent = new DefinitionHeaderEvent();
+			var event:DefinitionHeaderEvent = new DefinitionHeaderEvent(DefinitionHeaderEvent.DEFINITION_HEADER);
 			event.definitionCount = uint(response.headerText.substring(0, response.headerText.indexOf(" ")));
 			dispatchEvent(event);
     	}
 
     	private function throwDefinitionEvent(response:Response):void
     	{
-    		var event:DefinitionEvent = new DefinitionEvent();
+    		var event:DefinitionEvent = new DefinitionEvent(DefinitionEvent.DEFINITION);
     		var def:Definition = new Definition();
     		var headerText:String = response.headerText;
     		var tokens:Array = headerText.match(/"[^"]+"/g);

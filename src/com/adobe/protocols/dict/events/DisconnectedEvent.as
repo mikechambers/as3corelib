@@ -33,13 +33,22 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 
 	public class DisconnectedEvent extends Event
 	{
-		public function DisconnectedEvent()
+		public static const DISCONNECTED:String = "disconnected";		
+		
+		public function DisconnectedEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.DISCONNECTED);
+			super(type, bubbles, cancelable);
+		}
+		
+		public override function clone():Event
+		{
+			var out:DisconnectedEvent = new DisconnectedEvent(type, bubbles, cancelable);
+			
+			return out;
 		}
 		
 	}

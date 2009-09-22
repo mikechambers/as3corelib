@@ -32,6 +32,9 @@
 
 package com.adobe.protocols.events
 {
+	import com.adobe.protocols.dict.Definition;
+	import com.adobe.protocols.dict.events.DefinitionEvent;
+	
 	import flexunit.framework.TestCase;
 
 	public class DefinitionEventTest extends TestCase
@@ -43,8 +46,16 @@ package com.adobe.protocols.events
 		
 		public function test_clone():void
 		{
-			assertTrue(false);
-		}		
-		
+			var e1:DefinitionEvent = new DefinitionEvent(DefinitionEvent.DEFINITION);
+			e1.definition = new Definition();
+			
+			var e2:DefinitionEvent = DefinitionEvent(e1.clone());
+			
+			assertTrue("e1 != e2", e1 != e2);
+			assertTrue("e1.cancelable == e2.cancelable", e1.cancelable == e2.cancelable);
+			assertTrue("e1.bubbles == e2.bubbles", e1.bubbles == e2.bubbles);
+			assertTrue("e1.type == e2.type", e1.type == e2.type);
+			assertTrue("e1.definition == e2.definition", e1.definition == e2.definition);
+		}	
 	}
 }

@@ -32,6 +32,8 @@
 
 package com.adobe.protocols.events
 {
+	import com.adobe.protocols.dict.events.NoMatchEvent;
+	
 	import flexunit.framework.TestCase;
 
 	public class NoMatchEventTest extends TestCase
@@ -43,7 +45,14 @@ package com.adobe.protocols.events
 		
 		public function test_clone():void
 		{
-			assertTrue(false);
+			var e1:NoMatchEvent = new NoMatchEvent(NoMatchEvent.NO_MATCH);
+			
+			var e2:NoMatchEvent = NoMatchEvent(e1.clone());
+			
+			assertTrue("e1 != e2", e1 != e2);
+			assertTrue("e1.cancelable == e2.cancelable", e1.cancelable == e2.cancelable);
+			assertTrue("e1.bubbles == e2.bubbles", e1.bubbles == e2.bubbles);
+			assertTrue("e1.type == e2.type", e1.type == e2.type);
 		}		
 	}
 }

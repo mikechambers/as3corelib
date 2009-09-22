@@ -33,16 +33,17 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 
-	public class DefinitionHeaderEvent
-		extends Event
-	{
+	public class DefinitionHeaderEvent extends Event
+	{	
+		public static const DEFINITION_HEADER:String = "definitionHeader";
+		
 		private var _definitionCount:uint;
 		
-		public function DefinitionHeaderEvent()
+		public function DefinitionHeaderEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.DEFINITION_HEADER);
+			super(type, bubbles, cancelable);
 		}
 		
 		public function set definitionCount(definitionCount:uint):void
@@ -53,6 +54,16 @@ package com.adobe.protocols.dict.events
 		public function get definitionCount():uint
 		{
 			return this._definitionCount;
+		}
+		
+		public override function clone():Event
+		{
+			var out:DefinitionHeaderEvent = new DefinitionHeaderEvent(type, 
+															bubbles, cancelable);
+															
+			out.definitionCount = _definitionCount;
+			
+			return out;
 		}
 	}
 }

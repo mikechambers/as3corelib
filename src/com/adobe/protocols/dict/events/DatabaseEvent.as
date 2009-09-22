@@ -33,16 +33,17 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 
-	public class DatabaseEvent
-		extends Event
+	public class DatabaseEvent extends Event
 	{
 		private var _databases:Array;
 		
-		public function DatabaseEvent()
+		public static const DATABASES:String = "databases";
+		
+		public function DatabaseEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.DATABASES);
+			super(type, bubbles, cancelable);
 		}
 		
 		public function set databases(databases:Array):void
@@ -53,6 +54,14 @@ package com.adobe.protocols.dict.events
 		public function get databases():Array
 		{
 			return this._databases;
+		}
+		
+		public override function clone():Event
+		{
+			var out:DatabaseEvent = new DatabaseEvent(type, bubbles, cancelable);
+			out.databases = _databases;
+			
+			return out;
 		}
 	}
 }

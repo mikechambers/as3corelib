@@ -73,7 +73,7 @@ package com.adobe.protocols.dict.util
 		
 		private function throwResponseEvent(response:String):void
 		{
-			var responseEvent:CompleteResponseEvent = new CompleteResponseEvent();
+			var responseEvent:CompleteResponseEvent = new CompleteResponseEvent(CompleteResponseEvent.COMPLETE_RESPONSE);
 			responseEvent.response = response;
 			dispatchEvent(responseEvent);			
 		}

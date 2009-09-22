@@ -33,14 +33,22 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 
-	public class NoMatchEvent
-		extends Event
+	public class NoMatchEvent extends Event
 	{
-		public function NoMatchEvent()
+		public static const NO_MATCH:String = "noMatch";
+		
+		public function NoMatchEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.NO_MATCH);
+			super(type, bubbles, cancelable);
+		}
+		
+		public override function clone():Event
+		{
+			var out:NoMatchEvent = new NoMatchEvent(type, bubbles, cancelable);
+			
+			return out;
 		}
 	}
 }

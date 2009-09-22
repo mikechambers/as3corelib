@@ -33,16 +33,17 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 
-	public class MatchEvent
-		extends Event
+	public class MatchEvent extends Event
 	{
 		private var _matches:Array;
 		
-		public function MatchEvent()
+		public static const MATCH:String = "match";
+		
+		public function MatchEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.MATCH);
+			super(type, bubbles, cancelable);
 		}
 		
 		public function set matches(matches:Array):void
@@ -53,6 +54,14 @@ package com.adobe.protocols.dict.events
 		public function get matches():Array
 		{
 			return this._matches;
+		}
+		
+		public override function clone():Event
+		{
+			var out:MatchEvent = new MatchEvent(type, bubbles, cancelable);
+			out.matches = _matches;
+			
+			return out;
 		}
 	}
 }

@@ -32,6 +32,8 @@
 
 package com.adobe.protocols.events
 {
+	import com.adobe.protocols.dict.events.ErrorEvent;
+	
 	import flexunit.framework.TestCase;
 
 	public class ErrorEventTest extends TestCase
@@ -43,8 +45,19 @@ package com.adobe.protocols.events
 		
 		public function test_clone():void
 		{
-			assertTrue(false);
-		}		
+			var e1:ErrorEvent = new ErrorEvent(ErrorEvent.ERROR);
+			e1.message = "foo";
+			e1.code = 1;
+			
+			var e2:ErrorEvent = ErrorEvent(e1.clone());
+			
+			assertTrue("e1 != e2", e1 != e2);
+			assertTrue("e1.cancelable == e2.cancelable", e1.cancelable == e2.cancelable);
+			assertTrue("e1.bubbles == e2.bubbles", e1.bubbles == e2.bubbles);
+			assertTrue("e1.type == e2.type", e1.type == e2.type);
+			assertTrue("e1.message == e2.message", e1.message == e2.message);
+			assertTrue("e1.code == e2.code", e1.code == e2.code);
+		}	
 		
 	}
 }

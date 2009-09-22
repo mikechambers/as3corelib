@@ -33,14 +33,21 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 
 	public class ConnectedEvent extends Event
 	{
-		public function ConnectedEvent()
+		public static const CONNECTED:String = "connected";		
+		
+		public function ConnectedEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.CONNECTED);
+			super(type, bubbles, cancelable);
 		}
 		
+		public override function clone():Event
+		{
+			var out:ConnectedEvent = new ConnectedEvent(type, bubbles, cancelable);
+			return out;
+		}
 	}
 }

@@ -33,16 +33,17 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 
-	public class DictionaryServerEvent
-		extends Event
+	public class DictionaryServerEvent extends Event
 	{
+		public static const SERVERS:String = "servers";		
+		
 		private var _servers:Array;
 		
-		public function DictionaryServerEvent()
+		public function DictionaryServerEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.SERVERS);
+			super(type, bubbles, cancelable);
 		}
 		
 		public function set servers(servers:Array):void
@@ -53,6 +54,16 @@ package com.adobe.protocols.dict.events
 		public function get servers():Array
 		{
 			return this._servers;
+		}
+		
+		public override function clone():Event
+		{
+			var out:DictionaryServerEvent = new DictionaryServerEvent(type, 
+															bubbles, cancelable);
+															
+			out.servers = _servers;
+			
+			return out;
 		}
 	}
 }

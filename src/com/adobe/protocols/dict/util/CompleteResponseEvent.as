@@ -34,14 +34,16 @@ package com.adobe.protocols.dict.util
 {
 	import flash.events.Event;
 
-	public class CompleteResponseEvent
-		extends Event
+	public class CompleteResponseEvent extends Event
 	{
 		private var _response:String;
 
-		public function CompleteResponseEvent()
+		public static const COMPLETE_RESPONSE:String = "completeResponse"
+
+		public function CompleteResponseEvent(type:String, bubbles:Boolean = false,
+														cancelable:Boolean = false)
 		{
-			super(SocketHelper.COMPLETE_RESPONSE);
+			super(type, bubbles, cancelable);
 		}
 
 		public function set response(response:String):void
@@ -52,6 +54,15 @@ package com.adobe.protocols.dict.util
 		public function get response():String
 		{
 			return this._response;
+		}
+		
+		public override function clone():Event
+		{
+			var out:CompleteResponseEvent = new CompleteResponseEvent(type, 
+															bubbles, cancelable);
+			out.response = _response;
+			
+			return out;
 		}
 	}
 }

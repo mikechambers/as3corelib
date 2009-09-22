@@ -33,17 +33,18 @@
 package com.adobe.protocols.dict.events
 {
 	import flash.events.Event;
-	import com.adobe.protocols.dict.Dict;
 	
-	public class ErrorEvent
-		extends Event
+	public class ErrorEvent extends Event
 	{
+		public static const ERROR:String = "error";
+		
 		private var _code:uint;
 		private var _message:String;
 		
-		public function ErrorEvent()
+		public function ErrorEvent(type:String, bubbles:Boolean = false,
+													cancelable:Boolean = false)
 		{
-			super(Dict.ERROR);
+			super(type, bubbles, cancelable);
 		}
 
 		public function set code(code:uint):void
@@ -64,6 +65,16 @@ package com.adobe.protocols.dict.events
 		public function get message():String
 		{
 			return this._message;
+		}
+		
+		public override function clone():Event
+		{
+			var out:ErrorEvent = new ErrorEvent(type, bubbles, cancelable);
+			
+			out.message = _message;
+			out.code = _code;
+			
+			return out;
 		}
 	}
 }

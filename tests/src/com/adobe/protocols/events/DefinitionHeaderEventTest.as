@@ -32,6 +32,8 @@
 
 package com.adobe.protocols.events
 {
+	import com.adobe.protocols.dict.events.DefinitionHeaderEvent;
+	
 	import flexunit.framework.TestCase;
 
 	public class DefinitionHeaderEventTest extends TestCase
@@ -43,8 +45,17 @@ package com.adobe.protocols.events
 		
 		public function test_clone():void
 		{
-			assertTrue(false);
-		}		
+			var e1:DefinitionHeaderEvent = new DefinitionHeaderEvent(DefinitionHeaderEvent.DEFINITION_HEADER);
+			e1.definitionCount = 7;;
+			
+			var e2:DefinitionHeaderEvent = DefinitionHeaderEvent(e1.clone());
+			
+			assertTrue("e1 != e2", e1 != e2);
+			assertTrue("e1.cancelable == e2.cancelable", e1.cancelable == e2.cancelable);
+			assertTrue("e1.bubbles == e2.bubbles", e1.bubbles == e2.bubbles);
+			assertTrue("e1.type == e2.type", e1.type == e2.type);
+			assertTrue("e1.definitionCount == e2.definitionCount", e1.definitionCount == e2.definitionCount);
+		}			
 		
 	}
 }

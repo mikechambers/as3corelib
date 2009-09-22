@@ -32,6 +32,8 @@
 
 package com.adobe.protocols.util
 {
+	import com.adobe.protocols.dict.util.CompleteResponseEvent;
+	
 	import flexunit.framework.TestCase;
 
 	public class CompletedResponseEventTest extends TestCase
@@ -43,8 +45,16 @@ package com.adobe.protocols.util
 		
 		public function test_clone():void
 		{
-			assertTrue(false);
+			var e1:CompleteResponseEvent = new CompleteResponseEvent(CompleteResponseEvent.COMPLETE_RESPONSE);
+			e1.response = "foo";
+			
+			var e2:CompleteResponseEvent = CompleteResponseEvent(e1.clone());
+			
+			assertTrue("e1 != e2", e1 != e2);
+			assertTrue("e1.cancelable == e2.cancelable", e1.cancelable == e2.cancelable);
+			assertTrue("e1.bubbles == e2.bubbles", e1.bubbles == e2.bubbles);
+			assertTrue("e1.type == e2.type", e1.type == e2.type);
+			assertTrue("e1.response == e2.response", e1.response == e2.response);
 		}			
-		
 	}
 }

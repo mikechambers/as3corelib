@@ -32,15 +32,12 @@
 
 package com.adobe.air.logging
 {
-	import mx.logging.AbstractTarget;
 	import flash.filesystem.File;
-	import flash.filesystem.FileStream;
 	import flash.filesystem.FileMode;
-	import mx.logging.LogEvent;
-	import flash.system.System;
-	import flash.system.Capabilities;
-	import mx.logging.targets.LineFormattedTarget;
+	import flash.filesystem.FileStream;
+	
 	import mx.core.mx_internal;
+	import mx.logging.targets.LineFormattedTarget;
 	
 	use namespace mx_internal;
 
@@ -82,7 +79,7 @@ package com.adobe.air.logging
 		{		
 			var fs:FileStream = new FileStream();
 				fs.open(log, FileMode.APPEND);
-				fs.writeUTFBytes(msg + "\n");
+				fs.writeUTFBytes(msg + File.lineEnding);
 				fs.close();
 		}	
 		

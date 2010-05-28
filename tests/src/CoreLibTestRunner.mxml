@@ -37,7 +37,7 @@
 	xmlns:flexunit="flexunit.flexui.*"
 	creationComplete="onCreationComplete()">
 
-	<mx:Script source="CoreLibTestRunnerClass.as" />
+	<mx:Script source="CoreLibTestRunner.as" />
 
 	<mx:Canvas width="100%" height="100%">
 		<flexunit:TestRunnerBase id="testRunner" width="100%" height="100%" />

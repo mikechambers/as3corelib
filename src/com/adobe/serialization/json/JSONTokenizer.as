@@ -93,37 +93,37 @@ package com.adobe.serialization.json {
 			switch ( ch )
 			{	
 				case '{':
-					token.type = JSONTokenType.LEFT_BRACE;
+					token.type = JSON_TOKEN::LEFT_BRACE;
 					token.value = '{';
 					nextChar();
 					break
 					
 				case '}':
-					token.type = JSONTokenType.RIGHT_BRACE;
+					token.type = JSON_TOKEN::RIGHT_BRACE;
 					token.value = '}';
 					nextChar();
 					break
 					
 				case '[':
-					token.type = JSONTokenType.LEFT_BRACKET;
+					token.type = JSON_TOKEN::LEFT_BRACKET;
 					token.value = '[';
 					nextChar();
 					break
 					
 				case ']':
-					token.type = JSONTokenType.RIGHT_BRACKET;
+					token.type = JSON_TOKEN::RIGHT_BRACKET;
 					token.value = ']';
 					nextChar();
 					break
 				
 				case ',':
-					token.type = JSONTokenType.COMMA;
+					token.type = JSON_TOKEN::COMMA;
 					token.value = ',';
 					nextChar();
 					break
 					
 				case ':':
-					token.type = JSONTokenType.COLON;
+					token.type = JSON_TOKEN::COLON;
 					token.value = ':';
 					nextChar();
 					break;
@@ -133,7 +133,7 @@ package com.adobe.serialization.json {
 					
 					if ( possibleTrue == "true" )
 					{
-						token.type = JSONTokenType.TRUE;
+						token.type = JSON_TOKEN::TRUE;
 						token.value = true;
 						nextChar();
 					}
@@ -149,7 +149,7 @@ package com.adobe.serialization.json {
 					
 					if ( possibleFalse == "false" )
 					{
-						token.type = JSONTokenType.FALSE;
+						token.type = JSON_TOKEN::FALSE;
 						token.value = false;
 						nextChar();
 					}
@@ -165,7 +165,7 @@ package com.adobe.serialization.json {
 					
 					if ( possibleNull == "null" )
 					{
-						token.type = JSONTokenType.NULL;
+						token.type = JSON_TOKEN::NULL;
 						token.value = null;
 						nextChar();
 					}
@@ -181,7 +181,7 @@ package com.adobe.serialization.json {
 					
 					if ( possibleNaN == "NaN" )
 					{
-						token.type = JSONTokenType.NAN;
+						token.type = JSON_TOKEN::NAN;
 						token.value = NaN;
 						nextChar();
 					}
@@ -272,7 +272,7 @@ package com.adobe.serialization.json {
 			// Unescape the string
 			// the token for the string we'll try to read
 			var token:JSONToken = new JSONToken();
-			token.type = JSONTokenType.STRING;
+			token.type = JSON_TOKEN::STRING;
 			// Attach resulting string to the token to return it
 			token.value = unescapeString( jsonString.substr( loc, quoteIndex - loc ) );
 			
@@ -513,7 +513,7 @@ package com.adobe.serialization.json {
 			{
 				// the token for the number that we've read
 				var token:JSONToken = new JSONToken();
-				token.type = JSONTokenType.NUMBER;
+				token.type = JSON_TOKEN::NUMBER;
 				token.value = num;
 				return token;
 			}

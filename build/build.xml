@@ -64,6 +64,23 @@
 			<source-path path-element="${src.dir}" />
 			<source-path path-element="${test.src.dir}" />
 
+			<!--
+				Define JSON Constants
+			-->
+			<define name="JSON_TOKEN::UNKNOWN" value="-1" />
+			<define name="JSON_TOKEN::COMMA" value="0" />
+			<define name="JSON_TOKEN::LEFT_BRACE" value="1" />
+			<define name="JSON_TOKEN::RIGHT_BRACE" value="2" />
+			<define name="JSON_TOKEN::LEFT_BRACKET" value="3" />
+			<define name="JSON_TOKEN::RIGHT_BRACKET" value="4" />	
+			<define name="JSON_TOKEN::COLON" value="6" />
+			<define name="JSON_TOKEN::TRUE" value="7" />
+			<define name="JSON_TOKEN::FALSE" value="8" />
+			<define name="JSON_TOKEN::NULL" value="9" />
+			<define name="JSON_TOKEN::STRING" value="10" />
+			<define name="JSON_TOKEN::NUMBER" value="11" />
+			<define name="JSON_TOKEN::NAN" value="12" />
+			
 			<!-- The TestRunner needs the flexunit libraries in the build/libs folder -->
 			<library-path dir="${build.libs.dir}" append="true">
 				<include name="*.swc" />
@@ -105,13 +122,34 @@
 			
 			<load-config filename="${FLEX_HOME}/frameworks/air-config.xml" />
 			
+			<!--
+				Define JSON Constants
+			-->
+			<define name="JSON_TOKEN::UNKNOWN" value="-1" />
+			<define name="JSON_TOKEN::COMMA" value="0" />
+			<define name="JSON_TOKEN::LEFT_BRACE" value="1" />
+			<define name="JSON_TOKEN::RIGHT_BRACE" value="2" />
+			<define name="JSON_TOKEN::LEFT_BRACKET" value="3" />
+			<define name="JSON_TOKEN::RIGHT_BRACKET" value="4" />	
+			<define name="JSON_TOKEN::COLON" value="6" />
+			<define name="JSON_TOKEN::TRUE" value="7" />
+			<define name="JSON_TOKEN::FALSE" value="8" />
+			<define name="JSON_TOKEN::NULL" value="9" />
+			<define name="JSON_TOKEN::STRING" value="10" />
+			<define name="JSON_TOKEN::NUMBER" value="11" />
+			<define name="JSON_TOKEN::NAN" value="12" />
+			
 			<source-path path-element="${src.dir}" />
 			<include-sources dir="${src.dir}" includes="*" />
 		</compc>
 	</target>
 	
 	<target name="docs" depends="init" description="Generate ASDoc documentation">
-		<java jar="${FLEX_HOME}/lib/asdoc.jar" dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+		<java jar="${FLEX_HOME}/lib/asdoc.jar" 
+			dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+			
+			<arg line="-load-config '${FLEX_HOME}/frameworks/air-config.xml'" />
+			
 			<!-- Place the documentation in the "docs" directory -->
 			<arg line="-output ${docs.dir}" />
 			
@@ -123,6 +161,9 @@
 			
 			<!-- Include the library name in the window title -->
 			<arg line="-window-title 'Adobe ActionScript 3.0 Core Library - ${library.name}' "/>
+			
+			<!-- Define JSON Constants -->
+			<arg line="-define+=JSON_TOKEN::UNKNOWN,-1 -define+=JSON_TOKEN::COMMA,0 -define+=JSON_TOKEN::LEFT_BRACE,1 -define+=JSON_TOKEN::RIGHT_BRACE,2 -define+=JSON_TOKEN::LEFT_BRACKET,3 -define+=JSON_TOKEN::RIGHT_BRACKET,4 -define+=JSON_TOKEN::COLON,6 -define+=JSON_TOKEN::TRUE,7 -define+=JSON_TOKEN::FALSE,8 -define+=JSON_TOKEN::NULL,9 -define+=JSON_TOKEN::STRING,10 -define+=JSON_TOKEN::NUMBER,11 -define+=JSON_TOKEN::NAN,12" />
 		</java>
 		
 		<echo message="Documentation has been created in ${docs.dir}" />

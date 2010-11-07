@@ -46,7 +46,7 @@ package com.adobe.serialization.json {
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public function JSONToken( type:int = -1 /* JSONTokenType.UNKNOWN */, value:Object = null ) {
+		public function JSONToken( type:int = JSON_TOKEN::UNKNOWN, value:Object = null ) {
 			_type = type;
 			_value = value;
 		}

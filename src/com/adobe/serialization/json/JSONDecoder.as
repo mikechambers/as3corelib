@@ -116,20 +116,20 @@ package com.adobe.serialization.json
 			nextToken();
 			
 			// check to see if we have an empty array
-			if ( token.type == JSONTokenType.RIGHT_BRACKET )
+			if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 			{
 				// we're done reading the array, so return it
 				return a;
 			}
 			// in non-strict mode an empty array is also a comma
 			// followed by a right bracket
-			else if ( !strict && token.type == JSONTokenType.COMMA )
+			else if ( !strict && token.type == JSON_TOKEN::COMMA )
 			{
 				// move past the comma
 				nextToken();
 				
 				// check to see if we're reached the end of the array
-				if ( token.type == JSONTokenType.RIGHT_BRACKET )
+				if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 				{
 					return a;	
 				}
@@ -149,12 +149,12 @@ package com.adobe.serialization.json
 				// after the value there should be a ] or a ,
 				nextToken();
 				
-				if ( token.type == JSONTokenType.RIGHT_BRACKET )
+				if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 				{
 					// we're done reading the array, so return it
 					return a;
 				}
-				else if ( token.type == JSONTokenType.COMMA )
+				else if ( token.type == JSON_TOKEN::COMMA )
 				{
 					// move past the comma and read another value
 					nextToken();
@@ -164,7 +164,7 @@ package com.adobe.serialization.json
 					if ( !strict )
 					{
 						// Reached ",]" as the end of the array, so return it
-						if ( token.type == JSONTokenType.RIGHT_BRACKET )
+						if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 						{
 							return a;
 						}
@@ -195,20 +195,20 @@ package com.adobe.serialization.json
 			nextToken();
 			
 			// check to see if we have an empty object
-			if ( token.type == JSONTokenType.RIGHT_BRACE )
+			if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 			{
 				// we're done reading the object, so return it
 				return o;
 			}
 			// in non-strict mode an empty object is also a comma
 			// followed by a right bracket
-			else if ( !strict && token.type == JSONTokenType.COMMA )
+			else if ( !strict && token.type == JSON_TOKEN::COMMA )
 			{
 				// move past the comma
 				nextToken();
 				
 				// check to see if we're reached the end of the object
-				if ( token.type == JSONTokenType.RIGHT_BRACE )
+				if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 				{
 					return o;
 				}
@@ -222,7 +222,7 @@ package com.adobe.serialization.json
 			// loop because we could have any amount of members
 			while ( true )
 			{
-				if ( token.type == JSONTokenType.STRING )
+				if ( token.type == JSON_TOKEN::STRING )
 				{
 					// the string value we read is the key for the object
 					key = String( token.value );
@@ -231,7 +231,7 @@ package com.adobe.serialization.json
 					nextToken();
 					
 					// after the string there should be a :
-					if ( token.type == JSONTokenType.COLON )
+					if ( token.type == JSON_TOKEN::COLON )
 					{	
 						// move past the : and read/assign a value for the key
 						nextToken();
@@ -241,12 +241,12 @@ package com.adobe.serialization.json
 						nextToken();
 						
 						// after the value there's either a } or a ,
-						if ( token.type == JSONTokenType.RIGHT_BRACE )
+						if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 						{
 							// we're done reading the object, so return it
 							return o;	
 						}
-						else if ( token.type == JSONTokenType.COMMA )
+						else if ( token.type == JSON_TOKEN::COMMA )
 						{
 							// skip past the comma and read another member
 							nextToken();
@@ -256,7 +256,7 @@ package com.adobe.serialization.json
 							if ( !strict )
 							{
 								// Reached ",}" as the end of the object, so return it
-								if ( token.type == JSONTokenType.RIGHT_BRACE )
+								if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 								{
 									return o;
 								}
@@ -293,20 +293,20 @@ package com.adobe.serialization.json
 					
 			switch ( token.type )
 			{
-				case JSONTokenType.LEFT_BRACE:
+				case JSON_TOKEN::LEFT_BRACE:
 					return parseObject();
 					
-				case JSONTokenType.LEFT_BRACKET:
+				case JSON_TOKEN::LEFT_BRACKET:
 					return parseArray();
 					
-				case JSONTokenType.STRING:
-				case JSONTokenType.NUMBER:
-				case JSONTokenType.TRUE:
-				case JSONTokenType.FALSE:
-				case JSONTokenType.NULL:
+				case JSON_TOKEN::STRING:
+				case JSON_TOKEN::NUMBER:
+				case JSON_TOKEN::TRUE:
+				case JSON_TOKEN::FALSE:
+				case JSON_TOKEN::NULL:
 					return token.value;
 					
-				case JSONTokenType.NAN:
+				case JSON_TOKEN::NAN:
 					if ( !strict )
 					{
 						return token.value;

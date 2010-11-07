@@ -30,20 +30,22 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.serialization.json {
-
+package com.adobe.serialization.json
+{
+	
 	/**
 	 *
 	 *
 	 */
-	public class JSONParseError extends Error 	{
-	
+	public class JSONParseError extends Error
+	{
+		
 		/** The location in the string where the error occurred */
 		private var _location:int;
 		
 		/** The string in which the parse error occurred */
 		private var _text:String;
-	
+		
 		/**
 		 * Constructs a new JSONParseError.
 		 *
@@ -52,13 +54,14 @@ package com.adobe.serialization.json {
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public function JSONParseError( message:String = "", location:int = 0, text:String = "") {
+		public function JSONParseError( message:String = "", location:int = 0, text:String = "" )
+		{
 			super( message );
 			name = "JSONParseError";
 			_location = location;
 			_text = text;
 		}
-
+		
 		/**
 		 * Provides read-only access to the location variable.
 		 *
@@ -67,7 +70,8 @@ package com.adobe.serialization.json {
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public function get location():int {
+		public function get location():int
+		{
 			return _location;
 		}
 		
@@ -79,9 +83,10 @@ package com.adobe.serialization.json {
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public function get text():String {
+		public function get text():String
+		{
 			return _text;
 		}
 	}
-	
+
 }

@@ -30,18 +30,20 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.serialization.json {
-
-	public class JSONTokenizer {
+package com.adobe.serialization.json
+{
+	
+	public class JSONTokenizer
+	{
 		
-		/** 
+		/**
 		 * Flag indicating if the tokenizer should only recognize
 		 * standard JSON tokens.  Setting to <code>false</code> allows
 		 * tokens such as NaN and allows numbers to be formatted as
 		 * hex, etc.
 		 */
 		private var strict:Boolean;
-	
+		
 		/** The object that will get parsed from the JSON string */
 		private var obj:Object;
 		
@@ -54,14 +56,14 @@ package com.adobe.serialization.json {
 		/** The current character in the JSON string during parsing */
 		private var ch:String;
 		
-		/** 
+		/**
 		 * The regular expression used to make sure the string does not
 		 * contain invalid control characters.
 		 */
-		private var controlCharsRegExp:RegExp = /[\x00-\x1F]/;
+		private const controlCharsRegExp:RegExp = /[\x00-\x1F]/;
 		
 		/**
-		 * Constructs a new JSONDecoder to parse a JSON string 
+		 * Constructs a new JSONDecoder to parse a JSON string
 		 * into a native object.
 		 *
 		 * @param s The JSON string to be converted
@@ -79,62 +81,55 @@ package com.adobe.serialization.json {
 		
 		/**
 		 * Gets the next token in the input sting and advances
-		* the character to the next character after the token
+		 * the character to the next character after the token
 		 */
 		public function getNextToken():JSONToken
 		{
-			var token:JSONToken = new JSONToken();
+			var token:JSONToken = null;
 			
 			// skip any whitespace / comments since the last 
 			// token was read
 			skipIgnored();
-						
+			
 			// examine the new character and see what we have...
 			switch ( ch )
-			{	
+			{
 				case '{':
-					token.type = JSON_TOKEN::LEFT_BRACE;
-					token.value = '{';
+					token = JSONToken.create( JSON_TOKEN::LEFT_BRACE, ch );
 					nextChar();
 					break
-					
+				
 				case '}':
-					token.type = JSON_TOKEN::RIGHT_BRACE;
-					token.value = '}';
+					token = JSONToken.create( JSON_TOKEN::RIGHT_BRACE, ch );
 					nextChar();
 					break
-					
+				
 				case '[':
-					token.type = JSON_TOKEN::LEFT_BRACKET;
-					token.value = '[';
+					token = JSONToken.create( JSON_TOKEN::LEFT_BRACKET, ch );
 					nextChar();
 					break
-					
+				
 				case ']':
-					token.type = JSON_TOKEN::RIGHT_BRACKET;
-					token.value = ']';
+					token = JSONToken.create( JSON_TOKEN::RIGHT_BRACKET, ch );
 					nextChar();
 					break
 				
 				case ',':
-					token.type = JSON_TOKEN::COMMA;
-					token.value = ',';
+					token = JSONToken.create( JSON_TOKEN::COMMA, ch );
 					nextChar();
 					break
-					
+				
 				case ':':
-					token.type = JSON_TOKEN::COLON;
-					token.value = ':';
+					token = JSONToken.create( JSON_TOKEN::COLON, ch );
 					nextChar();
 					break;
-					
+				
 				case 't': // attempt to read true
 					var possibleTrue:String = "t" + nextChar() + nextChar() + nextChar();
 					
 					if ( possibleTrue == "true" )
 					{
-						token.type = JSON_TOKEN::TRUE;
-						token.value = true;
+						token = JSONToken.create( JSON_TOKEN::TRUE, true );
 						nextChar();
 					}
 					else
@@ -143,14 +138,13 @@ package com.adobe.serialization.json {
 					}
 					
 					break;
-					
+				
 				case 'f': // attempt to read false
 					var possibleFalse:String = "f" + nextChar() + nextChar() + nextChar() + nextChar();
 					
 					if ( possibleFalse == "false" )
 					{
-						token.type = JSON_TOKEN::FALSE;
-						token.value = false;
+						token = JSONToken.create( JSON_TOKEN::FALSE, false );
 						nextChar();
 					}
 					else
@@ -159,14 +153,13 @@ package com.adobe.serialization.json {
 					}
 					
 					break;
-					
+				
 				case 'n': // attempt to read null
 					var possibleNull:String = "n" + nextChar() + nextChar() + nextChar();
 					
 					if ( possibleNull == "null" )
 					{
-						token.type = JSON_TOKEN::NULL;
-						token.value = null;
+						token = JSONToken.create( JSON_TOKEN::NULL, null );
 						nextChar();
 					}
 					else
@@ -175,14 +168,13 @@ package com.adobe.serialization.json {
 					}
 					
 					break;
-					
+				
 				case 'N': // attempt to read NaN
 					var possibleNaN:String = "N" + nextChar() + nextChar();
 					
 					if ( possibleNaN == "NaN" )
 					{
-						token.type = JSON_TOKEN::NAN;
-						token.value = NaN;
+						token = JSONToken.create( JSON_TOKEN::NAN, NaN );
 						nextChar();
 					}
 					else
@@ -191,12 +183,12 @@ package com.adobe.serialization.json {
 					}
 					
 					break;
-					
+				
 				case '"': // the start of a string
 					token = readString();
 					break;
-					
-				default: 
+				
+				default:
 					// see if we can read a number
 					if ( isDigit( ch ) || ch == '-' )
 					{
@@ -205,10 +197,10 @@ package com.adobe.serialization.json {
 					else if ( ch == '' )
 					{
 						// check for reading past the end of the string
-						return null;
+						token = null;
 					}
 					else
-					{						
+					{
 						// not sure what was in the input string - it's not
 						// anything we expected
 						parseError( "Unexpected " + ch + " encountered" );
@@ -226,7 +218,7 @@ package com.adobe.serialization.json {
 		 * @return the JSONToken with the string value if a string could
 		 *		be read.  Throws an error otherwise.
 		 */
-		private function readString():JSONToken
+		private final function readString():JSONToken
 		{
 			// Rather than examine the string character-by-character, it's
 			// faster to use indexOf to try to and find the closing quote character
@@ -254,7 +246,7 @@ package com.adobe.serialization.json {
 					}
 					
 					// If we have an even number of backslashes, that means this is the ending quote 
-					if ( backspaceCount % 2 == 0 )
+					if ( ( backspaceCount & 1 ) == 0 )
 					{
 						break;
 					}
@@ -271,10 +263,10 @@ package com.adobe.serialization.json {
 			
 			// Unescape the string
 			// the token for the string we'll try to read
-			var token:JSONToken = new JSONToken();
-			token.type = JSON_TOKEN::STRING;
-			// Attach resulting string to the token to return it
-			token.value = unescapeString( jsonString.substr( loc, quoteIndex - loc ) );
+			var token:JSONToken = JSONToken.create( 
+					JSON_TOKEN::STRING,
+					// Attach resulting string to the token to return it
+					unescapeString( jsonString.substr( loc, quoteIndex - loc ) ) );
 			
 			// Move past the closing quote in the input string.  This updates the next
 			// character in the input stream to be the character one after the closing quote
@@ -317,17 +309,26 @@ package com.adobe.serialization.json {
 					nextSubstringStartPosition = backslashIndex + 2;
 					
 					// Check the next character so we know what to escape
-					var afterBackslashIndex:int = backslashIndex + 1;
-					var escapedChar:String = input.charAt( afterBackslashIndex );
+					var escapedChar:String = input.charAt( backslashIndex + 1 );
 					switch ( escapedChar )
-					{	
+					{
 						// Try to list the most common expected cases first to improve performance
 						
-						case '"': result += '"'; break; // quotation mark
-						case '\\': result += '\\'; break; // reverse solidus	
-						case 'n': result += '\n'; break; // newline
-						case 'r': result += '\r'; break; // carriage return
-						case 't': result += '\t'; break; // horizontal tab	
+						case '"':
+							result += escapedChar;
+							break; // quotation mark
+						case '\\':
+							result += escapedChar;
+							break; // reverse solidus	
+						case 'n':
+							result += '\n';
+							break; // newline
+						case 'r':
+							result += '\r';
+							break; // carriage return
+						case 't':
+							result += '\t';
+							break; // horizontal tab	
 						
 						// Convert a unicode escape sequence to it's character value
 						case 'u':
@@ -335,14 +336,16 @@ package com.adobe.serialization.json {
 							// Save the characters as a string we'll convert to an int
 							var hexValue:String = "";
 							
+							var unicodeEndPosition:int = nextSubstringStartPosition + 4;
+							
 							// Make sure there are enough characters in the string leftover
-							if ( nextSubstringStartPosition + 4 > len )
+							if ( unicodeEndPosition > len )
 							{
 								parseError( "Unexpected end of input.  Expecting 4 hex digits after \\u." );
 							}
 							
 							// Try to find 4 hex characters
-							for ( var i:int = nextSubstringStartPosition; i < nextSubstringStartPosition + 4; i++ )
+							for ( var i:int = nextSubstringStartPosition; i < unicodeEndPosition; i++ )
 							{
 								// get the next character and determine
 								// if it's a valid hex digit or not
@@ -360,14 +363,22 @@ package com.adobe.serialization.json {
 							// integer value to create a character to add
 							// to our string.
 							result += String.fromCharCode( parseInt( hexValue, 16 ) );
+							
 							// Move past the 4 hex digits that we just read
-							nextSubstringStartPosition += 4;
+							nextSubstringStartPosition = unicodeEndPosition;
 							break;
 						
-						case 'f': result += '\f'; break; // form feed
-						case '/': result += '/'; break; // solidus
-						case 'b': result += '\b'; break; // bell
-						default: result += '\\' + escapedChar; // Couldn't unescape the sequence, so just pass it through
+						case 'f':
+							result += '\f';
+							break; // form feed
+						case '/':
+							result += '/';
+							break; // solidus
+						case 'b':
+							result += '\b';
+							break; // bell
+						default:
+							result += '\\' + escapedChar; // Couldn't unescape the sequence, so just pass it through
 					}
 				}
 				else
@@ -386,11 +397,11 @@ package com.adobe.serialization.json {
 		 * Attempts to read a number from the input string.  Places
 		 * the character location at the first character after the
 		 * number.
-		 * 
+		 *
 		 * @return The JSONToken with the number value if a number could
 		 * 		be read.  Throws an error otherwise.
 		 */
-		private function readNumber():JSONToken
+		private final function readNumber():JSONToken
 		{
 			// the string to accumulate the number characters
 			// into that we'll convert to a number at the end
@@ -438,7 +449,7 @@ package com.adobe.serialization.json {
 					}
 					else
 					{
-						parseError( "Number in hex format require at least one hex digit after \"0x\"" );	
+						parseError( "Number in hex format require at least one hex digit after \"0x\"" );
 					}
 					
 					// consume all of the hex values
@@ -497,7 +508,7 @@ package com.adobe.serialization.json {
 				{
 					parseError( "Scientific notation number needs exponent value" );
 				}
-							
+				
 				// read in the exponent
 				while ( isDigit( ch ) )
 				{
@@ -512,19 +523,16 @@ package com.adobe.serialization.json {
 			if ( isFinite( num ) && !isNaN( num ) )
 			{
 				// the token for the number that we've read
-				var token:JSONToken = new JSONToken();
-				token.type = JSON_TOKEN::NUMBER;
-				token.value = num;
-				return token;
+				return JSONToken.create( JSON_TOKEN::NUMBER, num );
 			}
 			else
 			{
 				parseError( "Number " + num + " is not valid!" );
 			}
 			
-            return null;
+			return null;
 		}
-
+		
 		/**
 		 * Reads the next character in the input
 		 * string and advances the character location.
@@ -532,7 +540,7 @@ package com.adobe.serialization.json {
 		 * @return The next character in the input string, or
 		 *		null if we've read past the end.
 		 */
-		private function nextChar():String
+		private final function nextChar():String
 		{
 			return ch = jsonString.charAt( loc++ );
 		}
@@ -541,7 +549,7 @@ package com.adobe.serialization.json {
 		 * Advances the character location past any
 		 * sort of white space and comments
 		 */
-		private function skipIgnored():void
+		private final function skipIgnored():void
 		{
 			var originalLoc:int;
 			
@@ -552,8 +560,7 @@ package com.adobe.serialization.json {
 				originalLoc = loc;
 				skipWhite();
 				skipComments();
-			}
-			while ( originalLoc != loc );
+			} while ( originalLoc != loc );
 		}
 		
 		/**
@@ -576,8 +583,7 @@ package com.adobe.serialization.json {
 						do
 						{
 							nextChar();
-						}
-						while ( ch != '\n' && ch != '' )
+						} while ( ch != '\n' && ch != '' )
 						
 						// move past the \n
 						nextChar();
@@ -585,7 +591,7 @@ package com.adobe.serialization.json {
 						break;
 					
 					case '*': // multi-line comment, read until closing */
-
+						
 						// move past the opening *
 						nextChar();
 						
@@ -596,7 +602,7 @@ package com.adobe.serialization.json {
 							{
 								// check to see if we have a closing /
 								nextChar();
-								if ( ch == '/')
+								if ( ch == '/' )
 								{
 									// move past the end of the closing */
 									nextChar();
@@ -616,7 +622,7 @@ package com.adobe.serialization.json {
 								parseError( "Multi-line comment not closed" );
 							}
 						}
-
+						
 						break;
 					
 					// Can't match a comment after a /, so it's a parsing error
@@ -624,7 +630,7 @@ package com.adobe.serialization.json {
 						parseError( "Unexpected " + ch + " encountered (expecting '/' or '*' )" );
 				}
 			}
-			
+		
 		}
 		
 		
@@ -633,8 +639,8 @@ package com.adobe.serialization.json {
 		 * the character to the first character after any possible
 		 * whitespace.
 		 */
-		private function skipWhite():void
-		{	
+		private final function skipWhite():void
+		{
 			// As long as there are spaces in the input 
 			// stream, advance the current location pointer
 			// past them
@@ -642,7 +648,7 @@ package com.adobe.serialization.json {
 			{
 				nextChar();
 			}
-			
+		
 		}
 		
 		/**
@@ -651,7 +657,7 @@ package com.adobe.serialization.json {
 		 * @return True if the character passed in is a whitespace
 		 *	character
 		 */
-		private function isWhiteSpace( ch:String ):Boolean
+		private final function isWhiteSpace( ch:String ):Boolean
 		{
 			// Check for the whitespace defined in the spec
 			if ( ch == ' ' || ch == '\t' || ch == '\n' || ch == '\r' )
@@ -672,7 +678,7 @@ package com.adobe.serialization.json {
 		 *
 		 * @return True if the character passed in is a digit
 		 */
-		private function isDigit( ch:String ):Boolean
+		private final function isDigit( ch:String ):Boolean
 		{
 			return ( ch >= '0' && ch <= '9' );
 		}
@@ -682,21 +688,21 @@ package com.adobe.serialization.json {
 		 *
 		 * @return True if the character passed in is a hex digit
 		 */
-		private function isHexDigit( ch:String ):Boolean
+		private final function isHexDigit( ch:String ):Boolean
 		{
 			return ( isDigit( ch ) || ( ch >= 'A' && ch <= 'F' ) || ( ch >= 'a' && ch <= 'f' ) );
 		}
-	
+		
 		/**
 		 * Raises a parsing error with a specified message, tacking
 		 * on the error location and the original string.
 		 *
 		 * @param message The message indicating why the error occurred
 		 */
-		public function parseError( message:String ):void
+		public final function parseError( message:String ):void
 		{
 			throw new JSONParseError( message, loc, jsonString );
 		}
 	}
-	
+
 }

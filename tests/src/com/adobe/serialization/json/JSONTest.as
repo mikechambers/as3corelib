@@ -414,6 +414,24 @@ package com.adobe.serialization.json
 			assertTrue( b );
 		}
 		
+		public function testDecodeWithUnexpectedEndOfInput():void
+		{
+			expectParseError( "[" );
+			expectParseError( "[ 12" );
+			expectParseError( "[ 12, " );
+			
+			expectParseError( "{" );
+			expectParseError( "{ \"prop" );
+			expectParseError( "{ \"prop\"" );
+			expectParseError( "{ \"prop\":" );
+			expectParseError( "{ \"prop\": t" );
+			expectParseError( "{ \"prop\": true" );
+			
+			expectParseError( "t" );
+			expectParseError( "tr" );
+			expectParseError( "tru" );
+		}
+		
 		public function testEncodeTrue():void
 		{
 			var o:String = JSON.encode( true );

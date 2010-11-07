@@ -51,7 +51,7 @@ package com.adobe.net
 	 * <p>URI's fall into one of three categories:
 	 * <ul>
 	 *  <li>&lt;scheme&gt;:&lt;scheme-specific-part&gt;#&lt;fragment&gt;		(non-hierarchical)</li>
-	 *  <li>&lt;scheme&gt;:<authority&gt;&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;	(hierarchical)</li>
+	 *  <li>&lt;scheme&gt;:&lt;authority&gt;&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;	(hierarchical)</li>
 	 *  <li>&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;						(relative hierarchical)</li>
 	 * </ul></p>
 	 * 
@@ -307,7 +307,7 @@ package com.adobe.net
 		 *
 		 * Given a URI in string format, parse that sucker into its basic
 		 * components and assign them to this object.  A URI is of the form:
-		 *    <scheme>:<authority><path>?<query>#<fragment>
+		 *    &lt;scheme&gt;:&lt;authority&gt;&lt;path&gt;?&lt;query&gt;#&lt;fragment&gt;
 		 *
 		 * For simplicity, we parse the URI in the following order:
 		 * 		
@@ -348,7 +348,7 @@ package com.adobe.net
 		 * will result in parsing errors.  This function can handle
 		 * 	 - absolute hierarchical (e.g. "http://something.com/index.html),
 		 *   - relative hierarchical (e.g. "../images/flower.gif"), or
-		 *   - non-hierarchical URIs (e.g. "mailto:jsmith@fungoo.com").
+		 *   - non-hierarchical URIs (e.g. "mailto:jsmith&#64;fungoo.com").
 		 * 
 		 * Anything else will probably result in a parsing error, or a bogus
 		 * URI object.
@@ -893,8 +893,8 @@ package com.adobe.net
 		
 		/**
 		 * The non-hierarchical part of the URI.  For example, if
-		 * this URI object represents "mailto:somebody@company.com",
-		 * this will contain "somebody@company.com".  This is valid only
+		 * this URI object represents "mailto:somebody&#64;company.com",
+		 * this will contain "somebody&#64;company.com".  This is valid only
 		 * for non-hierarchical URI's.  
 		 */
 		public function get nonHierarchical() : String

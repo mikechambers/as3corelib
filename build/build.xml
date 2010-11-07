@@ -1,104 +1,172 @@
 <?xml version="1.0"?>
-<project name="as3corelib" basedir="../" default="lib">
+<project name="as3corelib" basedir="../" default="compile">
 
-	<!-- Define variables/paths used in this build script -->
-	<property file="./build/build.properties" />
+	<!-- ============================== -->
+	<!--  Configuration -->
+	<!-- ============================== -->
 
-	<!--
-		Have you edit the properties file to make sure the paths are right oo your system?
-	-->
-	<target name="properties">
-		<fail unless="asdoc.exe">The "asdoc.exe" property must be set in ${build.dir}/build.properties.</fail>
-		<fail unless="compc.exe">The "compc.exe" property must be set in ${build.dir}/build.properties.</fail>
-		<fail unless="mxmlc.exe">The "mxmlc.exe" property must be set in ${build.dir}/build.properties.</fail>
-	</target>
+	<property environment="env" />
 	
-	<!--
-		Compile the unit tests for the library, placing the test runner .swf file
-		in the bin directory.
-	-->
-	<target name="compileTests" depends="properties">
-		<exec executable="${mxmlc.exe}" dir="${basedir}">
-			<!-- Point to the main test runner's application mxml file -->
-			<arg line="'${tests.dir}/${testRunner.dir}/${testRunner.name}.mxml'" />
-			
-			<!-- Use AIR configuration file -->
-			<arg line="-load-config '${flex2sdk.lib.dir}/../air-config.xml'" />
-			
-			<!-- Place the built .swf file in the "bin" directory -->
-			<arg line="-o '${bin.dir}/${testRunner.name}.swf'" />
-			
-			<!-- Define source directories for "src" and "tests" -->
-			<arg line="-sp ${src.dir}" />
-			<arg line="-sp ${tests.dir}/src" />
-			
-			<!-- Include the necessary framework libraries in the class path -->
-			<arg line="-l '${flex2sdk.lib.dir}'" />
-			
-			<!-- Include in the flexunit.swc in the class path -->
-			<arg line="-l ${flexunit.swc}" />
-			
-			<!-- Include locale-specific items in the path -->
-			<arg line="-locale ${flex2sdk.locale}" />
-			<arg line="-l '${flex2sdk.locale.dir}'" />
-		</exec>
-	</target>
+	<fail unless="env.FLEX_HOME" message="FLEX_HOME needs to be defined as an environment variable or in the Ant build." />
+
+	<!-- Configuration -->
+	<property file="${basedir}/build/build.properties" />
+
+	<!-- Setup Flex Ant Resources -->
+	<!--property name="FLEX_HOME" location="${flex.sdk}" /-->
+	<property name="FLEX_HOME" location="${env.FLEX_HOME}" />
+	<taskdef resource="flexTasks.tasks" classpath="${FLEX_HOME}/ant/lib/flexTasks.jar" />
 	
-	<!--
-		Runs the unit tests for the library in the stand-alone Flash Player
-	-->
-	<target name="test" depends="compileTests">
-		<!--
-			If/When we add support for determinig the status of unit tests
-			as part of the ANT build process, we need to change the spawn to
-			"no" so that ANT waits until the test runner closes before
-			proceeding.
-		-->
-		<exec executable="${flashDebugPlayer.exe}" spawn="yes">
-			<arg line="${bin.dir}/${testRunner.name}.swf" />
-		</exec>
-	</target>
-	
-	<!--
-		Compile all of the classes under the "src" tree into a .swc file
-	-->
-	<target name="lib" depends="properties">
-		<exec executable="${compc.exe}" dir="${basedir}">
-			<!-- Specify the name of the output file -->
-			<arg line="-o '${bin.dir}/${library.name}.swc'" />
-			
-			<!-- Specify the main source path as "src" -->
-			<arg line="-sp ${src.dir}" />
-			
-			<!-- Include all of the classes in the "src" tree -->
-			<arg line="-is ${src.dir}" />
-		</exec>
-	</target>
-	
-	<!--
-		Generate ASDoc output for the library
-	-->
-	<target name="docs" depends="properties">
-		<!-- Clean out the contents of the doc directory, without delete "docs" -->
-		<!--
-		<delete includeemptydirs="true">
-			<fileset dir="${docs.dir}" includes="**/*" />
+	<!-- ============================== -->
+	<!--  Clean and Init Targets -->
+	<!-- ============================== -->
+
+	<target name="clean" description="Removes artifacts from previous builds">
+		<delete includeemptydirs="true" failonerror="false">
+			<fileset dir="${bin.dir}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${test.bin.dir}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${docs.dir}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
+			<fileset dir="${report.dir}" defaultexcludes="false">
+				<include name="**/*" />
+			</fileset>
 		</delete>
-		-->
-		
-		<exec executable="${asdoc.exe}" spawn="no">
+	</target>
+
+	<target name="init" description="Initializes project and destination folders">
+			<echo message="Project: ${ant.project.name}" />
+			<echo message="Flex SDK: ${FLEX_HOME}" />
+
+			<!-- Create direectories -->
+			<mkdir dir="${bin.dir}" />
+			<mkdir dir="${test.bin.dir}" />
+			<mkdir dir="${docs.dir}" />
+			<mkdir dir="${report.dir}" />
+		</target>
+	
+	<!-- ======================================= -->
+	<!--  Unit Test Targets -->
+	<!-- ======================================= -->
+	
+	<target name="compileTestRunner" depends="init" description="Compiles the test runner application.">
+
+		<!-- Compile TestRunner MXML as a SWF -->
+		<mxmlc file="${test.src.dir}/${test.application.name}.mxml" 
+			output="${test.bin.dir}/${test.application.name}.swf">
+			
+			<load-config filename="${FLEX_HOME}/frameworks/air-config.xml" />
+			
+			<source-path path-element="${src.dir}" />
+			<source-path path-element="${test.src.dir}" />
+
+			<!--
+				Define JSON Constants
+			-->
+			<define name="JSON_TOKEN::UNKNOWN" value="-1" />
+			<define name="JSON_TOKEN::COMMA" value="0" />
+			<define name="JSON_TOKEN::LEFT_BRACE" value="1" />
+			<define name="JSON_TOKEN::RIGHT_BRACE" value="2" />
+			<define name="JSON_TOKEN::LEFT_BRACKET" value="3" />
+			<define name="JSON_TOKEN::RIGHT_BRACKET" value="4" />	
+			<define name="JSON_TOKEN::COLON" value="6" />
+			<define name="JSON_TOKEN::TRUE" value="7" />
+			<define name="JSON_TOKEN::FALSE" value="8" />
+			<define name="JSON_TOKEN::NULL" value="9" />
+			<define name="JSON_TOKEN::STRING" value="10" />
+			<define name="JSON_TOKEN::NUMBER" value="11" />
+			<define name="JSON_TOKEN::NAN" value="12" />
+			
+			<!-- The TestRunner needs the flexunit libraries in the build/libs folder -->
+			<library-path dir="${build.libs.dir}" append="true">
+				<include name="*.swc" />
+			</library-path>
+
+			<!-- Sets java.awt.headless=true so font compilation works in headless environments -->
+			<compiler.headless-server>true</compiler.headless-server>
+		</mxmlc>
+
+		<echo message="The ${test.application.name}.swf test runner has been created in ${test.bin.dir}" />
+	</target>
+	
+	<target name="runTestsAndReport" depends="init" description="Launches the test runner, captures results, generates test report artifacts.">
+		<!-- Run FlexUnit Ant Task to execute the unit tests and capture reporting data -->
+		<taskdef resource="flexUnitTasks.tasks" classpath="${build.libs.dir}/flexUnitTasks-4.0.0.jar" />
+		<flexunit swf="${test.bin.dir}/${test.application.name}.swf" toDir="${report.dir}"
+			haltonfailure="false" verbose="false" localTrusted="false" player="air" />
+
+		<!-- Generate html JUnit-style reports based on test results -->
+		<junitreport todir="${report.dir}">
+			<fileset dir="${report.dir}">
+				<include name="TEST-*.xml" />
+			</fileset>
+			<report format="frames" todir="${report.html.dir}" />
+		</junitreport>
+
+		<echo message="The unit test reports have been created in ${report.dir}" />
+	</target>
+
+	<target name="test" depends="init, compileTestRunner, runTestsAndReport" description="Compiles unit tests and generates test report artiacts." />
+	
+	<!-- ======================================= -->
+	<!-- Compile and Document -->
+	<!-- ======================================= -->
+	
+	<target name="compile" depends="init" description="Compile the library .swc file">
+		<compc output="${bin.dir}/${library.name}.swc"
+			debug="false" optimize="true">
+			
+			<load-config filename="${FLEX_HOME}/frameworks/air-config.xml" />
+			
+			<!--
+				Define JSON Constants
+			-->
+			<define name="JSON_TOKEN::UNKNOWN" value="-1" />
+			<define name="JSON_TOKEN::COMMA" value="0" />
+			<define name="JSON_TOKEN::LEFT_BRACE" value="1" />
+			<define name="JSON_TOKEN::RIGHT_BRACE" value="2" />
+			<define name="JSON_TOKEN::LEFT_BRACKET" value="3" />
+			<define name="JSON_TOKEN::RIGHT_BRACKET" value="4" />	
+			<define name="JSON_TOKEN::COLON" value="6" />
+			<define name="JSON_TOKEN::TRUE" value="7" />
+			<define name="JSON_TOKEN::FALSE" value="8" />
+			<define name="JSON_TOKEN::NULL" value="9" />
+			<define name="JSON_TOKEN::STRING" value="10" />
+			<define name="JSON_TOKEN::NUMBER" value="11" />
+			<define name="JSON_TOKEN::NAN" value="12" />
+			
+			<source-path path-element="${src.dir}" />
+			<include-sources dir="${src.dir}" includes="*" />
+		</compc>
+	</target>
+	
+	<target name="docs" depends="init" description="Generate ASDoc documentation">
+		<java jar="${FLEX_HOME}/lib/asdoc.jar" 
+			dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+			
+			<arg line="-load-config '${FLEX_HOME}/frameworks/air-config.xml'" />
+			
 			<!-- Place the documentation in the "docs" directory -->
-			<arg line="-o ${docs.dir}" />
+			<arg line="-output ${docs.dir}" />
 			
 			<!-- Specify the main source path as "src" -->
-			<arg line="-sp ${src.dir}" />
+			<arg line="-source-path ${src.dir}" />
 			
 			<!-- Document all of the classes in the "src" tree -->
-			<arg line="-ds ${src.dir} " />
+			<arg line="-doc-sources ${src.dir} " />
 			
 			<!-- Include the library name in the window title -->
 			<arg line="-window-title 'Adobe ActionScript 3.0 Core Library - ${library.name}' "/>
-		</exec>
+			
+			<!-- Define JSON Constants -->
+			<arg line="-define+=JSON_TOKEN::UNKNOWN,-1 -define+=JSON_TOKEN::COMMA,0 -define+=JSON_TOKEN::LEFT_BRACE,1 -define+=JSON_TOKEN::RIGHT_BRACE,2 -define+=JSON_TOKEN::LEFT_BRACKET,3 -define+=JSON_TOKEN::RIGHT_BRACKET,4 -define+=JSON_TOKEN::COLON,6 -define+=JSON_TOKEN::TRUE,7 -define+=JSON_TOKEN::FALSE,8 -define+=JSON_TOKEN::NULL,9 -define+=JSON_TOKEN::STRING,10 -define+=JSON_TOKEN::NUMBER,11 -define+=JSON_TOKEN::NAN,12" />
+		</java>
+		
+		<echo message="Documentation has been created in ${docs.dir}" />
 	</target>
 
 </project>

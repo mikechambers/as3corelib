@@ -34,9 +34,9 @@ package com.adobe.serialization.json
 {
 	
 	public class JSONDecoder
-	{	
-	
-		/** 
+	{
+		
+		/**
 		 * Flag indicating if the parser should be strict about the format
 		 * of the JSON string it is attempting to decode.
 		 */
@@ -52,7 +52,7 @@ package com.adobe.serialization.json
 		private var token:JSONToken;
 		
 		/**
-		 * Constructs a new JSONDecoder to parse a JSON string 
+		 * Constructs a new JSONDecoder to parse a JSON string
 		 * into a native object.
 		 *
 		 * @param s The JSON string to be converted
@@ -64,7 +64,7 @@ package com.adobe.serialization.json
 		 * @tiptext
 		 */
 		public function JSONDecoder( s:String, strict:Boolean )
-		{	
+		{
 			this.strict = strict;
 			tokenizer = new JSONTokenizer( s, strict );
 			
@@ -97,15 +97,39 @@ package com.adobe.serialization.json
 		 * Returns the next token from the tokenzier reading
 		 * the JSON string
 		 */
-		private function nextToken():JSONToken
+		private final function nextToken():JSONToken
 		{
 			return token = tokenizer.getNextToken();
 		}
 		
 		/**
+		 * Returns the next token from the tokenizer reading
+		 * the JSON string and verifies that the token is valid.
+		 */
+		private final function nextValidToken():JSONToken
+		{
+			token = tokenizer.getNextToken();
+			checkValidToken();
+			
+			return token;
+		}
+		
+		/**
+		 * Verifies that the token is valid.
+		 */
+		private final function checkValidToken():void
+		{
+			// Catch errors when the input stream ends abruptly
+			if ( token == null )
+			{
+				tokenizer.parseError( "Unexpected end of input" );
+			}
+		}
+		
+		/**
 		 * Attempt to parse an array.
 		 */
-		private function parseArray():Array
+		private final function parseArray():Array
 		{
 			// create an array internally that we're going to attempt
 			// to parse from the tokenizer
@@ -113,25 +137,25 @@ package com.adobe.serialization.json
 			
 			// grab the next token from the tokenizer to move
 			// past the opening [
-			nextToken();
+			nextValidToken();
 			
 			// check to see if we have an empty array
-			if ( token.type == JSONTokenType.RIGHT_BRACKET )
+			if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 			{
 				// we're done reading the array, so return it
 				return a;
 			}
 			// in non-strict mode an empty array is also a comma
 			// followed by a right bracket
-			else if ( !strict && token.type == JSONTokenType.COMMA )
+			else if ( !strict && token.type == JSON_TOKEN::COMMA )
 			{
 				// move past the comma
-				nextToken();
+				nextValidToken();
 				
 				// check to see if we're reached the end of the array
-				if ( token.type == JSONTokenType.RIGHT_BRACKET )
+				if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 				{
-					return a;	
+					return a;
 				}
 				else
 				{
@@ -145,16 +169,16 @@ package com.adobe.serialization.json
 			{
 				// read in the value and add it to the array
 				a.push( parseValue() );
-			
-				// after the value there should be a ] or a ,
-				nextToken();
 				
-				if ( token.type == JSONTokenType.RIGHT_BRACKET )
+				// after the value there should be a ] or a ,
+				nextValidToken();
+				
+				if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 				{
 					// we're done reading the array, so return it
 					return a;
 				}
-				else if ( token.type == JSONTokenType.COMMA )
+				else if ( token.type == JSON_TOKEN::COMMA )
 				{
 					// move past the comma and read another value
 					nextToken();
@@ -163,8 +187,10 @@ package com.adobe.serialization.json
 					// if the decoder is not in strict mode
 					if ( !strict )
 					{
+						checkValidToken();
+						
 						// Reached ",]" as the end of the array, so return it
-						if ( token.type == JSONTokenType.RIGHT_BRACKET )
+						if ( token.type == JSON_TOKEN::RIGHT_BRACKET )
 						{
 							return a;
 						}
@@ -175,40 +201,41 @@ package com.adobe.serialization.json
 					tokenizer.parseError( "Expecting ] or , but found " + token.value );
 				}
 			}
-            return null;
+			
+			return null;
 		}
 		
 		/**
 		 * Attempt to parse an object.
 		 */
-		private function parseObject():Object
+		private final function parseObject():Object
 		{
 			// create the object internally that we're going to
 			// attempt to parse from the tokenizer
 			var o:Object = new Object();
-						
+			
 			// store the string part of an object member so
 			// that we can assign it a value in the object
 			var key:String
 			
 			// grab the next token from the tokenizer
-			nextToken();
+			nextValidToken();
 			
 			// check to see if we have an empty object
-			if ( token.type == JSONTokenType.RIGHT_BRACE )
+			if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 			{
 				// we're done reading the object, so return it
 				return o;
 			}
 			// in non-strict mode an empty object is also a comma
 			// followed by a right bracket
-			else if ( !strict && token.type == JSONTokenType.COMMA )
+			else if ( !strict && token.type == JSON_TOKEN::COMMA )
 			{
 				// move past the comma
-				nextToken();
+				nextValidToken();
 				
 				// check to see if we're reached the end of the object
-				if ( token.type == JSONTokenType.RIGHT_BRACE )
+				if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 				{
 					return o;
 				}
@@ -222,31 +249,31 @@ package com.adobe.serialization.json
 			// loop because we could have any amount of members
 			while ( true )
 			{
-				if ( token.type == JSONTokenType.STRING )
+				if ( token.type == JSON_TOKEN::STRING )
 				{
 					// the string value we read is the key for the object
 					key = String( token.value );
 					
 					// move past the string to see what's next
-					nextToken();
+					nextValidToken();
 					
 					// after the string there should be a :
-					if ( token.type == JSONTokenType.COLON )
-					{	
+					if ( token.type == JSON_TOKEN::COLON )
+					{
 						// move past the : and read/assign a value for the key
 						nextToken();
-						o[key] = parseValue();	
+						o[ key ] = parseValue();
 						
 						// move past the value to see what's next
-						nextToken();
+						nextValidToken();
 						
 						// after the value there's either a } or a ,
-						if ( token.type == JSONTokenType.RIGHT_BRACE )
+						if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 						{
 							// we're done reading the object, so return it
-							return o;	
+							return o;
 						}
-						else if ( token.type == JSONTokenType.COMMA )
+						else if ( token.type == JSON_TOKEN::COMMA )
 						{
 							// skip past the comma and read another member
 							nextToken();
@@ -255,8 +282,10 @@ package com.adobe.serialization.json
 							// if the decoder is not in strict mode
 							if ( !strict )
 							{
+								checkValidToken();
+								
 								// Reached ",}" as the end of the object, so return it
-								if ( token.type == JSONTokenType.RIGHT_BRACE )
+								if ( token.type == JSON_TOKEN::RIGHT_BRACE )
 								{
 									return o;
 								}
@@ -273,40 +302,36 @@ package com.adobe.serialization.json
 					}
 				}
 				else
-				{	
+				{
 					tokenizer.parseError( "Expecting string but found " + token.value );
 				}
 			}
-            return null;
+			return null;
 		}
 		
 		/**
 		 * Attempt to parse a value
 		 */
-		private function parseValue():Object
+		private final function parseValue():Object
 		{
-			// Catch errors when the input stream ends abruptly
-			if ( token == null )
-			{
-				tokenizer.parseError( "Unexpected end of input" );
-			}
-					
+			checkValidToken();
+			
 			switch ( token.type )
 			{
-				case JSONTokenType.LEFT_BRACE:
+				case JSON_TOKEN::LEFT_BRACE:
 					return parseObject();
-					
-				case JSONTokenType.LEFT_BRACKET:
+				
+				case JSON_TOKEN::LEFT_BRACKET:
 					return parseArray();
-					
-				case JSONTokenType.STRING:
-				case JSONTokenType.NUMBER:
-				case JSONTokenType.TRUE:
-				case JSONTokenType.FALSE:
-				case JSONTokenType.NULL:
+				
+				case JSON_TOKEN::STRING:
+				case JSON_TOKEN::NUMBER:
+				case JSON_TOKEN::TRUE:
+				case JSON_TOKEN::FALSE:
+				case JSON_TOKEN::NULL:
 					return token.value;
-					
-				case JSONTokenType.NAN:
+				
+				case JSON_TOKEN::NAN:
 					if ( !strict )
 					{
 						return token.value;
@@ -315,13 +340,13 @@ package com.adobe.serialization.json
 					{
 						tokenizer.parseError( "Unexpected " + token.value );
 					}
-
+				
 				default:
 					tokenizer.parseError( "Unexpected " + token.value );
-					
+			
 			}
 			
-            return null;
+			return null;
 		}
 	}
 }

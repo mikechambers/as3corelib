@@ -146,7 +146,7 @@ package com.adobe.air.crypto
 		 * <p>For any given 
 		 * password, calling the <code>getEncryptionKey()</code> method from the same AIR application 
 		 * running in the same user account on the same machine, the encryption key result is 
-		 * the same.
+		 * the same.</p>
 		 * 
 		 * <p>This method is designed to create an encryption key suitable for providing the highest 
 		 * level of data privacy and security. In order to achieve that level of security, your 

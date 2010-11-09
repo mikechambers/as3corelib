@@ -63,7 +63,7 @@ package com.adobe.serialization.json
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public function JSONToken( type:int = JSON_TOKEN::UNKNOWN, value:Object = null )
+		public function JSONToken( type:int = -1 /* JSONTokenType.UNKNOWN */, value:Object = null )
 		{
 			this.type = type;
 			this.value = value;
@@ -81,7 +81,7 @@ package com.adobe.serialization.json
 		 * of a token at a time, we can always use the same instance to improve performance
 		 * and reduce memory consumption during decoding.
 		 */
-		internal static function create( type:int = JSON_TOKEN::UNKNOWN, value:Object = null ):JSONToken
+		internal static function create( type:int = -1 /* JSONTokenType.UNKNOWN */, value:Object = null ):JSONToken
 		{
 			token.type = type;
 			token.value = value;

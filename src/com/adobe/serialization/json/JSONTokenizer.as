@@ -95,32 +95,32 @@ package com.adobe.serialization.json
 			switch ( ch )
 			{
 				case '{':
-					token = JSONToken.create( JSON_TOKEN::LEFT_BRACE, ch );
+					token = JSONToken.create( JSONTokenType.LEFT_BRACE, ch );
 					nextChar();
 					break
 				
 				case '}':
-					token = JSONToken.create( JSON_TOKEN::RIGHT_BRACE, ch );
+					token = JSONToken.create( JSONTokenType.RIGHT_BRACE, ch );
 					nextChar();
 					break
 				
 				case '[':
-					token = JSONToken.create( JSON_TOKEN::LEFT_BRACKET, ch );
+					token = JSONToken.create( JSONTokenType.LEFT_BRACKET, ch );
 					nextChar();
 					break
 				
 				case ']':
-					token = JSONToken.create( JSON_TOKEN::RIGHT_BRACKET, ch );
+					token = JSONToken.create( JSONTokenType.RIGHT_BRACKET, ch );
 					nextChar();
 					break
 				
 				case ',':
-					token = JSONToken.create( JSON_TOKEN::COMMA, ch );
+					token = JSONToken.create( JSONTokenType.COMMA, ch );
 					nextChar();
 					break
 				
 				case ':':
-					token = JSONToken.create( JSON_TOKEN::COLON, ch );
+					token = JSONToken.create( JSONTokenType.COLON, ch );
 					nextChar();
 					break;
 				
@@ -129,7 +129,7 @@ package com.adobe.serialization.json
 					
 					if ( possibleTrue == "true" )
 					{
-						token = JSONToken.create( JSON_TOKEN::TRUE, true );
+						token = JSONToken.create( JSONTokenType.TRUE, true );
 						nextChar();
 					}
 					else
@@ -144,7 +144,7 @@ package com.adobe.serialization.json
 					
 					if ( possibleFalse == "false" )
 					{
-						token = JSONToken.create( JSON_TOKEN::FALSE, false );
+						token = JSONToken.create( JSONTokenType.FALSE, false );
 						nextChar();
 					}
 					else
@@ -159,7 +159,7 @@ package com.adobe.serialization.json
 					
 					if ( possibleNull == "null" )
 					{
-						token = JSONToken.create( JSON_TOKEN::NULL, null );
+						token = JSONToken.create( JSONTokenType.NULL, null );
 						nextChar();
 					}
 					else
@@ -174,7 +174,7 @@ package com.adobe.serialization.json
 					
 					if ( possibleNaN == "NaN" )
 					{
-						token = JSONToken.create( JSON_TOKEN::NAN, NaN );
+						token = JSONToken.create( JSONTokenType.NAN, NaN );
 						nextChar();
 					}
 					else
@@ -264,7 +264,7 @@ package com.adobe.serialization.json
 			// Unescape the string
 			// the token for the string we'll try to read
 			var token:JSONToken = JSONToken.create( 
-					JSON_TOKEN::STRING,
+					JSONTokenType.STRING,
 					// Attach resulting string to the token to return it
 					unescapeString( jsonString.substr( loc, quoteIndex - loc ) ) );
 			
@@ -523,7 +523,7 @@ package com.adobe.serialization.json
 			if ( isFinite( num ) && !isNaN( num ) )
 			{
 				// the token for the number that we've read
-				return JSONToken.create( JSON_TOKEN::NUMBER, num );
+				return JSONToken.create( JSONTokenType.NUMBER, num );
 			}
 			else
 			{

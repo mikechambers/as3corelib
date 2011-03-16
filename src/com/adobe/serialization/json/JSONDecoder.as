@@ -63,7 +63,7 @@ package com.adobe.serialization.json
 		 * @playerversion Flash 9.0
 		 * @tiptext
 		 */
-		public function JSONDecoder( s:String, strict:Boolean )
+		public function JSONDecoder( s:String, strict:Boolean = true)
 		{
 			this.strict = strict;
 			tokenizer = new JSONTokenizer( s, strict );

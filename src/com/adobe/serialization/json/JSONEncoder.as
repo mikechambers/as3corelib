@@ -92,7 +92,7 @@ package com.adobe.serialization.json
 				// convert boolean to string easily
 				return value ? "true" : "false";
 			}
-			else if ( value is Array )
+			else if ( value is Array || value is Vector.<*> )
 			{
 				// call the helper method to convert an array
 				return arrayToString( value as Array );

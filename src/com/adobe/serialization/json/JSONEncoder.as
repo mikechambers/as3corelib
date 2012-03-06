@@ -175,7 +175,7 @@ package com.adobe.serialization.json
 								hexCode = "0"+hexCode;
 							}
 							// create the unicode escape sequence with 4 hex digits
-							s += "\u" + hexCode;
+							s += "\\u" + hexCode;
 						} else {
 						
 							// no need to do any special encoding, just pass-through

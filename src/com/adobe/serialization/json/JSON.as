@@ -66,7 +66,7 @@ package com.adobe.serialization.json
 		 *
 		 * @param s The JSON string representing the object
 		 * @param strict Flag indicating if the decoder should strictly adhere
-		 * 		to the JSON standard or not.  The default of <code>true</code>
+		 * 		to t he JSON standard or not.  The default of <code>true</code>
 		 * 		throws errors if the format does not match the JSON syntax exactly.
 		 * 		Pass <code>false</code> to allow for non-properly-formatted JSON
 		 * 		strings to be decoded with more leniancy.

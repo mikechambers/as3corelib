@@ -237,6 +237,28 @@ package com.adobe.serialization.json
 		}
 		
 		/**
+		 * Test decoding numbers that are larger than 2^52 and cannot
+		 * be accurately decoded in Flash. We return them as strings.
+		 */ 
+		public function testLargeNumbers():void
+		{
+			// when this is cast to a number, it gets cast to 10100401822940524
+			var big:String = "{\"val\":10100401822940525}";
+		
+			var decoded:Object = JSON.decode( big );
+			
+			assertTrue( decoded.val is String );  
+			assertTrue( decoded.val == "10100401822940525" );
+			
+			
+			var small:String = "{\"val\":100}";
+			decoded = JSON.decode( small );
+			
+			assertTrue( decoded.val is Number );
+			assertTrue( decoded.val == 100 );
+		}
+		
+		/**
 		 * Non-strict mode allows for NaN as a valid token
 		 */
 		public function testDecodeNaN():void

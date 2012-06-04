@@ -63,6 +63,14 @@ package com.adobe.serialization.json
 		private const controlCharsRegExp:RegExp = /[\x00-\x1F]/;
 		
 		/**
+		 * The maximum number that can be represented accurately as a double
+		 * in either AS3/ECMA languages. 
+		 *
+		 * See http://stackoverflow.com/questions/4840482/javascript-integer-overflow
+		 */
+		private const MAX_DOUBLE:Number = Math.pow(2,53);
+		
+		/**
 		 * Constructs a new JSONDecoder to parse a JSON string
 		 * into a native object.
 		 *
@@ -519,6 +527,13 @@ package com.adobe.serialization.json
 			
 			// convert the string to a number value
 			var num:Number = Number( input );
+			
+			if ( num > MAX_DOUBLE ) 
+			{
+				// Special case for numbers largers than doubles that we can't accurately represent in AS3
+				// We treat these as a string instead.
+				return JSONToken.create( JSONTokenType.STRING, input );
+			}
 			
 			if ( isFinite( num ) && !isNaN( num ) )
 			{

@@ -300,5 +300,17 @@ package com.adobe.utils
 			assertTrue("StringUtil.ltrim(\" XX\") == \"XX\"",
 											StringUtil.ltrim(" XX") == "XX");
 		}
+
+		public function testStringHasValue():void
+		{
+			assertFalse("StringUtil.stringHasValue(null) == false",
+											StringUtil.stringHasValue(null));
+			assertFalse("StringUtil.stringHasValue(\"\") == false",
+											StringUtil.stringHasValue(""));
+			assertTrue("StringUtil.stringHasValue(\"XXX\") == true",
+											StringUtil.stringHasValue("XXX"));
+
+		}
+
 	}
 }

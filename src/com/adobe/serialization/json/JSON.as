@@ -32,6 +32,8 @@
 
 package com.adobe.serialization.json
 {
+	import com.brokenfunction.json.decodeJson;
+	import com.brokenfunction.json.encodeJson;
 	
 	/**
 	 * This class provides encoding and decoding of the JSON format.
@@ -58,7 +60,7 @@ package com.adobe.serialization.json
 		 */
 		public static function encode( o:Object ):String
 		{
-			return new JSONEncoder( o ).getString();
+			return encodeJson(o);
 		}
 		
 		/**
@@ -78,7 +80,7 @@ package com.adobe.serialization.json
 		 */
 		public static function decode( s:String, strict:Boolean = true ):*
 		{
-			return new JSONDecoder( s, strict ).getValue();
+			return decodeJson(s);
 		}
 	
 	}

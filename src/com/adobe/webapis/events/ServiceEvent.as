@@ -43,7 +43,7 @@ package com.adobe.webapis.events
 	*/
 	public class ServiceEvent extends Event
 	{
-		private var _data:Object = new Object();;
+		private var _data:Object = new Object();
 
 		/**
 		* Constructor for ServiceEvent class.

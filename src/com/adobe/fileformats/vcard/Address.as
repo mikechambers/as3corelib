@@ -35,13 +35,15 @@ package com.adobe.fileformats.vcard
 	{
 		public var type:String;
 		public var street:String;
+		public var street2:String;
 		public var city:String;
 		public var state:String;
 		public var postalCode:String;
+		public var country:String;
 		
 		public function toString():String
 		{
-			return (street + " " + city + ", " + state + " " + postalCode);
+			return (street + " " + city + ", " + state + " " + postalCode+ " " + country);
 		}
 	}
 }

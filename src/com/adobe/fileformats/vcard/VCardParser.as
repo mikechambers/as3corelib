@@ -44,13 +44,19 @@ package com.adobe.fileformats.vcard
 			var type:String;
 			var typeTmp:String;
 			var line:String;
+			var numEmails:int;
 
 			for (var i:uint = 0; i < lines.length; ++i)
 			{
 				line = lines[i];
+				
+				line = line.replace(/type=/ig,"TYPE=");
+				
+				
 				if (line == "BEGIN:VCARD")
 				{
 					vcard = new VCard();
+					numEmails = 0;
 				}
 				else if (line == "END:VCARD")
 				{
@@ -76,6 +82,38 @@ package com.adobe.fileformats.vcard
 					var title:String = line.substring(6, line.length);
 					vcard.title = title;
 				}
+				else if(line.search(/^X-AIM/i) != -1)
+				{
+					var im:IM = new IM();
+					
+					var imTokens:Array =line.split(/;/);
+					
+					for each (var imToken:String in imTokens)
+					{
+						if (imToken.indexOf(":") > -1)
+						{
+							var imParts:Array = imToken.split(/:/);
+							im.address = imParts[imParts.length-1] as String;
+						}
+						
+						if (imToken.indexOf("TYPE=") > -1)
+						{
+							var tParts:Array = imToken.split(/:/);
+							var t:String = (tParts[0] as String).replace("TYPE=","");
+							if (t == "pref") 
+							{
+								im.isPreferred = true;
+							}
+							else
+							{
+								im.type = t;
+							}
+						}
+					}
+					
+					vcard.ims.push(im);
+					
+				}
 				else if (line.search(/^FN:/i) != -1)
 				{
 					var fullName:String = line.substring(3, line.length);
@@ -88,31 +126,45 @@ package com.adobe.fileformats.vcard
 					var phone:Phone = new Phone();
 					var number:String;
 					var phoneTokens:Array = line.split(";");
-					for each (var phoneToken:String in phoneTokens)
+					
+					if (line.indexOf("TYPE=") == -1)
 					{
-						if (phoneToken.search(/^TYPE=/i) != -1)
+						// there is no type specified so this is an older format, likely outlook
+						var phoneParts:Array = (phoneTokens[phoneTokens.length-1] as String).split(/:/,2);
+						number = phoneParts[phoneParts.length-1];
+						type = phoneTokens.length > 1 ? phoneTokens[1] : 'UNKNOWN';
+						
+						if (line.indexOf("FAX") > -1) type += ' FAX';
+					}
+					else
+					{
+						for each (var phoneToken:String in phoneTokens)
 						{
-							if (phoneToken.indexOf(":") != -1)
+							if (phoneToken.search(/^TYPE=/i) != -1)
 							{
-								typeTmp = phoneToken.substring(5, phoneToken.indexOf(":"));
-								number = phoneToken.substring(phoneToken.indexOf(":")+1, phoneToken.length);
+								if (phoneToken.indexOf(":") != -1)
+								{
+									typeTmp = phoneToken.substring(5, phoneToken.indexOf(":"));
+									number = phoneToken.substring(phoneToken.indexOf(":")+1, phoneToken.length);
+								}
+								else
+								{									
+									typeTmp = phoneToken.substring(5, phoneToken.length);
+								}
+	
+								typeTmp = typeTmp.toLocaleLowerCase();
+	
+								if (typeTmp == "pref")
+								{
+									phone.isPreferred = true;
+									continue;
+								}
+								if (type.length != 0)
+								{
+									type += (" ");
+								}
+								type += typeTmp;
 							}
-							else
-							{									
-								typeTmp = phoneToken.substring(5, phoneToken.length);
-							}
-
-							typeTmp = typeTmp.toLocaleLowerCase();
-
-							if (typeTmp == "pref")
-							{
-								continue;
-							}
-							if (type.length != 0)
-							{
-								type += (" ");
-							}
-							type += typeTmp;
 						}
 					}
 					if (type.length > 0 && number != null)
@@ -145,7 +197,13 @@ package com.adobe.fileformats.vcard
 
 							typeTmp = typeTmp.toLocaleLowerCase();
 
-							if (typeTmp == "pref" || typeTmp == "internet")
+							if (typeTmp == "pref")
+							{
+								email.isPreferred = true;
+								continue;
+							}
+							
+							if (typeTmp == "internet")
 							{
 								continue;
 							}
@@ -154,6 +212,14 @@ package com.adobe.fileformats.vcard
 								type += (" ");
 							}
 							type += typeTmp;
+						}
+						else if (type.length == 0 && emailToken.indexOf("@") != -1)
+						{
+							// this is probably an outlook style email which isn't caught by above logic
+							var emailParts:Array = emailToken.split(":");
+							emailAddress = emailParts[emailParts.length-1];
+							numEmails++;
+							type="EMAIL " + numEmails; // todo: type is unknown for this email
 						}
 					}
 					if (type.length > 0 && emailAddress != null)
@@ -167,9 +233,18 @@ package com.adobe.fileformats.vcard
 				{
 					var addressTokens:Array = line.split(";");
 					var address:Address = new Address();
+					var delimIndex:int = 0;
+					var streetLines:Array;
+					
 					for (var j:uint = 0; j < addressTokens.length; ++j)
 					{
 						var addressToken:String = addressTokens[j];
+						
+						if (addressToken.substr(addressToken.length-1,1) == ":")
+						{
+							delimIndex = j;
+						}
+						
 						if (addressToken.search(/^home:+$/i) != -1) // For Outlook, which uses non-standard vCards.
 						{
 							address.type = "home";
@@ -178,6 +253,7 @@ package com.adobe.fileformats.vcard
 						{
 							address.type = "work";
 						}
+						
 						if (addressToken.search(/^type=/i) != -1)  // The "type" parameter is the standard way (which Address Book uses)
 						{
 							// First, remove the optional ":" character.
@@ -209,12 +285,26 @@ package com.adobe.fileformats.vcard
 							}
 							address.type = addressType;
 						}
-						else if (addressToken.search(/^\d/) != -1 && address.street == null)
+						else if (addressToken.search(/^\d/) != -1 && address.street == null) // FAULTY LOGIC - STREET NAME DOES NOT REQUIRE NUMBERS
 						{
-							address.street = addressToken.replace(/\\n/, "");
+							streetLines = addressToken.split(/\\n/, 2);
+							address.street = streetLines[0];
+							address.street2 = streetLines.length > 1 ? (streetLines[1] as String).replace(/\\n/," ") : '';
 							address.city = addressTokens[j+1];
 							address.state = addressTokens[j+2];
 							address.postalCode = addressTokens[j+3];
+							address.country = addressTokens.length > j+4 ? addressTokens[j+4] : '';
+						}
+						else if (delimIndex > 0 && j == (delimIndex + 2) && address.street == null)
+						{
+							// TODO HACK this means that the faulty logic above didn't catch the address, not sure how compatible this is...?
+							streetLines = addressToken.split(/\\n/, 2);
+							address.street = streetLines[0];
+							address.street2 = streetLines.length > 1 ? (streetLines[1] as String).replace(/\\n/," ") : '';
+							address.city = addressTokens[j+1];
+							address.state = addressTokens[j+2];
+							address.postalCode = addressTokens[j+3];
+							address.country = addressTokens.length > j+4 ? addressTokens[j+4] : '';
 						}
 					}
 					if (address.type != null && address.street != null)
@@ -238,6 +328,14 @@ package com.adobe.fileformats.vcard
 							break;
 						}
 					}
+				}
+				else if (line == 'X-ABShowAs:COMPANY')
+				{
+					vcard.isCompany = true;
+				}
+				else
+				{
+					trace('UNKNOWN LINE');
 				}
 			}
 			return vcards;

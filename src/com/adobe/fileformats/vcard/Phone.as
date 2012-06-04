@@ -33,6 +33,7 @@ package com.adobe.fileformats.vcard
 {
 	public class Phone
 	{
+		public var isPreferred:Boolean;
 		public var type:String;
 		public var number:String;
 	}

@@ -41,7 +41,9 @@ package com.adobe.fileformats.vcard
 		public var image:ByteArray;
 		public var phones:Array;
 		public var emails:Array;
+		public var ims:Array;
 		public var addresses:Array;
+		public var isCompany:Boolean;
 		
 		public function VCard()
 		{
@@ -49,6 +51,7 @@ package com.adobe.fileformats.vcard
 			phones = new Array();
 			emails = new Array();
 			addresses = new Array();
+			ims = new Array();
 		}
 	}
 }

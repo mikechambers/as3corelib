@@ -198,6 +198,10 @@ package com.adobe.serialization.json
 		 */
 		private function arrayToString( a:Array ):String
 		{
+			// arrays of the __HTMLScriptArray type use string keys rather than numeric keys
+			var typeName:String = describeType( a ).@name.toString();
+			var isScriptArray:Boolean = (typeName == "flash.html::__HTMLScriptArray" || typeName == "flash.html::__HTMLScriptObject");
+			
 			// create a string to store the array's jsonstring value
 			var s:String = "";
 			
@@ -215,7 +219,7 @@ package com.adobe.serialization.json
 				}
 				
 				// convert the value to a string
-				s += convertToString( a[ i ] );
+				s += convertToString( a[ isScriptArray ? i.toString() : i ] );
 			}
 			
 			// KNOWN ISSUE:  In ActionScript, Arrays can also be associative
@@ -251,7 +255,7 @@ package com.adobe.serialization.json
 			
 			// determine if o is a class instance or a plain object
 			var classInfo:XML = describeType( o );
-			if ( classInfo.@name.toString() == "Object" )
+			if ( classInfo.@name.toString() == "Object" || classInfo.@name.toString() == "flash.html::__HTMLScriptObject" )
 			{
 				// the value of o[key] in the loop below - store this 
 				// as a variable so we don't have to keep looking up o[key]

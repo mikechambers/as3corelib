@@ -164,7 +164,7 @@ package com.adobe.serialization.json
 					default: // everything else
 						
 						// check for a control character and escape as unicode
-						if ( ch < ' ' )
+						if ( ch < ' ' || ch > '}')
 						{
 							// get the hex digit(s) of the character (either 1 or 2 digits)
 							var hexCode:String = ch.charCodeAt( 0 ).toString( 16 );

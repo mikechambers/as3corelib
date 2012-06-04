@@ -1457,7 +1457,7 @@ package com.adobe.net
 				return false;
 		
 			// Compare the extensions ignoring case
-			if (compareStr(thisExtension, extension, false) == 0)
+			if (compareStr(thisExtension, extension, false))
 				return true;
 			else
 				return false;

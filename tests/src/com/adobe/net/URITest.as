@@ -573,6 +573,30 @@ package com.adobe.net
 			assertTrue("Relative path verification failed.", test1.getRelation(test2) == URI.EQUAL);
 		}
 		
+		public function testFileType() : void
+		{
+			const TEST_EXTENSION : String = "xml";
+			const TEST_EXTENSION_OTHER : String = "csv";
+			const TEST_EXTENSION_UPPERCASE : String = "XML";
+			
+			const TEST_FILENAME : String = "foo.xml";
+			const TEST_URI : String = "http://adobe.com/foo.xml";
+			
+			// try with a full URI
+			var http_uri : URI = new URI( TEST_URI );
+			
+			assertFalse( "URI should NOT match different extension.", http_uri.isOfFileType( TEST_EXTENSION_OTHER ) );
+			assertTrue( "URI should have matched test extension.", http_uri.isOfFileType( TEST_EXTENSION ) );
+			assertTrue( "URI should have matched uppercase test extension.", http_uri.isOfFileType( TEST_EXTENSION_UPPERCASE ) );
+			
+			// try with just a filename
+			var file_uri : URI = new URI( TEST_FILENAME );
+			
+			assertFalse( "URI should NOT match different extension.", file_uri.isOfFileType( TEST_EXTENSION_OTHER ) );
+			assertTrue( "URI should have matched test extension.", file_uri.isOfFileType( TEST_EXTENSION ) );
+			assertTrue( "URI should have matched uppercase test extension.", file_uri.isOfFileType( TEST_EXTENSION_UPPERCASE ) );
+		}
+		
 		// Interface for IURIResolver
 		public function resolve(uri:URI) : URI
 		{

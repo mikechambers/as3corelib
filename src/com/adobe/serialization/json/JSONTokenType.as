@@ -8,11 +8,11 @@
 
   * Redistributions of source code must retain the above copyright notice, 
     this list of conditions and the following disclaimer.
-
+  
   * Redistributions in binary form must reproduce the above copyright
     notice, this list of conditions and the following disclaimer in the 
     documentation and/or other materials provided with the distribution.
-
+  
   * Neither the name of Adobe Systems Incorporated nor the names of its 
     contributors may be used to endorse or promote products derived from 
     this software without specific prior written permission.
@@ -30,15 +30,14 @@
   SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 
-package com.adobe.serialization.json
-{
-	
+package com.adobe.serialization.json {
+
 	/**
 	 * Class containing constant values for the different types
 	 * of tokens in a JSON encoded string.
 	 */
-	public final class JSONTokenType
-	{
+	public class JSONTokenType {
+	
 		public static const UNKNOWN:int = -1;
 		
 		public static const COMMA:int = 0;
@@ -64,6 +63,9 @@ package com.adobe.serialization.json
 		public static const NUMBER:int = 11;
 		
 		public static const NAN:int = 12;
-	
+		
+		public static const DATE:int = 13;
+		
 	}
+	
 }

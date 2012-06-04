@@ -662,6 +662,60 @@ package com.adobe.utils
 		}
 		
 		/**
+		 * RegExp for matching a date that has been serialized to JSON in the Microsoft format - e.g. "/Date(ticks[+-]offset)/"
+		 */
+		private static const MicrosoftJSONDateRegEx:RegExp = /^\/Date\((\d*)([-+](\d+))?\)\/$/;
+		
+		/**
+		 * Determine if the given string contains a date that has been serialized to JSON in the Microsoft format - e.g. "/Date(ticks-offset)/"
+		 * 
+		 * See for more detail: http://msdn.microsoft.com/en-us/library/bb299886.aspx#intro_to_json_sidebarb
+		 * 
+		 * @param	str
+		 * @return
+		 */
+		public static function isMicrosoftJSONDate(str:String):Boolean
+		{
+			if (!str)
+				return false;
+			
+			var datePattern:RegExp = DateUtil.MicrosoftJSONDateRegEx;
+			
+			return datePattern.test(str);
+		}
+		
+		/**
+		 * Parse a string containing a date in the Microsoft format to an ActionScript Date.  This will throw an exception 
+		 * if the string does not represent an ActionScript Date
+		 * 
+		 * @param	str
+		 * @return
+		 */
+		public static function parseMicrosoftJSONDate(str:String):Date
+		{
+			if (!str)
+				throw new Error("Received null/empty");
+				
+			var datePattern:RegExp = DateUtil.MicrosoftJSONDateRegEx;
+			
+			var matches:Array = datePattern.exec(str); //str.match(datePattern);
+			
+			if (!matches || 0 == matches.length)
+				throw new Error("String does not represent a Date");
+				
+			var ticks:Number = parseFloat(matches[1]); //int is too small
+			var date:Date = new Date(ticks);
+			
+			//If we only have two matches, then there's no offset information, so return immediately
+			if (2 >= matches.length)
+				return date;
+				
+			var offset:String = matches[2];
+			
+			return date;
+		}
+		
+		/**
 		 * Converts a date into just after midnight.
 		 */
 		public static function makeMorning(d:Date):Date

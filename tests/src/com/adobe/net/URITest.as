@@ -126,6 +126,64 @@ package com.adobe.net
 				mt, mt, mt, mt, mt,	"/images", "blah:somequery", "anchor", mt);
 		}
 		
+		public function testSpecialAIRParsing() : void
+		{
+			var mt:String = "";
+			
+			// Test Adobe AIR special URIs for embedded assets and local temp files
+			parseAndTest("app:/my/path/file.html",
+				"app",	mt, mt, mt, mt, "/my/path/file.html", mt, mt, mt);
+			
+			parseAndTest("app-storage:/my/path/file.html",
+				"app-storage",	mt, mt, mt, mt, "/my/path/file.html", mt, mt, mt);
+		}
+		
+		public function testUnusualSchemes() : void
+		{
+			var mt:String = "";
+			var uri : URI;
+			
+			/* Checks if the given string only contains characters
+			* valid for a URI scheme as per RFC 3986.
+			* 
+			* http://tools.ietf.org/html/rfc3986
+			* 
+			* Must begin with a letter, and them contain any number
+			* of letters, numbers, or "+", "-", or "."
+			*/
+			
+			// May contain plusses
+			parseAndTest("git+ssh://github.com/mikechambers/as3corelib.git",
+				"git+ssh", mt, mt, "github.com", mt, "/mikechambers/as3corelib.git", mt, mt, mt);
+			
+			// May contain periods, and numbers for that matter
+			parseAndTest("z39.50r://test.com/database",
+				"z39.50r", mt, mt, "test.com", mt, "/database", mt, mt, mt);
+
+			// May contain hyphens
+			parseAndTest("view-source:www.test.com/my/path/file.html",
+				"view-source", mt, mt, mt, mt, mt, mt, mt, "www.test.com/my/path/file.html");
+			
+			// Normalize upper case schemes to lowercase.
+			uri = new URI("HTTP://www.test.com/my/path/file.html");
+			assertEquals( "www.test.com", uri.authority );
+			assertEquals( "/my/path/file.html", uri.path );
+			assertEquals( mt, uri.fragment );
+			assertEquals( mt, uri.query );
+
+			// First character of scheme must be an alphabetic character - not valid in these cases
+			uri = new URI("0http://www.test.com/my/path/file.html");
+			assertEquals( "unknown:", uri.toString() );
+
+			uri = new URI(".http://www.test.com/my/path/file.html");
+			assertEquals( "unknown:", uri.toString() );
+			
+			uri = new URI("+http://www.test.com/my/path/file.html");
+			assertEquals( "unknown:", uri.toString() );
+			
+			uri = new URI("-http://www.test.com/my/path/file.html");
+			assertEquals( "unknown:", uri.toString() );
+		}
 		
 		public function testUnknownParsing() : void
 		{
@@ -287,7 +345,8 @@ package com.adobe.net
 			assertTrue("URI is invalid.", uri.isValid());
 			
 			// Make sure we get out what we expect
-			assertEquals("URI.toString() should output what we input.", expectedURI, uri.toString());
+			var actualURI : String = uri.toString();
+			assertEquals("URI.toString() should output what we input.", expectedURI, actualURI);
 			
 			if (uri.isHierarchical())
 			{
@@ -328,7 +387,8 @@ package com.adobe.net
 			var uri:URI = new URI(inURI);
 		
 			// Make sure we get out what we put in.
-			assertEquals("URI.toString() should output what we input.", inURI, uri.toString());
+			var actualURI : String = uri.toString();
+			assertEquals("URI.toString() should output what we input.", inURI, actualURI);
 		
 			if (uri.isHierarchical())
 			{
@@ -360,7 +420,8 @@ package com.adobe.net
 				uri.query = query;
 				uri.fragment = fragment;
 				
-				assertEquals("URI.toString() should be the same.", uri.toString(), inURI);
+				actualURI = uri.toDisplayString();
+				assertEquals("URI.toString() should be the same.", actualURI, inURI);
 			}
 			else
 			{
@@ -573,6 +634,43 @@ package com.adobe.net
 			assertTrue("Relative path verification failed.", test1.getRelation(test2) == URI.EQUAL);
 		}
 		
+		public function testFileType() : void
+		{
+			const TEST_EXTENSION : String = "xml";
+			const TEST_EXTENSION_OTHER : String = "csv";
+			const TEST_EXTENSION_UPPERCASE : String = "XML";
+			
+			const TEST_FILENAME : String = "foo.xml";
+			const TEST_URI : String = "http://adobe.com/foo.xml";
+			
+			// try with a full URI
+			var http_uri : URI = new URI( TEST_URI );
+			
+			assertFalse( "URI should NOT match different extension.", http_uri.isOfFileType( TEST_EXTENSION_OTHER ) );
+			assertTrue( "URI should have matched test extension.", http_uri.isOfFileType( TEST_EXTENSION ) );
+			assertTrue( "URI should have matched uppercase test extension.", http_uri.isOfFileType( TEST_EXTENSION_UPPERCASE ) );
+			
+			// try with just a filename
+			var file_uri : URI = new URI( TEST_FILENAME );
+			
+			assertFalse( "URI should NOT match different extension.", file_uri.isOfFileType( TEST_EXTENSION_OTHER ) );
+			assertTrue( "URI should have matched test extension.", file_uri.isOfFileType( TEST_EXTENSION ) );
+			assertTrue( "URI should have matched uppercase test extension.", file_uri.isOfFileType( TEST_EXTENSION_UPPERCASE ) );
+		}
+		
+		public function testVerifyScheme() : void
+		{
+			assertTrue( URI.verifyScheme( "HTTP" ) );
+			assertTrue( URI.verifyScheme( "http" ) );
+			assertTrue( URI.verifyScheme( "app-storage" ) );
+			assertTrue( URI.verifyScheme( "git+ssh" ) );
+			assertTrue( URI.verifyScheme( "z39.50s" ) );
+			assertTrue( URI.verifyScheme( "A0K" ) );
+			assertTrue( URI.verifyScheme( "X" ) );
+			assertFalse( URI.verifyScheme( "0" ) );
+			assertFalse( URI.verifyScheme( "0ff" ) );
+		}
+
 		// Interface for IURIResolver
 		public function resolve(uri:URI) : URI
 		{
@@ -584,6 +682,5 @@ package com.adobe.net
 				
 			return uri;
 		}
-		
 	} // end class
 } // end package

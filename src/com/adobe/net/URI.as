@@ -280,7 +280,7 @@ package com.adobe.net
 					// we probably parsed a C:\ type path or no scheme
 					return false;
 				}
-				else if (verifyAlpha(_scheme) == false)
+				else if (verifyScheme(_scheme) == false)
 					return false;  // Scheme contains bad characters
 			}
 			
@@ -432,6 +432,14 @@ package com.adobe.net
 					// Trim off the "//"
 					baseURI = baseURI.substr(2, baseURI.length - 2);
 				}
+				else if (_scheme == "app" || _scheme == "app-storage")
+				{
+					/* This is an AIR local file URI scheme. It doesn't appear to be heirarchical
+					due to the single slash, but we can treat it as such. It's really
+					a fancy file:// URI relative to one of the special directories used
+					by AIR for local data storage. */
+					_nonHierarchical = "";
+				}
 				else
 				{
 					// This is a non-hierarchical URI like "mailto:bob@mail.com"
@@ -567,17 +575,24 @@ package com.adobe.net
 		
 		/**
 		 * @private
-		 * Checks if the given string only contains a-z or A-Z.
+		 * Checks if the given string only contains characters
+		 * valid for a URI scheme as per RFC 3986.
+		 * 
+		 * http://tools.ietf.org/html/rfc3986
+		 * 
+		 * Must begin with a letter, and them contain any number
+		 * of letters, numbers, or "+", "-", or "."
+		 * 
 		 */
-		protected function verifyAlpha(str:String) : Boolean
+		public static function verifyScheme(str:String) : Boolean
 		{
-			var pattern:RegExp = /[^a-z]/;
+			var pattern:RegExp = /^[a-z][a-z0-9.+\-]*/;
 			var index:int;
 			
 			str = str.toLowerCase();
 			index = str.search(pattern);
 			
-			if (index == -1)
+			if (index != -1)
 				return true;
 			else
 				return false;
@@ -1457,7 +1472,7 @@ package com.adobe.net
 				return false;
 		
 			// Compare the extensions ignoring case
-			if (compareStr(thisExtension, extension, false) == 0)
+			if (compareStr(thisExtension, extension, false))
 				return true;
 			else
 				return false;

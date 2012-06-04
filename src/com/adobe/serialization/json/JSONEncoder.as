@@ -293,7 +293,7 @@ package com.adobe.serialization.json
 					(
 						name() == "accessor"
 						// Issue #116 - Make sure accessors are readable
-						&& attribute( "access" ).charAt( 0 ) == "r" )
+						&& attribute( "access" ).toString().charAt( 0 ) == "r" )
 					) )
 				{
 					// Issue #110 - If [Transient] metadata exists, then we should skip

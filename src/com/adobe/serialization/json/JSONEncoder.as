@@ -97,6 +97,11 @@ package com.adobe.serialization.json
 				// call the helper method to convert an array
 				return arrayToString( value as Array );
 			}
+			else if ( value is XML )
+			{
+				// call the helper method to convert an XML object
+				return xmlToString( value as Array );
+			}
 			else if ( value is Object && value != null )
 			{
 				// call the helper method to convert an object
@@ -236,6 +241,76 @@ package com.adobe.serialization.json
 			
 			// close the array and return it's string value
 			return "[" + s + "]";
+		}
+		
+		/**
+		 * Converts an XML object to its JSON string equivalent, omitting the
+		 * root element.
+		 * 
+		 * @param xml The XML object to convert
+		 * @return The JSON string representation of <code>xml</code>
+		 */
+		private function xmlToString( xml:XML ):String
+		{
+			// create a string to store the object's jsonstring value
+			var s:String = "";
+
+			// skip the root element
+			for each ( var node:XML in xml.children() )
+			{
+				// When the length is 0 we're adding the first item so
+				// no comma is necessary
+				if ( s.length > 0 ) {
+					// We've already added an item, so add the comma separator
+					s += ","
+				}
+
+				s += readNode( node );
+			}
+
+			return "{" + s + "}";
+		}
+		
+		/**
+		 * Recursive helper function to convert an XML object to JSON string
+		 * 
+		 * @param xml The XML node to convert
+		 * @return The JSON string representing the <code>xml</code> node
+		 */ 
+		private function readNode( xml:XML ):String
+		{
+			var s:String = "";
+
+			if ( xml.hasSimpleContent() )
+			{
+				s += escapeString( xml.localName().toString() ) + ":" 
+					+ convertToString( xml.toString() );
+			} 
+			else
+			{
+				// s will be a JSON object, "name : { }", but it remains blank
+				// so we can keep using s.length > 0 to add commas.
+
+				// Loop over all of the children in the XML and 
+				// serialize them along with their values.
+				for each ( var child:XML in xml.children() )
+				{
+					// When the length is 0 we're adding the first item so
+					// no comma is necessary
+					if ( s.length > 0 ) {
+						// We've already added an item, so add the comma separator
+						s += ","
+					}
+
+					s += readNode( child );
+				}
+
+				// s is now a collection of name-value pairs separated by commas.
+				// Re-assign the value of s to make it a JSON object.
+				s = escapeString( xml.localName().toString() ) 
+					+ " : { " + s + " } ";
+			}
+			return s;
 		}
 		
 		/**

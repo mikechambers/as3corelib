@@ -168,6 +168,22 @@ package com.adobe.utils
 			assertTrue("!ArrayUtil.arrayContainsValue(arr, 10)", 
 										!ArrayUtil.arrayContainsValue(arr, 10));
 		}
+		
+		public function testArrayShuffle():void 
+		{
+			var arr2:Array = ArrayUtil.copyArray(arr);
+			var length:uint = arr2.length;
+			
+			ArrayUtil.shuffle(arr);
+			assertNotNull("arr is null", arr);
+			assertTrue("arr.length == arr2.length", arr.length == arr2.length);
+			
+			var i : uint;
+			for (i=0;i<length;i++)
+			{
+				assertTrue("arr2["+i+"] contains in arr[]", ArrayUtil.arrayContainsValue(arr, arr2[i]));
+			}
+		}
 
 	}
 }

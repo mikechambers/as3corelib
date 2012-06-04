@@ -153,7 +153,7 @@ package com.adobe.utils
 		*	Compares two arrays and returns a boolean indicating whether the arrays
 		*	contain the same values at the same indexes.
 		* 
-		* 	@param arr1 The first array that will be compared to the second.
+		* 	@param arr1	The first array that will be compared to the second.
 		*
 		* 	@param arr2 The second array that will be compared to the first.
 		*
@@ -182,6 +182,32 @@ package com.adobe.utils
 			}
 			
 			return true;
+		}
+		
+		/**
+		*	Shuffle the indexes of source array
+		* 
+		*	@param source The source array to shuffle items
+		* 
+		* 	@param startIndex [optional] Array index that shuffle will start 
+		* 
+		* 	@param endIndex [optional] Array index that shuffle will end
+		* 
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+		*/
+		public static function shuffle(source:Array,startIndex:int = 0, endIndex:int = 0) : void 
+		{ 
+			if (endIndex == 0) 
+				endIndex = source.length-1;
+			for (var i:int = endIndex; i>startIndex; i--)
+			{
+				var randomNumber:int = Math.floor(Math.random()*endIndex)+startIndex;
+				var tmp:* = source[i];
+				source[i] = source[randomNumber];
+				source[randomNumber] = tmp;
+			}
 		}
 	}
 }

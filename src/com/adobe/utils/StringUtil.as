@@ -42,7 +42,34 @@ package com.adobe.utils
 	*/		
 	public class StringUtil
 	{
-
+		/**
+		*	Variable string injection.  Replaces all instances of '{n}' with
+		*   the parameter equivalent where 'n' equals a number.
+		* 
+		*	@param string The first string to injects variables into.
+		*
+		*	@param ... The unlimited number of variables to be injected.
+		*
+		*	@returns A string with the variables injected
+		*
+		* 	@langversion ActionScript 3.0
+		*	@playerversion Flash 9.0
+		*	@tiptext
+		*/
+		public static function substitute(string:String, ...params:Array):String
+		{
+			// Check to see if there's something to inject
+			if(params && params.length > 0)
+			{
+				// Iterate through array, try to inject vars in string
+				for(var i:uint = 0, len:uint = params.length; i<len; i++)
+				{
+					string = StringUtil.replace(string, '{' + i + '}', params[i].toString());
+				}
+			}
+			
+			return string;
+		}
 		
 		/**
 		*	Does a case insensitive compare or two strings and returns true if

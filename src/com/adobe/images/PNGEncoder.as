@@ -72,9 +72,10 @@ package com.adobe.images
 	            var j:int;
 	            if ( !img.transparent ) {
 	                for(j=0;j < img.width;j++) {
-	                    p = img.getPixel(j,i);
-	                    IDAT.writeUnsignedInt(
-	                        uint(((p&0xFFFFFF) << 8)|0xFF));
+						// ARGB -> RGBA
+						var pixelsARGB : ByteArray = img.getPixels(new Rectangle(0, i, img.width, 1));
+						IDAT.writeBytes(pixelsARGB, 1, pixelsARGB.length - 1);
+						IDAT.writeBytes(pixelsARGB, 0, 1);
 	                }
 	            } else {
 	                for(j=0;j < img.width;j++) {

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>as3corelib</groupId>
+  <artifactId>as3corelib</artifactId>
+  <version>0.94-SNAPSHOT</version>
+  <packaging>swc</packaging>
+
+  <properties>
+    <flex.version>4.10.0.20130801</flex.version>
+    <air.version>3.8</air.version>
+  </properties>
+
+
+  <build>
+    <sourceDirectory>src</sourceDirectory>
+    <plugins>
+      <plugin>
+        <groupId>net.flexmojos.oss</groupId>
+        <artifactId>flexmojos-maven-plugin</artifactId>
+        <version>6.0.1</version>
+        <extensions>true</extensions>
+        <dependencies>
+          <dependency>
+            <groupId>org.apache.flex</groupId>
+            <artifactId>compiler</artifactId>
+            <version>${flex.version}</version>
+            <type>pom</type>
+          </dependency>
+        </dependencies>
+      </plugin>
+    </plugins>
+  </build>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.apache.flex.framework.air</groupId>
+      <artifactId>air-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
+    <dependency>
+      <groupId>org.apache.flex.framework</groupId>
+      <artifactId>common-framework</artifactId>
+      <version>${flex.version}</version>
+      <type>pom</type>
+    </dependency>
+  </dependencies>
+
+</project>
